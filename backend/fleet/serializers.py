@@ -12,6 +12,13 @@ def validate_image(value):
         raise serializers.ValidationError('La imagen no puede superar 10 MB.')
     return value
 
+
+class ImageURLField(serializers.ImageField):
+    """Mantiene las rutas locales bajo /api/ para usar la cookie del proxy."""
+
+    def to_representation(self, value):
+        return value.url if value else None
+
 class UserSerializer(serializers.ModelSerializer):
     role_label = serializers.CharField(source='get_role_display', read_only=True)
     password = serializers.CharField(write_only=True, required=False, min_length=8)
@@ -54,7 +61,7 @@ class EquipmentSerializer(serializers.ModelSerializer):
     progress = serializers.IntegerField(read_only=True)
     status = serializers.CharField(read_only=True)
     status_label = serializers.SerializerMethodField()
-    photo = serializers.ImageField(required=False, validators=[validate_image])
+    photo = ImageURLField(required=False, validators=[validate_image])
     class Meta:
         model = Equipment
         fields = '__all__'
@@ -75,7 +82,7 @@ class ReadingSerializer(serializers.ModelSerializer):
     equipment_code = serializers.CharField(source='equipment.code', read_only=True)
     equipment_name = serializers.CharField(source='equipment.name', read_only=True)
     registered_by = serializers.SerializerMethodField()
-    evidence = serializers.ImageField(required=False, validators=[validate_image])
+    evidence = ImageURLField(required=False, validators=[validate_image])
     class Meta:
         model = Reading
         fields = '__all__'
