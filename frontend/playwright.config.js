@@ -1,0 +1,4 @@
+import {defineConfig} from '@playwright/test';
+export default defineConfig({testDir:'./tests',timeout:30000,workers:1,reporter:process.env.VILAS_EVIDENCE_DIR ? [['list'],['json',{outputFile:process.env.VILAS_EVIDENCE_DIR+'/playwright.json'}],['html',{outputFolder:process.env.VILAS_EVIDENCE_DIR+'/playwright-html',open:'never'}]] : 'list',outputDir:process.env.VILAS_EVIDENCE_DIR ? process.env.VILAS_EVIDENCE_DIR+'/browser-artifacts' : 'test-results',use:{baseURL:process.env.VILAS_TEST_FRONTEND_URL||'http://127.0.0.1:5173',headless:true,
+  launchOptions:{executablePath:process.env.PLAYWRIGHT_BROWSER_PATH||'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe'},screenshot:'only-on-failure'},
+  projects:[{name:'desktop',use:{viewport:{width:1366,height:900}}},{name:'mobile',use:{viewport:{width:390,height:844}}}]});
