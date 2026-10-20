@@ -4,10 +4,18 @@
   "buildCommand": "npm run build",
   "installCommand": "npm ci",
   "outputDirectory": "dist",
-  "rewrites": [
+  "routes": [
     {
-      "source": "/api/:path*",
-      "destination": "https://vilas-motors.onrender.com/api/:path*"
-    }
+      "src": "/(.*)",
+      "headers": {"X-Vilas-Routing": "render-proxy-v2"},
+      "continue": true
+    },
+    {
+      "src": "/api/(.*)",
+      "dest": "https://vilas-motors.onrender.com/api/$1",
+      "headers": {"Cache-Control": "private, no-store"}
+    },
+    {"handle": "filesystem"},
+    {"src": "/(.*)", "dest": "/index.html"}
   ]
 }
