@@ -1,4 +1,4 @@
-﻿# Vila’s Motor
+# Vila’s Motor
 
 Aplicación de gestión de mantención de flota con React, Vite, Django REST Framework y PostgreSQL. Incluye equipos, lecturas, mantenciones, calendario, alertas, reportes PDF/Excel y usuarios con permisos por rol.
 
@@ -62,9 +62,9 @@ Configura las variables de `backend/.env.example` para el dominio de destino, `D
 
 ## Conexión Vercel → Render
 
-La interfaz usa `/api/` en el mismo dominio del navegador. El build de Vercel genera un proxy hacia Render con Build Output API, conservando las cookies de sesión y CSRF. No configures `VITE_API_URL` ni cambies el cliente a llamadas directas entre dominios.
+La interfaz usa `/api/` en el mismo dominio del navegador. `frontend/vercel.json` reenv?a esas rutas a `https://vilas-motors.onrender.com/api/`. Esto conserva las cookies bajo el dominio del frontend.
 
-En **Vercel → Settings → Environment Variables**, agrega `BACKEND_URL=https://vilas-motors.onrender.com` para Production (y Preview si necesitas conectarlo a la misma base). Usa Root Directory `frontend`. El archivo `frontend/vercel.json` define `npm ci` y `npm run build:vercel`; elimina las sobreescrituras anteriores de Framework/Build/Output Directory del panel, ya que este build genera `.vercel/output/` en lugar de publicar directamente `dist/`. La variable BACKEND_URL es obligatoria y debe ser un origen HTTPS sin `/api`.
+En Vercel usa Root Directory `frontend`, Framework `Vite`, Build Command `npm run build` y Output Directory `dist`. El proxy queda expl?cito en `vercel.json`; esta configuraci?n ya no necesita BACKEND_URL ni el build especial de Build Output API. Desactiva las sobreescrituras antiguas del panel si todav?a indican `npm run build:vercel`.
 
 En **Render**, usa Root Directory `backend`, Build Command `bash build.sh` y Start Command `gunicorn config.wsgi:application --bind 0.0.0.0:$PORT`. Configura:
 
@@ -79,7 +79,7 @@ El host público que proporciona Render se agrega automáticamente a ALLOWED_HOS
 
 La URL de Vercel anterior identifica el despliegue que compartiste. Si asignas un dominio estable al proyecto, actualiza FRONTEND_URL para que los correos de recuperación y CSRF usen ese dominio. Un enlace al panel `vercel.com/...` no es la URL pública de la página.
 
-`backend/.env` y los scripts de PowerShell mantienen el desarrollo local. En producción no se usan localhost por defecto: Django exige FRONTEND_URL y una conexión explícita a la base. El build de Vercel exige BACKEND_URL. No subas `.env` a GitHub: configura las variables en cada proveedor. Después de subir el código, vuelve a desplegar ambos servicios.
+`backend/.env` y los scripts de PowerShell mantienen el desarrollo local. En producción no se usan localhost por defecto: Django exige FRONTEND_URL y una conexión explícita a la base. El destino de Render se configura en frontend/vercel.json. No subas `.env` a GitHub: configura las variables en cada proveedor. Después de subir el código, vuelve a desplegar ambos servicios.
 
 Documentación: [Build Output API](https://vercel.com/docs/build-output-api) y [Django en Render](https://render.com/docs/deploy-django).
 ## PostgreSQL en Supabase (Render)
