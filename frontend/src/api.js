@@ -1,7 +1,23 @@
 let csrfToken = '';
-export async function initCSRF() {
-  const response = await fetch('/api/auth/csrf/', { credentials: 'include' });
-  const data = await response.json(); csrfToken = data.csrfToken;
+let csrfRequest;
+export function initCSRF() {
+  if (!csrfRequest) {
+    csrfRequest = (async () => {
+      const response = await fetch('/api/auth/csrf/', {
+        credentials: 'include', cache: 'no-store',
+      });
+      if (!response.ok) throw new Error('No se pudo obtener el token de seguridad. Recarga la página.');
+      const data = await response.json();
+      if (!data.csrfToken) throw new Error('La API no devolvió el token de seguridad.');
+      csrfToken = data.csrfToken;
+    })().finally(() => { csrfRequest = undefined; });
+  }
+  return csrfRequest;
+}
+function currentCSRFToken() {
+  const cookie = document.cookie.split(';').map(value => value.trim())
+    .find(value => value.startsWith('csrftoken='));
+  return cookie ? decodeURIComponent(cookie.slice('csrftoken='.length)) : csrfToken;
 }
 function errorText(data) {
   if (typeof data === 'string') return data;
@@ -10,7 +26,10 @@ function errorText(data) {
 }
 export async function api(path, {method = 'GET', body, ...options} = {}) {
   const headers = {};
-  if (method !== 'GET') headers['X-CSRFToken'] = csrfToken;
+  if (!['GET', 'HEAD', 'OPTIONS'].includes(method.toUpperCase())) {
+    if (!currentCSRFToken()) await initCSRF();
+    headers['X-CSRFToken'] = currentCSRFToken();
+  }
   if (body && !(body instanceof FormData)) headers['Content-Type'] = 'application/json';
   const response = await fetch('/api/' + path, {method, credentials: 'include', headers, body: body instanceof FormData ? body : body ? JSON.stringify(body) : undefined, ...options});
   if (response.status === 204) return null;

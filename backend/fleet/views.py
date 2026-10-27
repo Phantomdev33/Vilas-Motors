@@ -34,6 +34,11 @@ from .serializers import UserSerializer, EquipmentSerializer, ReadingSerializer,
 from .services import audit, reconcile_alert, LABELS
 from .throttles import DeviceTelemetryThrottle
 
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import never_cache
+
+
+@method_decorator(never_cache, name='dispatch')
 class CSRFView(APIView):
     permission_classes = [AllowAny]
     authentication_classes = []
