@@ -21,7 +21,7 @@ class ImageURLField(serializers.ImageField):
 
 class UserSerializer(serializers.ModelSerializer):
     role_label = serializers.CharField(source='get_role_display', read_only=True)
-    password = serializers.CharField(write_only=True, required=False, min_length=8)
+    password = serializers.CharField(write_only=True, required=False, min_length=13)
     class Meta:
         model = User
         fields = ['id', 'email', 'first_name', 'last_name', 'role', 'role_label', 'region', 'is_active', 'last_login', 'password']
@@ -54,6 +54,10 @@ class UserSerializer(serializers.ModelSerializer):
         return instance
 
 class EquipmentSerializer(serializers.ModelSerializer):
+    service_interval = serializers.IntegerField(read_only=True)
+    updated_by_name = serializers.SerializerMethodField()
+    def get_updated_by_name(self, obj):
+        return (obj.updated_by.get_full_name() or obj.updated_by.email) if obj.updated_by else 'Sin registro histórico'
     current_value = serializers.DecimalField(max_digits=12, decimal_places=2, read_only=True)
     last_service_value = serializers.DecimalField(max_digits=12, decimal_places=2, read_only=True)
     next_service = serializers.DecimalField(max_digits=12, decimal_places=2, read_only=True)
@@ -65,15 +69,19 @@ class EquipmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Equipment
         fields = '__all__'
-        read_only_fields = ['created_at']
+        read_only_fields = ['created_at', 'updated_by', 'updated_at', 'import_notes']
+    def validate_serial_number(self, value):
+        return value.strip() or None if value else None
     def get_status_label(self, obj): return LABELS[obj.status]
     def validate(self, attrs):
+        if self.instance and self.instance.import_notes and attrs.get('code', self.instance.code) != self.instance.code:
+            raise serializers.ValidationError({'code': 'El código de importación se conserva para evitar duplicados en futuras cargas.'})
         initial = attrs.get('initial_value', getattr(self.instance, 'initial_value', 0))
         service = attrs.get('initial_service_value', getattr(self.instance, 'initial_service_value', 0))
         if service > initial:
             raise serializers.ValidationError({'initial_service_value': 'No puede superar la lectura inicial.'})
         if self.instance and (self.instance.readings.exists() or self.instance.maintenances.exists()):
-            for field in ('initial_value', 'initial_service_value', 'unit'):
+            for field in ('initial_value', 'initial_service_value', 'unit', 'meter_initialized'):
                 if field in attrs and attrs[field] != getattr(self.instance, field):
                     raise serializers.ValidationError({field: 'El equipo tiene historial; registra una lectura o mantención para actualizarlo.'})
         return attrs
@@ -94,6 +102,7 @@ class ReadingSerializer(serializers.ModelSerializer):
         value = attrs.get('value', getattr(self.instance, 'value', None))
         moment = attrs.get('recorded_at', getattr(self.instance, 'recorded_at', timezone.now()))
         if not equipment.active: raise serializers.ValidationError({'equipment': 'El equipo está inactivo.'})
+        if not equipment.meter_initialized: raise serializers.ValidationError({'equipment': 'Completa la lectura inicial, la última mantención y el intervalo en la ficha antes de registrar lecturas.'})
         if moment > timezone.now(): raise serializers.ValidationError({'recorded_at': 'La lectura no puede estar en el futuro.'})
         if self.instance and equipment.pk != self.instance.equipment_id:
             raise serializers.ValidationError({'equipment': 'No puedes reasignar una lectura histórica.'})
@@ -110,6 +119,10 @@ class ReadingSerializer(serializers.ModelSerializer):
         completed = equipment.maintenances.filter(status='completed', completed_at__lte=moment).order_by('-value').first()
         if completed and value < completed.value:
             raise serializers.ValidationError({'value': 'No puede ser inferior al horómetro de la mantención completada.'})
+        if not self.instance and attrs.get('source') == 'sensor':
+            raise serializers.ValidationError({'source': 'Las lecturas GPS solo se reciben desde un dispositivo autenticado.'})
+        if not self.instance and attrs.get('source') == 'ocr' and not attrs.get('evidence'):
+            raise serializers.ValidationError({'evidence': 'Adjunta la foto para registrar una lectura OCR.'})
         confidence = attrs.get('confidence')
         if confidence is not None and not (0 <= confidence <= 100):
             raise serializers.ValidationError({'confidence': 'Debe estar entre 0 y 100.'})
@@ -132,6 +145,13 @@ class MaintenanceSupplySerializer(serializers.ModelSerializer):
         return value
 
 class MaintenanceSerializer(serializers.ModelSerializer):
+    unit = serializers.CharField(source='equipment.unit', read_only=True)
+    registered_by = serializers.SerializerMethodField()
+    next_service = serializers.SerializerMethodField()
+    def get_registered_by(self, obj):
+        return (obj.created_by.get_full_name() or obj.created_by.email) if obj.created_by else 'Sin registro histórico'
+    def get_next_service(self, obj):
+        return str(obj.value + obj.interval)
     equipment_code = serializers.CharField(source='equipment.code', read_only=True)
     equipment_name = serializers.CharField(source='equipment.name', read_only=True)
     supplies = MaintenanceSupplySerializer(many=True, required=False)
@@ -142,6 +162,7 @@ class MaintenanceSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         equipment = attrs.get('equipment', getattr(self.instance, 'equipment', None))
         if not equipment.active: raise serializers.ValidationError({'equipment': 'El equipo está inactivo.'})
+        if not equipment.meter_initialized: raise serializers.ValidationError({'equipment': 'Completa primero los valores iniciales y el intervalo en la ficha del equipo.'})
         if self.instance and equipment.pk != self.instance.equipment_id:
             raise serializers.ValidationError({'equipment': 'No puedes reasignar una mantención.'})
         if attrs.get('status', getattr(self.instance, 'status', 'scheduled')) == 'completed':
@@ -155,6 +176,12 @@ class MaintenanceSerializer(serializers.ModelSerializer):
                 attrs['completed_at'] = timezone.now()
             elif completed_at > timezone.now():
                 raise serializers.ValidationError({'completed_at': 'La finalización no puede estar en el futuro.'})
+        completed = attrs.get('completed_at', getattr(self.instance, 'completed_at', None))
+        scheduled = attrs.get('scheduled_at', getattr(self.instance, 'scheduled_at', None))
+        if completed and scheduled and completed < scheduled:
+            raise serializers.ValidationError({'completed_at': 'La finalización no puede ser anterior al inicio del servicio.'})
+        if attrs.get('status', getattr(self.instance, 'status', 'scheduled')) != 'completed':
+            attrs['completed_at'] = None
         supplies = attrs.get('supplies', [])
         ids = [item['supply'].pk for item in supplies]
         if len(ids) != len(set(ids)): raise serializers.ValidationError({'supplies': 'No repitas un mismo insumo.'})
@@ -198,4 +225,4 @@ class AuditSerializer(serializers.ModelSerializer):
     class Meta:
         model = AuditLog
         fields = '__all__'
-    def get_user_name(self, obj): return obj.user.get_full_name() if obj.user else 'Sistema / dispositivo'
+    def get_user_name(self, obj): return (obj.user.get_full_name() or obj.user.email) if obj.user else 'Sistema / dispositivo'

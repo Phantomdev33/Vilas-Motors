@@ -1,0 +1,2760 @@
+[
+  {
+    "row": 2,
+    "code": "XLS-0002",
+    "equipment_type": "GRUA HORQUILLA 2 TON",
+    "brand": "KOMATSU",
+    "model": "FG20T 16"
+  },
+  {
+    "row": 3,
+    "code": "XLS-0003",
+    "equipment_type": "GRUA HORQUILLA 7 TON",
+    "brand": "KOMATSU",
+    "model": "FD70-10"
+  },
+  {
+    "row": 4,
+    "code": "XLS-0004",
+    "equipment_type": "GRUA HORQUILLA 7 TON",
+    "brand": "KOMATSU",
+    "model": "FD70-10"
+  },
+  {
+    "row": 5,
+    "code": "XLS-0005",
+    "equipment_type": "GRUA HORQUILLA 5 TON",
+    "brand": "KOMATSU",
+    "model": "FD50AT7"
+  },
+  {
+    "row": 6,
+    "code": "XLS-0006",
+    "equipment_type": "GRUA HORQUILLA 3.5 TON",
+    "brand": "HANGCHA",
+    "model": "CPCD-35"
+  },
+  {
+    "row": 7,
+    "code": "XLS-0007",
+    "equipment_type": "GRUA HORQUILLA 2 TON",
+    "brand": "KOMATSU",
+    "model": "FG20T 16"
+  },
+  {
+    "row": 8,
+    "code": "XLS-0008",
+    "equipment_type": "RODILLO COMPACTADOR",
+    "brand": "HAMM",
+    "model": "3412"
+  },
+  {
+    "row": 9,
+    "code": "XLS-0009",
+    "equipment_type": "GRUA HORQUILLA 16 TON",
+    "brand": "KOMATSU",
+    "model": "FD160E 8"
+  },
+  {
+    "row": 10,
+    "code": "XLS-0010",
+    "equipment_type": "GRUA HORQUILLA 16 TON",
+    "brand": "KOMATSU",
+    "model": "FD160E 8"
+  },
+  {
+    "row": 11,
+    "code": "XLS-0011",
+    "equipment_type": "GRUA HORQUILLA 16 TON",
+    "brand": "KOMATSU",
+    "model": "FD160E 8"
+  },
+  {
+    "row": 12,
+    "code": "XLS-0012",
+    "equipment_type": "CARGADOR FRONTAL",
+    "brand": "JCB",
+    "model": "456ZX"
+  },
+  {
+    "row": 13,
+    "code": "XLS-0013",
+    "equipment_type": "GRUA HORQUILLA 10 TON",
+    "brand": "KOMATSU",
+    "model": "FD100 8"
+  },
+  {
+    "row": 14,
+    "code": "XLS-0014",
+    "equipment_type": "GRUA HORQUILLA 16 TON",
+    "brand": "KOMATSU",
+    "model": "FD160E 8"
+  },
+  {
+    "row": 15,
+    "code": "XLS-0015",
+    "equipment_type": "GRUA HORQUILLA 5 TON",
+    "brand": "KOMATSU",
+    "model": "FD50AT-10"
+  },
+  {
+    "row": 16,
+    "code": "XLS-0016",
+    "equipment_type": "GRUA HORQUILLA 5 TON",
+    "brand": "KOMATSU",
+    "model": "FD50AT-10"
+  },
+  {
+    "row": 17,
+    "code": "XLS-0017",
+    "equipment_type": "GRUA HORQUILLA 5 TON",
+    "brand": "KOMATSU",
+    "model": "FD50AT-10"
+  },
+  {
+    "row": 18,
+    "code": "XLS-0018",
+    "equipment_type": "EXCAVADORA",
+    "brand": "JCB",
+    "model": "JS220LC"
+  },
+  {
+    "row": 19,
+    "code": "XLS-0019",
+    "equipment_type": "MANIPULADOR",
+    "brand": "JCB",
+    "model": "533-105 T"
+  },
+  {
+    "row": 20,
+    "code": "XLS-0020",
+    "equipment_type": "MANIPULADOR",
+    "brand": "JCB",
+    "model": "531 70 T"
+  },
+  {
+    "row": 21,
+    "code": "XLS-0021",
+    "equipment_type": "GRUA HORQUILLA 10 TON",
+    "brand": "KOMATSU",
+    "model": "FD100 8"
+  },
+  {
+    "row": 22,
+    "code": "XLS-0022",
+    "equipment_type": "GRUA HORQUILLA 7 TON",
+    "brand": "KOMATSU",
+    "model": "FD70-10"
+  },
+  {
+    "row": 23,
+    "code": "XLS-0023",
+    "equipment_type": "GRUA HORQUILLA 16 TON",
+    "brand": "KOMATSU",
+    "model": "LRTL85"
+  },
+  {
+    "row": 24,
+    "code": "XLS-0024",
+    "equipment_type": "RETROEXCAVADORA",
+    "brand": "JCB",
+    "model": "3CX 4X4"
+  },
+  {
+    "row": 25,
+    "code": "XLS-0025",
+    "equipment_type": "RETROEXCAVADORA",
+    "brand": "JCB",
+    "model": "3CX 4X4"
+  },
+  {
+    "row": 26,
+    "code": "XLS-0026",
+    "equipment_type": "GRUA HORQUILLA 25 TON",
+    "brand": "KOMATSU",
+    "model": "FD250-7"
+  },
+  {
+    "row": 27,
+    "code": "XLS-0027",
+    "equipment_type": "GRUA HORQUILLA 7 TON",
+    "brand": "KOMATSU",
+    "model": "FD70-10"
+  },
+  {
+    "row": 28,
+    "code": "XLS-0028",
+    "equipment_type": "GRUA HORQUILLA 3 TON",
+    "brand": "KOMATSU",
+    "model": "FD30T-17"
+  },
+  {
+    "row": 29,
+    "code": "XLS-0029",
+    "equipment_type": "GRUA HORQUILLA 3 TON",
+    "brand": "KOMATSU",
+    "model": "FD30T-17"
+  },
+  {
+    "row": 30,
+    "code": "XLS-0030",
+    "equipment_type": "GRUA HORQUILLA 3 TON",
+    "brand": "KOMATSU",
+    "model": "FD30T-17"
+  },
+  {
+    "row": 31,
+    "code": "XLS-0031",
+    "equipment_type": "GRUA HORQUILLA 16 TON",
+    "brand": "KOMATSU",
+    "model": "FD160E 8"
+  },
+  {
+    "row": 32,
+    "code": "XLS-0032",
+    "equipment_type": "GRUA HORQUILLA 16 TON",
+    "brand": "KOMATSU",
+    "model": "FD160E 8"
+  },
+  {
+    "row": 33,
+    "code": "XLS-0033",
+    "equipment_type": "RETROEXCAVADORA",
+    "brand": "JCB",
+    "model": "3CX"
+  },
+  {
+    "row": 34,
+    "code": "XLS-0034",
+    "equipment_type": "RETROEXCAVADORA",
+    "brand": "JCB",
+    "model": "3CX 4X4"
+  },
+  {
+    "row": 35,
+    "code": "XLS-0035",
+    "equipment_type": "RETROEXCAVADORA",
+    "brand": "JCB",
+    "model": "3CX 4X4"
+  },
+  {
+    "row": 36,
+    "code": "XLS-0036",
+    "equipment_type": "RETROEXCAVADORA",
+    "brand": "JCB",
+    "model": "3CX 4X4 (RCSZ-64)"
+  },
+  {
+    "row": 37,
+    "code": "XLS-0037",
+    "equipment_type": "GRUA HORQUILLA 3 TON",
+    "brand": "KOMATSU",
+    "model": "FD30T-17"
+  },
+  {
+    "row": 38,
+    "code": "XLS-0038",
+    "equipment_type": "GRUA HORQUILLA 3 TON",
+    "brand": "KOMATSU",
+    "model": "FD30T 17"
+  },
+  {
+    "row": 39,
+    "code": "XLS-0039",
+    "equipment_type": "GRUA HORQUILLA 3 TON",
+    "brand": "KOMATSU",
+    "model": "FD30T 17"
+  },
+  {
+    "row": 40,
+    "code": "XLS-0040",
+    "equipment_type": "GRUA HORQUILLA 3 TON",
+    "brand": "KOMATSU",
+    "model": "FD30T 17"
+  },
+  {
+    "row": 41,
+    "code": "XLS-0041",
+    "equipment_type": "GRUA HORQUILLA 3 TON",
+    "brand": "KOMATSU",
+    "model": "FD30T 17"
+  },
+  {
+    "row": 42,
+    "code": "XLS-0042",
+    "equipment_type": "MANIPULADOR",
+    "brand": "JCB",
+    "model": "533-105 T"
+  },
+  {
+    "row": 43,
+    "code": "XLS-0043",
+    "equipment_type": "MANIPULADOR",
+    "brand": "JCB",
+    "model": "533-105 T"
+  },
+  {
+    "row": 44,
+    "code": "XLS-0044",
+    "equipment_type": "GRUA HORQUILLA 10 TON",
+    "brand": "KOMATSU",
+    "model": "FD100-8"
+  },
+  {
+    "row": 45,
+    "code": "XLS-0045",
+    "equipment_type": "GRUA HORQUILLA 16 TON",
+    "brand": "KOMATSU",
+    "model": "FD160E-8"
+  },
+  {
+    "row": 46,
+    "code": "XLS-0046",
+    "equipment_type": "GRUA HORQUILLA 16 TON",
+    "brand": "KOMATSU",
+    "model": "FD160E-8"
+  },
+  {
+    "row": 47,
+    "code": "XLS-0047",
+    "equipment_type": "GRUA HORQUILLA 3.5 TON",
+    "brand": "HANGCHA",
+    "model": "CPCD-35"
+  },
+  {
+    "row": 48,
+    "code": "XLS-0048",
+    "equipment_type": "RETROEXCAVADORA",
+    "brand": "JCB",
+    "model": "3CX 4X4 (LPHL-61)"
+  },
+  {
+    "row": 49,
+    "code": "XLS-0049",
+    "equipment_type": "GRUA HORQUILLA 16 TON",
+    "brand": "KOMATSU",
+    "model": "FD160E-8"
+  },
+  {
+    "row": 50,
+    "code": "XLS-0050",
+    "equipment_type": "RETROEXCAVADORA",
+    "brand": "JCB",
+    "model": "3CX 4X4"
+  },
+  {
+    "row": 51,
+    "code": "XLS-0051",
+    "equipment_type": "RETROEXCAVADORA",
+    "brand": "JCB",
+    "model": "3CX 4X4"
+  },
+  {
+    "row": 52,
+    "code": "XLS-0052",
+    "equipment_type": "RETROEXCAVADORA",
+    "brand": "JCB",
+    "model": "3CX 4X4"
+  },
+  {
+    "row": 53,
+    "code": "XLS-0053",
+    "equipment_type": "GRUA HORQUILLA 16 TON",
+    "brand": "KOMATSU",
+    "model": "FD160E-8"
+  },
+  {
+    "row": 54,
+    "code": "XLS-0054",
+    "equipment_type": "GRUA HORQUILLA 16 TON",
+    "brand": "KOMATSU",
+    "model": "FD160E-8"
+  },
+  {
+    "row": 55,
+    "code": "XLS-0055",
+    "equipment_type": "GRUA HORQUILLA 16 TON",
+    "brand": "KOMATSU",
+    "model": "FD160E 8"
+  },
+  {
+    "row": 56,
+    "code": "XLS-0056",
+    "equipment_type": "GRUA HORQUILLA 07 TON",
+    "brand": "KOMATSU",
+    "model": "FD70-10"
+  },
+  {
+    "row": 57,
+    "code": "XLS-0057",
+    "equipment_type": "GRUA HORQUILLA 3 TON",
+    "brand": "KOMATSU",
+    "model": ""
+  },
+  {
+    "row": 58,
+    "code": "XLS-0058",
+    "equipment_type": "EXCAVADORA",
+    "brand": "JCB",
+    "model": "JS220 LC"
+  },
+  {
+    "row": 59,
+    "code": "XLS-0059",
+    "equipment_type": "EXCAVADORA",
+    "brand": "JCB",
+    "model": "JS220 LC"
+  },
+  {
+    "row": 60,
+    "code": "XLS-0060",
+    "equipment_type": "GRUA HORQUILLA 3 TON",
+    "brand": "KOMATSU",
+    "model": "FD30T17"
+  },
+  {
+    "row": 61,
+    "code": "XLS-0061",
+    "equipment_type": "MINICARGADOR",
+    "brand": "JCB",
+    "model": "205 CAB AC"
+  },
+  {
+    "row": 62,
+    "code": "XLS-0062",
+    "equipment_type": "CARGADOR FRONTAL",
+    "brand": "SANY",
+    "model": "SYL956H5"
+  },
+  {
+    "row": 63,
+    "code": "XLS-0063",
+    "equipment_type": "EXCAVADORA",
+    "brand": "JCB",
+    "model": "JS220LC"
+  },
+  {
+    "row": 64,
+    "code": "XLS-0064",
+    "equipment_type": "GRUA HORQUILLA 3 TON",
+    "brand": "KOMATSU",
+    "model": "FD30T-17"
+  },
+  {
+    "row": 65,
+    "code": "XLS-0065",
+    "equipment_type": "GRUA HORQUILLA 3 TON",
+    "brand": "KOMATSU",
+    "model": "FD30T-17"
+  },
+  {
+    "row": 66,
+    "code": "XLS-0066",
+    "equipment_type": "RETRO EXCAVADORA",
+    "brand": "JCB",
+    "model": "3CX 4X4"
+  },
+  {
+    "row": 67,
+    "code": "XLS-0067",
+    "equipment_type": "GRUA HORQUILLA 3TON",
+    "brand": "KOMATSU",
+    "model": "FD30T17"
+  },
+  {
+    "row": 68,
+    "code": "XLS-0068",
+    "equipment_type": "GRUA HORQUILLA 3 TON",
+    "brand": "KOMATSU",
+    "model": "FD30T17"
+  },
+  {
+    "row": 69,
+    "code": "XLS-0069",
+    "equipment_type": "GRUA HORQUILLA 3 TON",
+    "brand": "KOMATSU",
+    "model": "FD30T17"
+  },
+  {
+    "row": 70,
+    "code": "XLS-0070",
+    "equipment_type": "GRUA HORQUILLA 3 TON",
+    "brand": "KOMATSU",
+    "model": "FD30T17"
+  },
+  {
+    "row": 71,
+    "code": "XLS-0071",
+    "equipment_type": "GRUA HORQUILLA 3 TON",
+    "brand": "KOMATSU",
+    "model": "FD30T17"
+  },
+  {
+    "row": 72,
+    "code": "XLS-0072",
+    "equipment_type": "GRUA HORQUILLA 3 TON",
+    "brand": "KOMATSU",
+    "model": "FD30T17"
+  },
+  {
+    "row": 73,
+    "code": "XLS-0073",
+    "equipment_type": "GRUA HORQUILLA 3 TON",
+    "brand": "KOMATSU",
+    "model": "FD30T17"
+  },
+  {
+    "row": 74,
+    "code": "XLS-0074",
+    "equipment_type": "GRUA HORQUILLA 3 TON",
+    "brand": "KOMATSU",
+    "model": "FD30T-17"
+  },
+  {
+    "row": 75,
+    "code": "XLS-0075",
+    "equipment_type": "GRUA HORQUILLA 3 TON",
+    "brand": "KOMATSU",
+    "model": "FD30T-17"
+  },
+  {
+    "row": 76,
+    "code": "XLS-0076",
+    "equipment_type": "GRUA HORQUILLA 3 TON",
+    "brand": "KOMATSU",
+    "model": "FD30T-17"
+  },
+  {
+    "row": 77,
+    "code": "XLS-0077",
+    "equipment_type": "GRUA HORQUILLA 3 TON",
+    "brand": "KOMATSU",
+    "model": "FD30T-17"
+  },
+  {
+    "row": 78,
+    "code": "XLS-0078",
+    "equipment_type": "GRUA HORQUILLA 3 TON",
+    "brand": "KOMATSU",
+    "model": "FD30T-17"
+  },
+  {
+    "row": 79,
+    "code": "XLS-0079",
+    "equipment_type": "GRUA HORQUILLA 3 TON",
+    "brand": "KOMATSU",
+    "model": "FD30T-17"
+  },
+  {
+    "row": 80,
+    "code": "XLS-0080",
+    "equipment_type": "EXCAVADORA",
+    "brand": "JCB",
+    "model": "J220LC"
+  },
+  {
+    "row": 81,
+    "code": "XLS-0081",
+    "equipment_type": "GRUA HORQUILLA 3.5 TON",
+    "brand": "HANGCHA",
+    "model": "CPCD35 XW33CRT4"
+  },
+  {
+    "row": 82,
+    "code": "XLS-0082",
+    "equipment_type": "GRUA HORQUILLA 25 TON",
+    "brand": "KOMATSU",
+    "model": "FD250-7"
+  },
+  {
+    "row": 83,
+    "code": "XLS-0083",
+    "equipment_type": "RETROEXCAVADORA",
+    "brand": "JCB",
+    "model": "3CX"
+  },
+  {
+    "row": 84,
+    "code": "XLS-0084",
+    "equipment_type": "RETROEXCAVADORA",
+    "brand": "JCB",
+    "model": "3CX"
+  },
+  {
+    "row": 85,
+    "code": "XLS-0085",
+    "equipment_type": "GRUA HORQUILLA 16 TON",
+    "brand": "KOMATSU",
+    "model": "FD16E-8"
+  },
+  {
+    "row": 86,
+    "code": "XLS-0086",
+    "equipment_type": "GRUA HORQUILLA 16 TON",
+    "brand": "KOMATSU",
+    "model": "FD16E-8"
+  },
+  {
+    "row": 87,
+    "code": "XLS-0087",
+    "equipment_type": "GRUA HORQUILLA 5 TON",
+    "brand": "HANGCHA",
+    "model": "CPCD50-RT4 4X4 3,6 AUT"
+  },
+  {
+    "row": 88,
+    "code": "XLS-0088",
+    "equipment_type": "GRUA HORQUILLA 3.5 TON",
+    "brand": "HANGCHA",
+    "model": "CPCD35 4X4 3,3AUT"
+  },
+  {
+    "row": 89,
+    "code": "XLS-0089",
+    "equipment_type": "GRUA HORQUILLA 3.5 TON",
+    "brand": "HANGCHA",
+    "model": "CPCD35 4X4 3,3AUT"
+  },
+  {
+    "row": 90,
+    "code": "XLS-0090",
+    "equipment_type": "MINICARGADOR",
+    "brand": "JCB",
+    "model": "270 CAB AC"
+  },
+  {
+    "row": 91,
+    "code": "XLS-0091",
+    "equipment_type": "CARGADOR FRONTAL",
+    "brand": "JCB",
+    "model": "455 ZX"
+  },
+  {
+    "row": 92,
+    "code": "XLS-0092",
+    "equipment_type": "CARGADOR FRONTAL",
+    "brand": "JCB",
+    "model": "455 ZX"
+  },
+  {
+    "row": 93,
+    "code": "XLS-0093",
+    "equipment_type": "MANIPULADOR",
+    "brand": "JCB",
+    "model": "533"
+  },
+  {
+    "row": 94,
+    "code": "XLS-0094",
+    "equipment_type": "MINICARGADOR",
+    "brand": "JCB",
+    "model": "270 T3"
+  },
+  {
+    "row": 95,
+    "code": "XLS-0095",
+    "equipment_type": "GRUA HORQUILLA 16 TON",
+    "brand": "BOBCAT",
+    "model": "D1605-7"
+  },
+  {
+    "row": 96,
+    "code": "XLS-0096",
+    "equipment_type": "GRUA HORQULLA 7 TON",
+    "brand": "BOBCAT",
+    "model": "D70S-9"
+  },
+  {
+    "row": 97,
+    "code": "XLS-0097",
+    "equipment_type": "RETROEXCAVADORA",
+    "brand": "JCB",
+    "model": "JCB3CX4TER3325888"
+  },
+  {
+    "row": 98,
+    "code": "XLS-0098",
+    "equipment_type": "RETROEXCAVADORA",
+    "brand": "JCB",
+    "model": "JCB3CX4TPR3324034"
+  },
+  {
+    "row": 99,
+    "code": "XLS-0099",
+    "equipment_type": "MANIPULADOR",
+    "brand": "JCB",
+    "model": "540-170"
+  },
+  {
+    "row": 100,
+    "code": "XLS-0100",
+    "equipment_type": "GRUA HORQUILLA 25 TON",
+    "brand": "KONECRANES",
+    "model": "SMV25-1200C"
+  },
+  {
+    "row": 101,
+    "code": "XLS-0101",
+    "equipment_type": "GRUA HORQUILLA 25 TON",
+    "brand": "KONECRANES",
+    "model": "SMV25-1200C"
+  },
+  {
+    "row": 102,
+    "code": "XLS-0102",
+    "equipment_type": "MINICARGADOR",
+    "brand": "JCB",
+    "model": "JCB270CAB_AC_CL"
+  },
+  {
+    "row": 103,
+    "code": "XLS-0103",
+    "equipment_type": "MINICARGADOR",
+    "brand": "JCB",
+    "model": "JCB270CAB_AC_CL"
+  },
+  {
+    "row": 104,
+    "code": "XLS-0104",
+    "equipment_type": "GRUA HORQUILLA 3 TON",
+    "brand": "HANGCHA",
+    "model": "CPCD30-X2W97B1 4X2"
+  },
+  {
+    "row": 105,
+    "code": "XLS-0105",
+    "equipment_type": "GRUA HORQUILLA 3 TON",
+    "brand": "HANGCHA",
+    "model": "CPCD30-X2W97B1 4X2"
+  },
+  {
+    "row": 106,
+    "code": "XLS-0106",
+    "equipment_type": "GRUA HORQUILLA 3.5 TON",
+    "brand": "HANGCHA",
+    "model": "CPCD35-QQ98CRT4 4X4"
+  },
+  {
+    "row": 107,
+    "code": "XLS-0107",
+    "equipment_type": "GRUA HORQUILLA 5 TON",
+    "brand": "HANGCHA",
+    "model": "CPCD50-RT4_CL"
+  },
+  {
+    "row": 108,
+    "code": "XLS-0108",
+    "equipment_type": "GRUA HORQUILLA 5 TON",
+    "brand": "HANGCHA",
+    "model": "CPCD50-RT4_CL"
+  },
+  {
+    "row": 109,
+    "code": "XLS-0109",
+    "equipment_type": "MINICARGADOR",
+    "brand": "JCB",
+    "model": "JCB270CAB_AC_CL"
+  },
+  {
+    "row": 110,
+    "code": "XLS-0110",
+    "equipment_type": "GRUA HORQUILLA 05 TON",
+    "brand": "KOMATSU",
+    "model": "FH50-2"
+  },
+  {
+    "row": 111,
+    "code": "XLS-0111",
+    "equipment_type": "GRUA HORQUILLA 10 TON",
+    "brand": "HANGCHA",
+    "model": "CPCD100-XH16B"
+  },
+  {
+    "row": 112,
+    "code": "XLS-0112",
+    "equipment_type": "GRUA HORQUILLA 2.5 TON ELECTRICA",
+    "brand": "HANGCHA",
+    "model": "CPD25-XEY2HA-SI_CL"
+  },
+  {
+    "row": 113,
+    "code": "XLS-0113",
+    "equipment_type": "GRUA HORQUILLA 03 TON GAS",
+    "brand": "HANGCHA",
+    "model": "CPQYD30-XRW22"
+  },
+  {
+    "row": 114,
+    "code": "XLS-0114",
+    "equipment_type": "GRUA HORQUILLA 03 TON GAS",
+    "brand": "HANGCHA",
+    "model": "CPQYD30-XRW22"
+  },
+  {
+    "row": 115,
+    "code": "XLS-0115",
+    "equipment_type": "GRUA HORQUILLA 10 TON",
+    "brand": "KOMATSU",
+    "model": "FH100-1"
+  },
+  {
+    "row": 116,
+    "code": "XLS-0116",
+    "equipment_type": "GRUA HORQUILLA 10 TON",
+    "brand": "KOMATSU",
+    "model": "FH100-1"
+  },
+  {
+    "row": 117,
+    "code": "XLS-0117",
+    "equipment_type": "GRUA HORQUILLA 16 TON",
+    "brand": "KOMATSU",
+    "model": "FH160-1"
+  },
+  {
+    "row": 118,
+    "code": "XLS-0118",
+    "equipment_type": "CAMIONETA",
+    "brand": "MAZDA",
+    "model": "NEW BT 50 DCAB SDX 4X4"
+  },
+  {
+    "row": 119,
+    "code": "XLS-0119",
+    "equipment_type": "CAMIONETA",
+    "brand": "MAXUS",
+    "model": "C35 C PLANA 2.0"
+  },
+  {
+    "row": 120,
+    "code": "XLS-0120",
+    "equipment_type": "CAMIONETA",
+    "brand": "DODGE",
+    "model": "RAM VAN 700 CITY"
+  },
+  {
+    "row": 121,
+    "code": "XLS-0121",
+    "equipment_type": "CAMIONETA",
+    "brand": "DODGE",
+    "model": "RAM VAN 700 CITY"
+  },
+  {
+    "row": 122,
+    "code": "XLS-0122",
+    "equipment_type": "MINIBUS",
+    "brand": "HYUNDAI",
+    "model": "COUNTY"
+  },
+  {
+    "row": 123,
+    "code": "XLS-0123",
+    "equipment_type": "CAMIONETA",
+    "brand": "MITSUBISHI",
+    "model": "L200 KATANA CRT 4X4 2.4"
+  },
+  {
+    "row": 124,
+    "code": "XLS-0124",
+    "equipment_type": "CAMIONETA",
+    "brand": "MITSUBISHI",
+    "model": "L200 KATANA CRT 4X4 2.4"
+  },
+  {
+    "row": 125,
+    "code": "XLS-0125",
+    "equipment_type": "CAMIONETA",
+    "brand": "DODGE",
+    "model": "RAM VAN 700 CITY"
+  },
+  {
+    "row": 126,
+    "code": "XLS-0126",
+    "equipment_type": "CAMIONETA",
+    "brand": "DODGE",
+    "model": "RAM VAN 700 CITY"
+  },
+  {
+    "row": 127,
+    "code": "XLS-0127",
+    "equipment_type": "CAMIONETA",
+    "brand": "DODGE",
+    "model": "RAM VAN 700 CITY"
+  },
+  {
+    "row": 128,
+    "code": "XLS-0128",
+    "equipment_type": "CAMIONETA",
+    "brand": "DODGE",
+    "model": "RAM VAN 700 CITY"
+  },
+  {
+    "row": 129,
+    "code": "XLS-0129",
+    "equipment_type": "CAMIONETA",
+    "brand": "MITSUBISHI",
+    "model": "L200 KATANA CRT 4X4 2.4"
+  },
+  {
+    "row": 130,
+    "code": "XLS-0130",
+    "equipment_type": "CAMIONETA",
+    "brand": "MITSUBISHI",
+    "model": "L200 KATANA CRT 4X4 2.4"
+  },
+  {
+    "row": 131,
+    "code": "XLS-0131",
+    "equipment_type": "CAMIONETA",
+    "brand": "MAXUS",
+    "model": "T90 4x4 AT"
+  },
+  {
+    "row": 132,
+    "code": "XLS-0132",
+    "equipment_type": "CAMIONETA",
+    "brand": "RENAULT",
+    "model": "DOKKER III"
+  },
+  {
+    "row": 133,
+    "code": "XLS-0133",
+    "equipment_type": "CAMIONETA",
+    "brand": "RENAULT",
+    "model": "DOKKER III"
+  },
+  {
+    "row": 134,
+    "code": "XLS-0134",
+    "equipment_type": "CAMIONETA",
+    "brand": "RENAULT",
+    "model": "DOKKER III"
+  },
+  {
+    "row": 135,
+    "code": "XLS-0135",
+    "equipment_type": "CAMIONETA",
+    "brand": "RENAULT",
+    "model": "DOKKER III"
+  },
+  {
+    "row": 136,
+    "code": "XLS-0136",
+    "equipment_type": "CAMIONETA",
+    "brand": "TOYOTA",
+    "model": "HILUX D CAB 4X4 3.0"
+  },
+  {
+    "row": 137,
+    "code": "XLS-0137",
+    "equipment_type": "CAMIONETA",
+    "brand": "TOYOTA",
+    "model": "HILUX D CAB 4X4 3.0"
+  },
+  {
+    "row": 138,
+    "code": "XLS-0138",
+    "equipment_type": "CAMIONETA",
+    "brand": "TOYOTA",
+    "model": "HILUX"
+  },
+  {
+    "row": 139,
+    "code": "XLS-0139",
+    "equipment_type": "CAMIONETA",
+    "brand": "TOYOTA",
+    "model": "HILUX D CAB 4X4 3.0"
+  },
+  {
+    "row": 140,
+    "code": "XLS-0140",
+    "equipment_type": "CAMIONETA",
+    "brand": "TOYOTA",
+    "model": "HILUX"
+  },
+  {
+    "row": 141,
+    "code": "XLS-0141",
+    "equipment_type": "CAMION LUBRICADOR",
+    "brand": "HINO",
+    "model": "XZU 6.5DC"
+  },
+  {
+    "row": 142,
+    "code": "XLS-0142",
+    "equipment_type": "CAMIONETA",
+    "brand": "TOYOTA",
+    "model": "HILUX"
+  },
+  {
+    "row": 143,
+    "code": "XLS-0143",
+    "equipment_type": "CAMIONETA",
+    "brand": "TOYOTA",
+    "model": "HILUX"
+  },
+  {
+    "row": 144,
+    "code": "XLS-0144",
+    "equipment_type": "CAMIONETA",
+    "brand": "RENAULT",
+    "model": "DOKKER III"
+  },
+  {
+    "row": 145,
+    "code": "XLS-0145",
+    "equipment_type": "CAMIONETA",
+    "brand": "DODGE",
+    "model": "RAM TRUCK 2500 6.7L CUMMINS"
+  },
+  {
+    "row": 146,
+    "code": "XLS-0146",
+    "equipment_type": "CAMIONETA",
+    "brand": "DODGE",
+    "model": "RAM TRUCK 2500 6.7L CUMMINS"
+  },
+  {
+    "row": 147,
+    "code": "XLS-0147",
+    "equipment_type": "CAMIONETA",
+    "brand": "GREAT WALL",
+    "model": "WINGLE2,4 T/M 4X2"
+  },
+  {
+    "row": 148,
+    "code": "XLS-0148",
+    "equipment_type": "CAMIONETA",
+    "brand": "GREAT WALL",
+    "model": "POER PLUS AT 2,0"
+  },
+  {
+    "row": 149,
+    "code": "XLS-0149",
+    "equipment_type": "CAMIONETA",
+    "brand": "GREAT WALL",
+    "model": "WINGLE2,4 T/M 4X2"
+  },
+  {
+    "row": 150,
+    "code": "XLS-0150",
+    "equipment_type": "CAMIONETA",
+    "brand": "GREAT WALL",
+    "model": "WINGLE2,4 T/M 4X2"
+  },
+  {
+    "row": 151,
+    "code": "XLS-0151",
+    "equipment_type": "CAMIONETA",
+    "brand": "RAM",
+    "model": "700 BIGHORN DC 1,3 CVT"
+  },
+  {
+    "row": 152,
+    "code": "XLS-0152",
+    "equipment_type": "CAMIONETA",
+    "brand": "RAM",
+    "model": "700 BIGHORN DC 1,3 CVT"
+  },
+  {
+    "row": 153,
+    "code": "XLS-0153",
+    "equipment_type": "CAMIONETA",
+    "brand": "RAM",
+    "model": "700 BIGHORN DC 1,3 CVT"
+  },
+  {
+    "row": 154,
+    "code": "XLS-0154",
+    "equipment_type": "CAMIONETA",
+    "brand": "RAM",
+    "model": "700 BIGHORN DC 1,3 CVT"
+  },
+  {
+    "row": 155,
+    "code": "XLS-0155",
+    "equipment_type": "CAMIONETA",
+    "brand": "RAM",
+    "model": "700 BIGHORN DC 1,3 CVT"
+  },
+  {
+    "row": 156,
+    "code": "XLS-0156",
+    "equipment_type": "CAMIONETA",
+    "brand": "RAM",
+    "model": "700 BIGHORN 1,3 AUT"
+  },
+  {
+    "row": 157,
+    "code": "XLS-0157",
+    "equipment_type": "CAMIONETA",
+    "brand": "RAM",
+    "model": "700 BIGHORN 1,3 AUT"
+  },
+  {
+    "row": 158,
+    "code": "XLS-0158",
+    "equipment_type": "CAMIONETA",
+    "brand": "RAM",
+    "model": "700 BIGHORN 1,3 AUT"
+  },
+  {
+    "row": 159,
+    "code": "XLS-0159",
+    "equipment_type": "CAMIONETA",
+    "brand": "RAM",
+    "model": "700 BIGHORN 1,3 AUT"
+  },
+  {
+    "row": 160,
+    "code": "XLS-0160",
+    "equipment_type": "CAMIONETA",
+    "brand": "RAM",
+    "model": "700 BIGHORN 1,3 AUT"
+  },
+  {
+    "row": 161,
+    "code": "XLS-0161",
+    "equipment_type": "FURGÓN",
+    "brand": "",
+    "model": ""
+  },
+  {
+    "row": 162,
+    "code": "XLS-0162",
+    "equipment_type": "FURGÓN",
+    "brand": "MAXUS",
+    "model": "E DELIVER 3 AUT"
+  },
+  {
+    "row": 163,
+    "code": "XLS-0163",
+    "equipment_type": "ALZA HOMBRE",
+    "brand": "GENIE",
+    "model": "Z62/40"
+  },
+  {
+    "row": 164,
+    "code": "XLS-0164",
+    "equipment_type": "ALZA HOMBRE ART 16 M",
+    "brand": "GENIE",
+    "model": "Z - 45/25J RT 4X4"
+  },
+  {
+    "row": 165,
+    "code": "XLS-0165",
+    "equipment_type": "ALZA HOMBRE ART 16 M",
+    "brand": "GENIE",
+    "model": "Z - 45/25J RT 4X4"
+  },
+  {
+    "row": 166,
+    "code": "XLS-0166",
+    "equipment_type": "ALZA HOMBRE ART 16 M",
+    "brand": "GENIE",
+    "model": "Z - 45/25J RT 4X4"
+  },
+  {
+    "row": 167,
+    "code": "XLS-0167",
+    "equipment_type": "ALZA HOMBRE ART 16,5 M",
+    "brand": "GENIE",
+    "model": "Z - 45/25J RT 4X4"
+  },
+  {
+    "row": 168,
+    "code": "XLS-0168",
+    "equipment_type": "ALZA HOMBRE ART 25.77M",
+    "brand": "GENIE",
+    "model": "Z80/60"
+  },
+  {
+    "row": 169,
+    "code": "XLS-0169",
+    "equipment_type": "LUMINARIA",
+    "brand": "PRAMAC",
+    "model": "T.LED 1700K"
+  },
+  {
+    "row": 170,
+    "code": "XLS-0170",
+    "equipment_type": "LUMINARIA",
+    "brand": "PRAMAC",
+    "model": "T.LED 1700K"
+  },
+  {
+    "row": 171,
+    "code": "XLS-0171",
+    "equipment_type": "LUMINARIA",
+    "brand": "PRAMAC",
+    "model": "T.LED 1700K"
+  },
+  {
+    "row": 172,
+    "code": "XLS-0172",
+    "equipment_type": "LUMINARIA",
+    "brand": "PRAMAC",
+    "model": "T.LED 1700K"
+  },
+  {
+    "row": 173,
+    "code": "XLS-0173",
+    "equipment_type": "LUMINARIA",
+    "brand": "PRAMAC",
+    "model": "T.LED 1700K"
+  },
+  {
+    "row": 174,
+    "code": "XLS-0174",
+    "equipment_type": "GENERADOR 220 KVA",
+    "brand": "JCB",
+    "model": "G220QX"
+  },
+  {
+    "row": 175,
+    "code": "XLS-0175",
+    "equipment_type": "GENERADOR 330 KVA",
+    "brand": "JCB",
+    "model": "G330QX"
+  },
+  {
+    "row": 176,
+    "code": "XLS-0176",
+    "equipment_type": "GENERADOR 90 KVA",
+    "brand": "JCB",
+    "model": "G90QX"
+  },
+  {
+    "row": 177,
+    "code": "XLS-0177",
+    "equipment_type": "GENERADOR 45 KVA",
+    "brand": "JCB",
+    "model": "G45QX"
+  },
+  {
+    "row": 178,
+    "code": "XLS-0178",
+    "equipment_type": "GENERADOR 90 KVA",
+    "brand": "JCB",
+    "model": "G90QX"
+  },
+  {
+    "row": 179,
+    "code": "XLS-0179",
+    "equipment_type": "GENERADOR 20 KVA",
+    "brand": "JCB",
+    "model": "G20QS"
+  },
+  {
+    "row": 180,
+    "code": "XLS-0180",
+    "equipment_type": "GENERADOR 45 KVA",
+    "brand": "JCB",
+    "model": "G45QS"
+  },
+  {
+    "row": 181,
+    "code": "XLS-0181",
+    "equipment_type": "GENERADOR 440 KVA",
+    "brand": "JCB",
+    "model": "G440QX"
+  },
+  {
+    "row": 182,
+    "code": "XLS-0182",
+    "equipment_type": "GENERADOR 440 KVA",
+    "brand": "JCB",
+    "model": "G440QX"
+  },
+  {
+    "row": 183,
+    "code": "XLS-0183",
+    "equipment_type": "GENERADOR 440 KVA",
+    "brand": "JCB",
+    "model": "G440QX"
+  },
+  {
+    "row": 184,
+    "code": "XLS-0184",
+    "equipment_type": "GENERADOR 45 KVA",
+    "brand": "JCB",
+    "model": "G45QS"
+  },
+  {
+    "row": 185,
+    "code": "XLS-0185",
+    "equipment_type": "GENERADOR 45 KVA",
+    "brand": "JCB",
+    "model": "G45QS"
+  },
+  {
+    "row": 186,
+    "code": "XLS-0186",
+    "equipment_type": "GENERADOR 440 KVA",
+    "brand": "JCB",
+    "model": "G440QX"
+  },
+  {
+    "row": 187,
+    "code": "XLS-0187",
+    "equipment_type": "GENERADOR 20 KVA",
+    "brand": "JCB",
+    "model": "G20QS"
+  },
+  {
+    "row": 188,
+    "code": "XLS-0188",
+    "equipment_type": "GENERADOR 90 KVA",
+    "brand": "JCB",
+    "model": "G90QS"
+  },
+  {
+    "row": 189,
+    "code": "XLS-0189",
+    "equipment_type": "GENERADOR 115 KVA",
+    "brand": "JCB",
+    "model": "G115QS"
+  },
+  {
+    "row": 190,
+    "code": "XLS-0190",
+    "equipment_type": "GENERADOR 220 KVA",
+    "brand": "JCB",
+    "model": "G220QS"
+  },
+  {
+    "row": 191,
+    "code": "XLS-0191",
+    "equipment_type": "GENERADOR 115 KVA",
+    "brand": "JCB",
+    "model": "G115QS"
+  },
+  {
+    "row": 192,
+    "code": "XLS-0192",
+    "equipment_type": "GENERADOR 45 KVA",
+    "brand": "JCB",
+    "model": "G45QS"
+  },
+  {
+    "row": 193,
+    "code": "XLS-0193",
+    "equipment_type": "GENERADOR 90 KVA",
+    "brand": "JCB",
+    "model": "G90QS"
+  },
+  {
+    "row": 194,
+    "code": "XLS-0194",
+    "equipment_type": "GENERADOR 45 KVA",
+    "brand": "JCB",
+    "model": "G45QS"
+  },
+  {
+    "row": 195,
+    "code": "XLS-0195",
+    "equipment_type": "GENERADOR 115 KVA",
+    "brand": "JCB",
+    "model": "G115QS"
+  },
+  {
+    "row": 196,
+    "code": "XLS-0196",
+    "equipment_type": "GENERADOR 45 KVA",
+    "brand": "JCB",
+    "model": "G45QX"
+  },
+  {
+    "row": 197,
+    "code": "XLS-0197",
+    "equipment_type": "GENERADOR 220 KVA",
+    "brand": "JCB",
+    "model": "G220QS"
+  },
+  {
+    "row": 198,
+    "code": "XLS-0198",
+    "equipment_type": "GENERADOR 165 KVA",
+    "brand": "JCB",
+    "model": "G165QS"
+  },
+  {
+    "row": 199,
+    "code": "XLS-0199",
+    "equipment_type": "GENERADOR 165 KVA",
+    "brand": "JCB",
+    "model": "G165QS"
+  },
+  {
+    "row": 200,
+    "code": "XLS-0200",
+    "equipment_type": "GENERADOR 45 KVA",
+    "brand": "JBC",
+    "model": "G45QS"
+  },
+  {
+    "row": 201,
+    "code": "XLS-0201",
+    "equipment_type": "GENERADOR 45 KVA",
+    "brand": "JCB",
+    "model": "G45QS"
+  },
+  {
+    "row": 202,
+    "code": "XLS-0202",
+    "equipment_type": "GENERADOR 33 KVA",
+    "brand": "JCB",
+    "model": "G33QS"
+  },
+  {
+    "row": 203,
+    "code": "XLS-0203",
+    "equipment_type": "GENERADOR 33 KVA",
+    "brand": "JCB",
+    "model": "G33QS"
+  },
+  {
+    "row": 204,
+    "code": "XLS-0204",
+    "equipment_type": "GENERADOR 33 KVA",
+    "brand": "JCB",
+    "model": "G33QS"
+  },
+  {
+    "row": 205,
+    "code": "XLS-0205",
+    "equipment_type": "GENERADOR 33 KVA",
+    "brand": "JCB",
+    "model": "G33QS"
+  },
+  {
+    "row": 206,
+    "code": "XLS-0206",
+    "equipment_type": "GENERADOR 45 KVA",
+    "brand": "JBC",
+    "model": "G45QS"
+  },
+  {
+    "row": 207,
+    "code": "XLS-0207",
+    "equipment_type": "GENERADOR 221 KVA",
+    "brand": "JCB",
+    "model": "G221QS"
+  },
+  {
+    "row": 208,
+    "code": "XLS-0208",
+    "equipment_type": "GENERADOR 221 KVA",
+    "brand": "JCB",
+    "model": "G221QS"
+  },
+  {
+    "row": 209,
+    "code": "XLS-0209",
+    "equipment_type": "GENERADOR 165 KVA",
+    "brand": "JCB",
+    "model": "G165QS"
+  },
+  {
+    "row": 210,
+    "code": "XLS-0210",
+    "equipment_type": "GENERADOR 141 KVA",
+    "brand": "JCB",
+    "model": "G141QS"
+  },
+  {
+    "row": 211,
+    "code": "XLS-0211",
+    "equipment_type": "GENERADOR 166 KVA",
+    "brand": "JCB",
+    "model": "G166QS"
+  },
+  {
+    "row": 212,
+    "code": "XLS-0212",
+    "equipment_type": "GENERADOR 166 KVA",
+    "brand": "JCB",
+    "model": "G166QS"
+  },
+  {
+    "row": 213,
+    "code": "XLS-0213",
+    "equipment_type": "GENERADOR 66 KVA",
+    "brand": "JCB",
+    "model": "G66QS"
+  },
+  {
+    "row": 214,
+    "code": "XLS-0214",
+    "equipment_type": "GENERADOR 66 KVA",
+    "brand": "JCB",
+    "model": "G66QS"
+  },
+  {
+    "row": 215,
+    "code": "XLS-0215",
+    "equipment_type": "GENERADOR 141 KVA",
+    "brand": "JCB",
+    "model": "G141QS"
+  },
+  {
+    "row": 216,
+    "code": "XLS-0216",
+    "equipment_type": "GENERADOR 91 KVA",
+    "brand": "JCB",
+    "model": "G91QS"
+  },
+  {
+    "row": 217,
+    "code": "XLS-0217",
+    "equipment_type": "GENERADOR 91 KVA",
+    "brand": "JCB",
+    "model": "G91QS"
+  },
+  {
+    "row": 218,
+    "code": "XLS-0218",
+    "equipment_type": "GENERADOR 41 KVA",
+    "brand": "JCB",
+    "model": "G41QS"
+  },
+  {
+    "row": 219,
+    "code": "XLS-0219",
+    "equipment_type": "GENERADOR 41 KVA",
+    "brand": "JCB",
+    "model": "G41QS"
+  },
+  {
+    "row": 220,
+    "code": "XLS-0220",
+    "equipment_type": "GENERADOR 41 KVA",
+    "brand": "JCB",
+    "model": "G41QS"
+  },
+  {
+    "row": 221,
+    "code": "XLS-0221",
+    "equipment_type": "GENERADOR 11 KVA",
+    "brand": "VIELCO",
+    "model": "VIELCO TRIF GS11YLD"
+  },
+  {
+    "row": 222,
+    "code": "XLS-0222",
+    "equipment_type": "GENERADOR 11 KVA",
+    "brand": "VIELCO",
+    "model": "VIELCO TRIF GS11YLD"
+  },
+  {
+    "row": 223,
+    "code": "XLS-0223",
+    "equipment_type": "GENERADOR 22 KVA",
+    "brand": "VIELCO",
+    "model": "VIELCO FAW TRIF GS22FLD"
+  },
+  {
+    "row": 224,
+    "code": "XLS-0224",
+    "equipment_type": "GENERADOR 22 KVA",
+    "brand": "VIELCO",
+    "model": "VIELCO FAW TRIF GS22FLD"
+  },
+  {
+    "row": 225,
+    "code": "XLS-0225",
+    "equipment_type": "GENERADOR 22 KVA",
+    "brand": "VIELCO",
+    "model": "VIELCO FAW TRIF GS22FLD"
+  },
+  {
+    "row": 226,
+    "code": "XLS-0226",
+    "equipment_type": "GENERADOR 41 KVA",
+    "brand": "JCB",
+    "model": "G41QS"
+  },
+  {
+    "row": 227,
+    "code": "XLS-0227",
+    "equipment_type": "GENERADOR 41 KVA",
+    "brand": "JCB",
+    "model": "G41QS"
+  },
+  {
+    "row": 228,
+    "code": "XLS-0228",
+    "equipment_type": "GENERADOR 20 KVA",
+    "brand": "JCB",
+    "model": "G20QS"
+  },
+  {
+    "row": 229,
+    "code": "XLS-0229",
+    "equipment_type": "GENERADOR 137 KVA",
+    "brand": "JCB",
+    "model": "G141QS"
+  },
+  {
+    "row": 231,
+    "code": "XLS-0231",
+    "equipment_type": "GENERADOR 20 KVA",
+    "brand": "JCB",
+    "model": "G20QS"
+  },
+  {
+    "row": 232,
+    "code": "XLS-0232",
+    "equipment_type": "COMPRESOR",
+    "brand": "SULLAIR",
+    "model": "0"
+  },
+  {
+    "row": 233,
+    "code": "XLS-0233",
+    "equipment_type": "SOLDADORA",
+    "brand": "LINCOLN",
+    "model": "VANTAGE 500"
+  },
+  {
+    "row": 234,
+    "code": "XLS-0234",
+    "equipment_type": "SOLDADORA",
+    "brand": "LINCOLN",
+    "model": "VANTAGE 500"
+  },
+  {
+    "row": 235,
+    "code": "XLS-0235",
+    "equipment_type": "SOLDADORA",
+    "brand": "LINCOLN",
+    "model": "VANTAGE 500"
+  },
+  {
+    "row": 236,
+    "code": "XLS-0236",
+    "equipment_type": "SOLDADORA",
+    "brand": "LINCOLN",
+    "model": "VANTAGE 500"
+  },
+  {
+    "row": 237,
+    "code": "XLS-0237",
+    "equipment_type": "SOLDADORA",
+    "brand": "LINCOLN",
+    "model": "VANTAGE 500"
+  },
+  {
+    "row": 238,
+    "code": "XLS-0238",
+    "equipment_type": "SOLDADORA",
+    "brand": "LINCOLN",
+    "model": "VANTAGE 500"
+  },
+  {
+    "row": 239,
+    "code": "XLS-0239",
+    "equipment_type": "LUMINARIA",
+    "brand": "WACKER NEUSON",
+    "model": "LTV 6K"
+  },
+  {
+    "row": 240,
+    "code": "XLS-0240",
+    "equipment_type": "LUMINARIA",
+    "brand": "WACKER NEUSON",
+    "model": "LTV 6K"
+  },
+  {
+    "row": 241,
+    "code": "XLS-0241",
+    "equipment_type": "LUMINARIA",
+    "brand": "ALLMAND",
+    "model": "NIGHT LITE PRO 212"
+  },
+  {
+    "row": 242,
+    "code": "XLS-0242",
+    "equipment_type": "LUMINARIA",
+    "brand": "WACKER NEUSON",
+    "model": "LTV 6K"
+  },
+  {
+    "row": 243,
+    "code": "XLS-0243",
+    "equipment_type": "CAMION PLUMA",
+    "brand": "FREIGHTLINER",
+    "model": "M2 106"
+  },
+  {
+    "row": 244,
+    "code": "XLS-0244",
+    "equipment_type": "PLUMA",
+    "brand": "",
+    "model": ""
+  },
+  {
+    "row": 245,
+    "code": "XLS-0245",
+    "equipment_type": "CAMION COMBUSTIBLE",
+    "brand": "MITSUBISHI",
+    "model": "CANTER"
+  },
+  {
+    "row": 246,
+    "code": "XLS-0246",
+    "equipment_type": "CAMION ALJIBE",
+    "brand": "MERCEDES BENZ",
+    "model": "ACTROS 3336"
+  },
+  {
+    "row": 247,
+    "code": "XLS-0247",
+    "equipment_type": "CAMION TOLVA",
+    "brand": "FREIGHTLINER",
+    "model": "M2 112 6X4"
+  },
+  {
+    "row": 248,
+    "code": "XLS-0248",
+    "equipment_type": "CAMION TOLVA",
+    "brand": "FREIGHTLINER",
+    "model": "M2 112 6X4"
+  },
+  {
+    "row": 249,
+    "code": "XLS-0249",
+    "equipment_type": "CAMION PLUMA",
+    "brand": "MERCEDES BENZ",
+    "model": "ACTROS 4144K 8X4"
+  },
+  {
+    "row": 250,
+    "code": "XLS-0250",
+    "equipment_type": "PLUMA",
+    "brand": "",
+    "model": ""
+  },
+  {
+    "row": 251,
+    "code": "XLS-0251",
+    "equipment_type": "PLATAFORMA TIJERAS",
+    "brand": "HAULLOTE",
+    "model": ""
+  },
+  {
+    "row": 252,
+    "code": "XLS-0252",
+    "equipment_type": "LUMINARIA",
+    "brand": "WACKER NEUSON",
+    "model": "LTV 6K"
+  },
+  {
+    "row": 253,
+    "code": "XLS-0253",
+    "equipment_type": "CAMION PLUMA",
+    "brand": "FREIGHTLINER",
+    "model": "GWLW60"
+  },
+  {
+    "row": 254,
+    "code": "XLS-0254",
+    "equipment_type": "CAMION PLUMA",
+    "brand": "FREIGHTLINER",
+    "model": "M2 106 (CUMMINS)"
+  },
+  {
+    "row": 255,
+    "code": "XLS-0255",
+    "equipment_type": "PLUMA",
+    "brand": "",
+    "model": ""
+  },
+  {
+    "row": 256,
+    "code": "XLS-0256",
+    "equipment_type": "CAMION PLUMA",
+    "brand": "MERCEDES BENZ",
+    "model": "ACTROS 4144K 8X4"
+  },
+  {
+    "row": 257,
+    "code": "XLS-0257",
+    "equipment_type": "PLUMA",
+    "brand": "PALFINGER",
+    "model": "PK48002-EH"
+  },
+  {
+    "row": 258,
+    "code": "XLS-0258",
+    "equipment_type": "CAMION PLUMA",
+    "brand": "FREIGHTLINER",
+    "model": "M2 112 DD13 EPA10"
+  },
+  {
+    "row": 259,
+    "code": "XLS-0259",
+    "equipment_type": "PLUMA",
+    "brand": "",
+    "model": ""
+  },
+  {
+    "row": 260,
+    "code": "XLS-0260",
+    "equipment_type": "CAMION PLUMA",
+    "brand": "FREIGHTLINER",
+    "model": "M2 112 DD13"
+  },
+  {
+    "row": 261,
+    "code": "XLS-0261",
+    "equipment_type": "PLUMA",
+    "brand": "",
+    "model": ""
+  },
+  {
+    "row": 262,
+    "code": "XLS-0262",
+    "equipment_type": "COMPRESOR",
+    "brand": "KAESER",
+    "model": "M50 CL"
+  },
+  {
+    "row": 263,
+    "code": "XLS-0263",
+    "equipment_type": "COMPRESOR",
+    "brand": "KAESER",
+    "model": ""
+  },
+  {
+    "row": 264,
+    "code": "XLS-0264",
+    "equipment_type": "COMPRESOR",
+    "brand": "KAESER",
+    "model": ""
+  },
+  {
+    "row": 265,
+    "code": "XLS-0265",
+    "equipment_type": "CAMION PLUMA",
+    "brand": "FREIGHTLINER",
+    "model": "M2 106 CUMMINS"
+  },
+  {
+    "row": 266,
+    "code": "XLS-0266",
+    "equipment_type": "PLUMA",
+    "brand": "",
+    "model": ""
+  },
+  {
+    "row": 267,
+    "code": "XLS-0267",
+    "equipment_type": "CAMION ALJIBE",
+    "brand": "MERCEDES BENZ",
+    "model": "ACTROS 3336"
+  },
+  {
+    "row": 268,
+    "code": "XLS-0268",
+    "equipment_type": "CAMION PLATAFORMA",
+    "brand": "MERCEDES BENZ",
+    "model": "ATEGO 1726/54 EURO V"
+  },
+  {
+    "row": 269,
+    "code": "XLS-0269",
+    "equipment_type": "CAMION PLUMA",
+    "brand": "FREIGHTLINER",
+    "model": "M2 112 DD13 EPA"
+  },
+  {
+    "row": 270,
+    "code": "XLS-0270",
+    "equipment_type": "PLUMA",
+    "brand": "",
+    "model": ""
+  },
+  {
+    "row": 271,
+    "code": "XLS-0271",
+    "equipment_type": "CAMION PLUMA",
+    "brand": "FREIGHTLINER",
+    "model": "SD 114"
+  },
+  {
+    "row": 272,
+    "code": "XLS-0272",
+    "equipment_type": "PLUMA",
+    "brand": "",
+    "model": ""
+  },
+  {
+    "row": 273,
+    "code": "XLS-0273",
+    "equipment_type": "CAMION TOLVA",
+    "brand": "MERCEDES BENZ",
+    "model": "AROCS 4848"
+  },
+  {
+    "row": 274,
+    "code": "XLS-0274",
+    "equipment_type": "CAMION TOLVA",
+    "brand": "MERCEDES BENZ",
+    "model": "AROCS 4848"
+  },
+  {
+    "row": 275,
+    "code": "XLS-0275",
+    "equipment_type": "CAMION ALJIBE",
+    "brand": "MERCEDEZ BENZ",
+    "model": "AROCS 3342 K 3600 RET"
+  },
+  {
+    "row": 276,
+    "code": "XLS-0276",
+    "equipment_type": "CAMION TOLVA",
+    "brand": "MERCEDEZ BENZ",
+    "model": "AROCS 4848"
+  },
+  {
+    "row": 277,
+    "code": "XLS-0277",
+    "equipment_type": "CAMION TOLVA",
+    "brand": "MERCEDEZ BENZ",
+    "model": "AROCS 4848"
+  },
+  {
+    "row": 278,
+    "code": "XLS-0278",
+    "equipment_type": "CAMION",
+    "brand": "HINO",
+    "model": "FD1121"
+  },
+  {
+    "row": 279,
+    "code": "XLS-0279",
+    "equipment_type": "COMPRESOR",
+    "brand": "KAESER",
+    "model": "M100"
+  },
+  {
+    "row": 280,
+    "code": "XLS-0280",
+    "equipment_type": "COMPRESOR",
+    "brand": "BOONIGA",
+    "model": "V2065-100L"
+  },
+  {
+    "row": 281,
+    "code": "XLS-0281",
+    "equipment_type": "COMPRESOR",
+    "brand": "KAESER",
+    "model": "MOBILAIR M50 PE CL 7BAR"
+  },
+  {
+    "row": 282,
+    "code": "XLS-0282",
+    "equipment_type": "COMPRESOR",
+    "brand": "KAESER",
+    "model": "MOBILAIR M50 PE CL 7BAR"
+  },
+  {
+    "row": 283,
+    "code": "XLS-0283",
+    "equipment_type": "COMPRESOR",
+    "brand": "KAESER",
+    "model": "MOBILAIR M50"
+  },
+  {
+    "row": 284,
+    "code": "XLS-0284",
+    "equipment_type": "COMPRESOR",
+    "brand": "KAESER",
+    "model": "MOBILAR M50"
+  },
+  {
+    "row": 285,
+    "code": "XLS-0285",
+    "equipment_type": "COMPRESOR",
+    "brand": "KAESER",
+    "model": "MOBILAR M50"
+  },
+  {
+    "row": 286,
+    "code": "XLS-0286",
+    "equipment_type": "LUMINARIA",
+    "brand": "WACKER NEUSON",
+    "model": "LTV 6K"
+  },
+  {
+    "row": 287,
+    "code": "XLS-0287",
+    "equipment_type": "LUMINARIA",
+    "brand": "WACKER NEUSON",
+    "model": "LTV 6K"
+  },
+  {
+    "row": 288,
+    "code": "XLS-0288",
+    "equipment_type": "LUMINARIA",
+    "brand": "WACKER NEUSON",
+    "model": "LTV 6K"
+  },
+  {
+    "row": 289,
+    "code": "XLS-0289",
+    "equipment_type": "LUMINARIA",
+    "brand": "WACKER NEUSON",
+    "model": "LTV 6K"
+  },
+  {
+    "row": 290,
+    "code": "XLS-0290",
+    "equipment_type": "LUMINARIA",
+    "brand": "ALLMAND",
+    "model": "NIGHT LITE PRO II"
+  },
+  {
+    "row": 291,
+    "code": "XLS-0291",
+    "equipment_type": "LUMINARIA",
+    "brand": "ALLMAND",
+    "model": "NIGHT LITE PRO II"
+  },
+  {
+    "row": 292,
+    "code": "XLS-0292",
+    "equipment_type": "LUMINARIA",
+    "brand": "ALLMAND",
+    "model": "NIGHT LITE PRO II"
+  },
+  {
+    "row": 293,
+    "code": "XLS-0293",
+    "equipment_type": "LUMINARIA",
+    "brand": "ALLMAND",
+    "model": "NIGHT LITE PRO II"
+  },
+  {
+    "row": 294,
+    "code": "XLS-0294",
+    "equipment_type": "LUMINARIA",
+    "brand": "ALLMAND",
+    "model": "NIGHT LITE PRO II"
+  },
+  {
+    "row": 295,
+    "code": "XLS-0295",
+    "equipment_type": "LUMINARIA",
+    "brand": "ALLMAND",
+    "model": "NIGHT LITE PRO II"
+  },
+  {
+    "row": 296,
+    "code": "XLS-0296",
+    "equipment_type": "LUMINARIA",
+    "brand": "ALLMAND",
+    "model": "NIGHT LITE PRO II"
+  },
+  {
+    "row": 297,
+    "code": "XLS-0297",
+    "equipment_type": "LUMINARIA",
+    "brand": "ALLMAND",
+    "model": "NIGHT LITE PRO II"
+  },
+  {
+    "row": 298,
+    "code": "XLS-0298",
+    "equipment_type": "LUMINARIA",
+    "brand": "ALLMAND",
+    "model": "NIGHT LITE PRO II"
+  },
+  {
+    "row": 299,
+    "code": "XLS-0299",
+    "equipment_type": "LUMINARIA",
+    "brand": "DOOSAN",
+    "model": "LN LEK1.4-50HZ LED"
+  },
+  {
+    "row": 300,
+    "code": "XLS-0300",
+    "equipment_type": "LUMINARIA",
+    "brand": "DOOSAN",
+    "model": "LN LEK1.4-50HZ LED"
+  },
+  {
+    "row": 301,
+    "code": "XLS-0301",
+    "equipment_type": "LUMINARIA",
+    "brand": "DOOSAN",
+    "model": "LN LEK1.4-50HZ LED"
+  },
+  {
+    "row": 302,
+    "code": "XLS-0302",
+    "equipment_type": "LUMINARIA",
+    "brand": "DOOSAN",
+    "model": "LN LEK1.4-50HZ LED"
+  },
+  {
+    "row": 303,
+    "code": "XLS-0303",
+    "equipment_type": "LUMINARIA",
+    "brand": "DOOSAN",
+    "model": "LN LEK1.4-50HZ LED"
+  },
+  {
+    "row": 304,
+    "code": "XLS-0304",
+    "equipment_type": "LUMINARIA",
+    "brand": "DOOSAN",
+    "model": "LN LEK1.4-50HZ LED"
+  },
+  {
+    "row": 305,
+    "code": "XLS-0305",
+    "equipment_type": "LUMINARIA",
+    "brand": "DOOSAN",
+    "model": "LN LEK1.4-50HZ LED"
+  },
+  {
+    "row": 306,
+    "code": "XLS-0306",
+    "equipment_type": "LUMINARIA",
+    "brand": "DOOSAN",
+    "model": "LN LEK1.4-50HZ LED"
+  },
+  {
+    "row": 307,
+    "code": "XLS-0307",
+    "equipment_type": "LUMINARIA",
+    "brand": "DOOSAN",
+    "model": "LN LEK1.4-50HZ LED"
+  },
+  {
+    "row": 308,
+    "code": "XLS-0308",
+    "equipment_type": "LUMINARIA",
+    "brand": "DOOSAN",
+    "model": "LN LEK1.4-50HZ LED"
+  },
+  {
+    "row": 309,
+    "code": "XLS-0309",
+    "equipment_type": "LUMINARIA",
+    "brand": "DOOSAN",
+    "model": "LN LEK1,450HZLED"
+  },
+  {
+    "row": 310,
+    "code": "XLS-0310",
+    "equipment_type": "LUMINARIA",
+    "brand": "DOOSAN",
+    "model": "LN LEK1,450HZLED"
+  },
+  {
+    "row": 311,
+    "code": "XLS-0311",
+    "equipment_type": "LUMINARIA",
+    "brand": "DOOSAN",
+    "model": "LN LEK1,450HZLED"
+  },
+  {
+    "row": 312,
+    "code": "XLS-0312",
+    "equipment_type": "LUMINARIA",
+    "brand": "DOOSAN",
+    "model": "LN LEK1,450HZLED"
+  },
+  {
+    "row": 313,
+    "code": "XLS-0313",
+    "equipment_type": "LUMINARIA",
+    "brand": "DOOSAN",
+    "model": "LN LEK1,450HZLED"
+  },
+  {
+    "row": 314,
+    "code": "XLS-0314",
+    "equipment_type": "LUMINARIA",
+    "brand": "DOOSAN",
+    "model": "LN LEK1,450HZLED"
+  },
+  {
+    "row": 315,
+    "code": "XLS-0315",
+    "equipment_type": "LUMINARIA",
+    "brand": "DOOSAN",
+    "model": "LN LEK1,450HZLED"
+  },
+  {
+    "row": 316,
+    "code": "XLS-0316",
+    "equipment_type": "LUMINARIA",
+    "brand": "DOOSAN",
+    "model": "LN LEK1,450HZLED"
+  },
+  {
+    "row": 317,
+    "code": "XLS-0317",
+    "equipment_type": "LUMINARIA",
+    "brand": "BOBCAT",
+    "model": "LED PL50"
+  },
+  {
+    "row": 318,
+    "code": "XLS-0318",
+    "equipment_type": "LUMINARIA",
+    "brand": "BOBCAT",
+    "model": "LED PL50"
+  },
+  {
+    "row": 319,
+    "code": "XLS-0319",
+    "equipment_type": "LUMINARIA",
+    "brand": "BOBCAT",
+    "model": "LED PL50"
+  },
+  {
+    "row": 320,
+    "code": "XLS-0320",
+    "equipment_type": "LUMINARIA",
+    "brand": "BOBCAT",
+    "model": "LED PL50"
+  },
+  {
+    "row": 321,
+    "code": "XLS-0321",
+    "equipment_type": "LUMINARIA",
+    "brand": "BOBCAT",
+    "model": "LED PL50"
+  },
+  {
+    "row": 322,
+    "code": "XLS-0322",
+    "equipment_type": "LUMINARIA",
+    "brand": "BOBCAT",
+    "model": "LED PL50"
+  },
+  {
+    "row": 323,
+    "code": "XLS-0323",
+    "equipment_type": "LUMINARIA",
+    "brand": "BOBCAT",
+    "model": "LED PL50"
+  },
+  {
+    "row": 324,
+    "code": "XLS-0324",
+    "equipment_type": "LUMINARIA",
+    "brand": "BOBCAT",
+    "model": "LED PL50"
+  },
+  {
+    "row": 325,
+    "code": "XLS-0325",
+    "equipment_type": "LUMINARIA",
+    "brand": "BOBCAT",
+    "model": "LED PL50"
+  },
+  {
+    "row": 326,
+    "code": "XLS-0326",
+    "equipment_type": "LUMINARIA",
+    "brand": "BOBCAT",
+    "model": "LED PL50"
+  },
+  {
+    "row": 327,
+    "code": "XLS-0327",
+    "equipment_type": "COMPRESOR",
+    "brand": "KAESER",
+    "model": "SK22 8BAR"
+  },
+  {
+    "row": 328,
+    "code": "XLS-0328",
+    "equipment_type": "LUMINARIA SOLAR",
+    "brand": "ATLAS COPCO",
+    "model": "SOLAR HILIDHT MS 5"
+  },
+  {
+    "row": 329,
+    "code": "XLS-0329",
+    "equipment_type": "LUMINARIA SOLAR",
+    "brand": "ATLAS COPCO",
+    "model": "SOLAR HILIDHT MS 5"
+  },
+  {
+    "row": 330,
+    "code": "XLS-0330",
+    "equipment_type": "LUMINARIA SOLAR",
+    "brand": "ATLAS COPCO",
+    "model": "SOLAR HILIDHT MS 5"
+  },
+  {
+    "row": 331,
+    "code": "XLS-0331",
+    "equipment_type": "LUMINARIA SOLAR",
+    "brand": "ATLAS COPCO",
+    "model": "SOLAR HILIDHT MS 5"
+  },
+  {
+    "row": 332,
+    "code": "XLS-0332",
+    "equipment_type": "LUMINARIA SOLAR",
+    "brand": "ATLAS COPCO",
+    "model": "SOLAR HILIDHT MS 5"
+  },
+  {
+    "row": 333,
+    "code": "XLS-0333",
+    "equipment_type": "LUMINARIA SOLAR",
+    "brand": "ATLAS COPCO",
+    "model": "SOLAR HILIDHT MS 5"
+  },
+  {
+    "row": 334,
+    "code": "XLS-0334",
+    "equipment_type": "COMPRESOR",
+    "brand": "",
+    "model": ""
+  },
+  {
+    "row": 335,
+    "code": "XLS-0335",
+    "equipment_type": "CAMION PLANO 5TN",
+    "brand": "MITSUBISHI FUSO",
+    "model": "CANTER 815 EURO V DUONIC"
+  },
+  {
+    "row": 336,
+    "code": "XLS-0336",
+    "equipment_type": "CAMION PLUMA PK 33002 EH 6X4",
+    "brand": "MERCEDES BENZ",
+    "model": "AROCS 3342"
+  },
+  {
+    "row": 337,
+    "code": "XLS-0337",
+    "equipment_type": "CAMION",
+    "brand": "MITSUBISHI-FUSO",
+    "model": "CANTER 815 EURO V DUONIC"
+  },
+  {
+    "row": 338,
+    "code": "XLS-0338",
+    "equipment_type": "MOTONIVELADORA",
+    "brand": "KOMATSU",
+    "model": "GD675-6E0"
+  },
+  {
+    "row": 339,
+    "code": "XLS-0339",
+    "equipment_type": "TRACTO CAMION",
+    "brand": "FREIGHTLINER",
+    "model": "CL 120"
+  },
+  {
+    "row": 340,
+    "code": "XLS-0340",
+    "equipment_type": "TRACTO CAMION",
+    "brand": "FREIGHTLINER",
+    "model": "CL 120 6X4"
+  },
+  {
+    "row": 341,
+    "code": "XLS-0341",
+    "equipment_type": "CAMION",
+    "brand": "HINO",
+    "model": "FC9JJSA"
+  },
+  {
+    "row": 342,
+    "code": "XLS-0342",
+    "equipment_type": "TRACTO CAMION",
+    "brand": "FREIGHTLINER",
+    "model": "SD 122"
+  },
+  {
+    "row": 343,
+    "code": "XLS-0343",
+    "equipment_type": "CAMION",
+    "brand": "HINO",
+    "model": "FC9JJSA FULL"
+  },
+  {
+    "row": 344,
+    "code": "XLS-0344",
+    "equipment_type": "CAMION RESCATE",
+    "brand": "MITSUBISHI",
+    "model": "CANTER 7,5"
+  },
+  {
+    "row": 345,
+    "code": "XLS-0345",
+    "equipment_type": "CAMION",
+    "brand": "FREIGHTLINER",
+    "model": "M2 106 (CUMMINS)"
+  },
+  {
+    "row": 346,
+    "code": "XLS-0346",
+    "equipment_type": "CAMION",
+    "brand": "HINO",
+    "model": "FC9JJTA FULL"
+  },
+  {
+    "row": 347,
+    "code": "XLS-0347",
+    "equipment_type": "TRACTO CAMION",
+    "brand": "FREIGHTLINER",
+    "model": "SD 122"
+  },
+  {
+    "row": 348,
+    "code": "XLS-0348",
+    "equipment_type": "TRACTO CAMION",
+    "brand": "FREIGHTLINER",
+    "model": "TRACTO NEW CA116 EPA"
+  },
+  {
+    "row": 349,
+    "code": "XLS-0349",
+    "equipment_type": "TRACTO CAMION",
+    "brand": "FREIGHTLINER",
+    "model": "TRACTO NEW CA116"
+  },
+  {
+    "row": 350,
+    "code": "XLS-0350",
+    "equipment_type": "CAMION",
+    "brand": "MERCEDES BENZ",
+    "model": "NEW ACTROS 3358"
+  },
+  {
+    "row": 351,
+    "code": "XLS-0351",
+    "equipment_type": "CAMION",
+    "brand": "HINO",
+    "model": "FD 1121"
+  },
+  {
+    "row": 352,
+    "code": "XLS-0352",
+    "equipment_type": "CAMION",
+    "brand": "FREIGHTLINER",
+    "model": "SD114 PLUS SEG EURO V"
+  },
+  {
+    "row": 353,
+    "code": "XLS-0353",
+    "equipment_type": "TRACTO CAMION",
+    "brand": "FREIGHTLINER",
+    "model": "NEW CA116 60K DD13 505 DT12 SEG EURO V"
+  },
+  {
+    "row": 354,
+    "code": "XLS-0354",
+    "equipment_type": "TRACTO CAMION",
+    "brand": "FREIGHTLINER",
+    "model": "TRACTO NEW CA116 60K DD13 505 DT12 SEG EURO V"
+  },
+  {
+    "row": 355,
+    "code": "XLS-0355",
+    "equipment_type": "CAMA BAJA",
+    "brand": "TREMAC",
+    "model": ""
+  },
+  {
+    "row": 356,
+    "code": "XLS-0356",
+    "equipment_type": "GENERADOR 165 KVA",
+    "brand": "JCB",
+    "model": "G165QS"
+  },
+  {
+    "row": 357,
+    "code": "XLS-0357",
+    "equipment_type": "GENERADOR 20 KVA",
+    "brand": "JCB",
+    "model": "G20QS"
+  },
+  {
+    "row": 358,
+    "code": "XLS-0358",
+    "equipment_type": "PLATAFORMA TIJERAS",
+    "brand": "SNORKEL",
+    "model": "S3246"
+  },
+  {
+    "row": 359,
+    "code": "XLS-0359",
+    "equipment_type": "GENERADOR 6 KVA",
+    "brand": "HYUNDAI",
+    "model": "DHY8000SE"
+  },
+  {
+    "row": 360,
+    "code": "XLS-0360",
+    "equipment_type": "GENERADOR 545 KVA",
+    "brand": "JCB",
+    "model": "G545QX"
+  },
+  {
+    "row": 361,
+    "code": "XLS-0361",
+    "equipment_type": "GENERADOR 45 KVA",
+    "brand": "JCB",
+    "model": "G45QX"
+  },
+  {
+    "row": 362,
+    "code": "XLS-0362",
+    "equipment_type": "GENERADOR 6 KVA",
+    "brand": "HYUNDAI",
+    "model": "DHY8000SE"
+  },
+  {
+    "row": 363,
+    "code": "XLS-0363",
+    "equipment_type": "CAMION",
+    "brand": "JAC",
+    "model": "URBAN HFC 1035"
+  },
+  {
+    "row": 364,
+    "code": "XLS-0364",
+    "equipment_type": "PLATAFORMA TIJERAS",
+    "brand": "HAULLOTE",
+    "model": "COMPACT 12"
+  },
+  {
+    "row": 365,
+    "code": "XLS-0365",
+    "equipment_type": "CAMION PANTALLA",
+    "brand": "FOTON",
+    "model": "AUMARK 814"
+  },
+  {
+    "row": 366,
+    "code": "XLS-0366",
+    "equipment_type": "ALZA HOMBRE",
+    "brand": "S8510-8415",
+    "model": "NO APLICA"
+  },
+  {
+    "row": 367,
+    "code": "XLS-0367",
+    "equipment_type": "CAMION PLUMA",
+    "brand": "FREIGHTLINER",
+    "model": "M2 106 (DETROIT)"
+  },
+  {
+    "row": 368,
+    "code": "XLS-0368",
+    "equipment_type": "PLUMA",
+    "brand": "",
+    "model": ""
+  },
+  {
+    "row": 369,
+    "code": "XLS-0369",
+    "equipment_type": "PLATAFORMA TIJERA ELECTRICA 14 M",
+    "brand": "HANGCHA",
+    "model": "140XEN"
+  },
+  {
+    "row": 370,
+    "code": "XLS-0370",
+    "equipment_type": "PLATAFORMA TIJERA ELECTRICA 14 M",
+    "brand": "HANGCHA",
+    "model": "140XEN"
+  },
+  {
+    "row": 371,
+    "code": "XLS-0371",
+    "equipment_type": "LUMINARIA",
+    "brand": "ATLAS COPCO",
+    "model": "HILIGHT V5+KD 50HZROW SV2A NEO"
+  },
+  {
+    "row": 372,
+    "code": "XLS-0372",
+    "equipment_type": "LUMINARIA",
+    "brand": "ATLAS COPCO",
+    "model": "HILIGHT V5+KD 50HZROW SV2A NEO"
+  },
+  {
+    "row": 373,
+    "code": "XLS-0373",
+    "equipment_type": "LUMINARIA",
+    "brand": "ATLAS COPCO",
+    "model": "HILIGHT V5+KD 50HZROW SV2A NEO"
+  },
+  {
+    "row": 374,
+    "code": "XLS-0374",
+    "equipment_type": "LUMINARIA",
+    "brand": "ATLAS COPCO",
+    "model": "HILIGHT V5+KD 50HZROW SV2A NEO"
+  },
+  {
+    "row": 375,
+    "code": "XLS-0375",
+    "equipment_type": "LUMINARIA",
+    "brand": "ATLAS COPCO",
+    "model": "HILIGHT V5+KD 50HZROW SV2A NEO"
+  },
+  {
+    "row": 376,
+    "code": "XLS-0376",
+    "equipment_type": "LUMINARIA",
+    "brand": "ATLAS COPCO",
+    "model": "HILIGHT V5+KD 50HZROW SV2A NEO"
+  },
+  {
+    "row": 377,
+    "code": "XLS-0377",
+    "equipment_type": "LUMINARIA",
+    "brand": "ATLAS COPCO",
+    "model": "HILIGHT V5+KD 50HZROW SV2A NEO"
+  },
+  {
+    "row": 378,
+    "code": "XLS-0378",
+    "equipment_type": "LUMINARIA",
+    "brand": "ATLAS COPCO",
+    "model": "HILIGHT V5+KD 50HZROW SV2A NEO"
+  },
+  {
+    "row": 379,
+    "code": "XLS-0379",
+    "equipment_type": "LUMINARIA",
+    "brand": "ATLAS COPCO",
+    "model": "HILIGHT V5+KD 50HZROW SV2A NEO"
+  },
+  {
+    "row": 380,
+    "code": "XLS-0380",
+    "equipment_type": "LUMINARIA",
+    "brand": "ATLAS COPCO",
+    "model": "HILIGHT V5+KD 50HZROW SV2A NEO"
+  },
+  {
+    "row": 381,
+    "code": "XLS-0381",
+    "equipment_type": "LUMINARIA",
+    "brand": "ATLAS COPCO",
+    "model": "HILIGHT V5+KD 50HZROW SV2A NEO"
+  },
+  {
+    "row": 382,
+    "code": "XLS-0382",
+    "equipment_type": "LUMINARIA",
+    "brand": "ATLAS COPCO",
+    "model": "HILIGHT V5+KD 50HZROW SV2A NEO"
+  },
+  {
+    "row": 383,
+    "code": "XLS-0383",
+    "equipment_type": "LUMINARIA",
+    "brand": "ATLAS COPCO",
+    "model": "HILIGHT V5+KD 50HZROW SV2A NEO"
+  },
+  {
+    "row": 384,
+    "code": "XLS-0384",
+    "equipment_type": "LUMINARIA",
+    "brand": "ATLAS COPCO",
+    "model": "HILIGHT V5+KD 50HZROW SV2A NEO"
+  },
+  {
+    "row": 385,
+    "code": "XLS-0385",
+    "equipment_type": "LUMINARIA",
+    "brand": "ATLAS COPCO",
+    "model": "HILIGHT V5+KD 50HZROW SV2A NEO"
+  },
+  {
+    "row": 386,
+    "code": "XLS-0386",
+    "equipment_type": "LUMINARIA",
+    "brand": "ATLAS COPCO",
+    "model": "HILIGHT V5+KD 50HZROW SV2A NEO"
+  },
+  {
+    "row": 387,
+    "code": "XLS-0387",
+    "equipment_type": "CAMA BAJA",
+    "brand": "RANDON",
+    "model": "SR CT PD 03 45"
+  },
+  {
+    "row": 388,
+    "code": "XLS-0388",
+    "equipment_type": "CAMA BAJA",
+    "brand": "RANDON",
+    "model": "SR CT PD 03 45"
+  },
+  {
+    "row": 389,
+    "code": "XLS-0389",
+    "equipment_type": "CAMA BAJA",
+    "brand": "LEDWELL",
+    "model": "LW48HTHT3"
+  },
+  {
+    "row": 390,
+    "code": "XLS-0390",
+    "equipment_type": "CAMA BAJA",
+    "brand": "LEDWELL",
+    "model": "LW48HTHT2"
+  },
+  {
+    "row": 391,
+    "code": "XLS-0391",
+    "equipment_type": "SEMIREMOLQUE",
+    "brand": "TREMAC",
+    "model": "CAMA BAJA"
+  },
+  {
+    "row": 392,
+    "code": "XLS-0392",
+    "equipment_type": "CAMA BAJA",
+    "brand": "TREMAC",
+    "model": "SR PLANO 13.5 MTS"
+  },
+  {
+    "row": 393,
+    "code": "XLS-0393",
+    "equipment_type": "RAMPLA",
+    "brand": "TREMAC",
+    "model": ""
+  },
+  {
+    "row": 394,
+    "code": "XLS-0394",
+    "equipment_type": "CAMA BAJA",
+    "brand": "GOREN",
+    "model": "SRCB 3M 3516"
+  },
+  {
+    "row": 395,
+    "code": "XLS-0395",
+    "equipment_type": "CAMA BAJA",
+    "brand": "GOREN",
+    "model": "SRR 3 N 30 12 5"
+  },
+  {
+    "row": 396,
+    "code": "XLS-0396",
+    "equipment_type": "CAMA BAJA",
+    "brand": "GOREN",
+    "model": ""
+  }
+]

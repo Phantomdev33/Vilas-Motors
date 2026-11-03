@@ -12,7 +12,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import transaction
-from django.db.models import OuterRef, Subquery, DecimalField
+from django.db.models import OuterRef, Subquery, DecimalField, IntegerField, Q, Exists
 from django.db.models.functions import Coalesce
 from django.http import HttpResponse, FileResponse
 from django.middleware.csrf import get_token
@@ -33,6 +33,7 @@ from .permissions import RolePermission, MATRIX
 from .serializers import UserSerializer, EquipmentSerializer, ReadingSerializer, MaintenanceSerializer, SupplySerializer, AlertSerializer, AuditSerializer, SensorSerializer
 from .services import audit, reconcile_alert, LABELS
 from .throttles import DeviceTelemetryThrottle
+from .captcha import challenge, verify
 
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
@@ -44,7 +45,26 @@ class CSRFView(APIView):
     authentication_classes = []
     def get(self, request): return Response({'csrfToken': get_token(request)})
 
-class LoginView(APIView):
+class CaptchaView(APIView):
+    permission_classes = [AllowAny]
+    authentication_classes = []
+    def get(self, request):
+        response = Response(challenge())
+        response['Cache-Control'] = 'no-store'
+        return response
+
+class CaptchaProtectedView(APIView):
+    def initial(self, request, *args, **kwargs):
+        super().initial(request, *args, **kwargs)
+        if request.method != 'POST':
+            return
+        enforce_csrf(request)
+        with transaction.atomic():
+            error = verify(request)
+        if error:
+            raise ValidationError({'captcha': error})
+
+class LoginView(CaptchaProtectedView):
     permission_classes = [AllowAny]
     authentication_classes = []
     @transaction.atomic
@@ -90,7 +110,7 @@ class MeView(APIView):
         data['permissions'] = {module: roles.get(request.user.role, '') for module, roles in MATRIX.items()}
         return Response(data)
 
-class PasswordResetView(APIView):
+class PasswordResetView(CaptchaProtectedView):
     permission_classes = [AllowAny]
     authentication_classes = []
     def post(self, request):
@@ -103,14 +123,14 @@ class PasswordResetView(APIView):
             send_mail('Recupera tu acceso · Vila’s Motor', f'Restablece tu contraseña en los próximos 30 minutos:\n{url}', settings.DEFAULT_FROM_EMAIL, [user.email])
         return Response({'detail': 'Si el correo está registrado, recibirás un enlace para recuperar tu acceso.'})
 
-class PasswordResetConfirmView(APIView):
+class PasswordResetConfirmView(CaptchaProtectedView):
     permission_classes = [AllowAny]
     authentication_classes = []
     def post(self, request):
         enforce_csrf(request)
         try:
-            user = User.objects.get(pk=urlsafe_base64_decode(request.data.get('uid', '')).decode())
-        except (User.DoesNotExist, ValueError, UnicodeDecodeError):
+            user = User.objects.get(pk=urlsafe_base64_decode(request.data.get('uid', '')).decode(), is_active=True)
+        except (User.DoesNotExist, ValueError, UnicodeDecodeError, TypeError, OverflowError):
             raise ValidationError('Enlace inválido o vencido.')
         if not default_token_generator.check_token(user, request.data.get('token', '')):
             raise ValidationError('Enlace inválido o vencido.')
@@ -134,36 +154,39 @@ class AuditedViewSet(viewsets.ModelViewSet):
         audit(self.request.user, 'updated', instance)
 
 class EquipmentViewSet(AuditedViewSet):
-    queryset = Equipment.objects.annotate(
+    queryset = Equipment.objects.select_related('updated_by').annotate(
+        _service_interval=Coalesce(Subquery(Maintenance.objects.filter(equipment=OuterRef('pk'), status='completed').order_by('-value', '-id').values('interval')[:1]), 'interval', output_field=IntegerField()),
         _current_value=Coalesce(Subquery(Reading.objects.filter(equipment=OuterRef('pk')).order_by('-recorded_at', '-id').values('value')[:1]), 'initial_value', output_field=DecimalField()),
         _last_service_value=Coalesce(Subquery(Maintenance.objects.filter(equipment=OuterRef('pk'), status='completed').order_by('-value', '-id').values('value')[:1]), 'initial_service_value', output_field=DecimalField()))
     serializer_class = EquipmentSerializer
     permission_module = 'equipment'
     @transaction.atomic
     def perform_create(self, serializer):
-        super().perform_create(serializer)
-        reconcile_alert(serializer.instance, self.request.user)
+        instance = serializer.save(updated_by=self.request.user)
+        audit(self.request.user, 'created', instance)
+        reconcile_alert(instance, self.request.user)
     @transaction.atomic
     def update(self, request, *args, **kwargs):
         Equipment.objects.select_for_update().get(pk=kwargs['pk'])
         return super().update(request, *args, **kwargs)
     def perform_update(self, serializer):
-        super().perform_update(serializer)
-        instance = serializer.instance
-        for key in ('_current_value', '_last_service_value', 'current_value', 'last_service_value', 'next_service', 'remaining', 'progress', 'status'):
+        instance = serializer.save(updated_by=self.request.user)
+        audit(self.request.user, 'updated', instance)
+        for key in ('_current_value', '_last_service_value', '_service_interval', 'service_interval', 'current_value', 'last_service_value', 'next_service', 'remaining', 'progress', 'status'):
             instance.__dict__.pop(key, None)
         reconcile_alert(serializer.instance, self.request.user)
     @transaction.atomic
     def perform_destroy(self, instance):
         Equipment.objects.select_for_update().get(pk=instance.pk)
         instance.active = False
-        instance.save(update_fields=['active'])
+        instance.updated_by = self.request.user
+        instance.save(update_fields=['active', 'updated_by', 'updated_at'])
         audit(self.request.user, 'deactivated', instance)
         reconcile_alert(instance, self.request.user)
     @action(detail=True, methods=['get'])
     def history(self, request, pk=None):
         equipment = self.get_object()
-        return Response({'equipment': self.get_serializer(equipment).data,
+        return Response({'changes': AuditSerializer(AuditLog.objects.filter(entity='Equipment', entity_id=str(equipment.pk)).select_related('user'), many=True).data, 'equipment': self.get_serializer(equipment).data,
             'readings': ReadingSerializer(equipment.readings.all(), many=True, context={'request': request}).data,
             'maintenances': MaintenanceSerializer(equipment.maintenances.all(), many=True).data,
             'alerts': AlertSerializer(equipment.alerts.all(), many=True).data,
@@ -193,7 +216,7 @@ class ReadingViewSet(AuditedViewSet):
                 return Response(self.get_serializer(existing).data, status=200)
         return super().create(request, *args, **kwargs)
     def perform_create(self, serializer):
-        reading = serializer.save(created_by=self.request.user, source='manual')
+        reading = serializer.save(created_by=self.request.user, source='ocr' if serializer.validated_data.get('source') == 'ocr' else 'manual')
         audit(self.request.user, 'created', reading)
         reconcile_alert(reading.equipment, self.request.user)
     @transaction.atomic
@@ -215,7 +238,7 @@ class ReadingViewSet(AuditedViewSet):
         reconcile_alert(equipment, self.request.user)
 
 class MaintenanceViewSet(AuditedViewSet):
-    queryset = Maintenance.objects.select_related('equipment').prefetch_related('supplies__supply').all()
+    queryset = Maintenance.objects.select_related('equipment', 'created_by').prefetch_related('supplies__supply').all()
     serializer_class = MaintenanceSerializer
     permission_module = 'maintenance'
     @transaction.atomic
@@ -295,6 +318,7 @@ class TelemetryView(APIView):
             if existing:
                 if existing.sensor_id != sensor.pk: raise PermissionDenied('Identificador de lectura ya utilizado.')
                 return Response(ReadingSerializer(existing, context={'request': request}).data)
+        data.pop('source', None)
         serializer = ReadingSerializer(data=data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         reading = serializer.save(sensor=sensor, created_by=None, source='ocr' if data.get('confidence') is not None else 'sensor')
@@ -308,15 +332,20 @@ class TelemetryView(APIView):
 def report_rows(day):
     cutoff = timezone.make_aware(datetime.combine(day, time.max))
     rows = []
-    equipment = Equipment.objects.filter(active=True).annotate(
+    equipment = Equipment.objects.filter(active=True).filter(
+        Q(created_at__lte=cutoff) | Exists(Reading.objects.filter(equipment=OuterRef('pk'), recorded_at__lte=cutoff))
+        | Exists(Maintenance.objects.filter(equipment=OuterRef('pk'), completed_at__lte=cutoff))).annotate(
+        report_interval=Coalesce(Subquery(Maintenance.objects.filter(equipment=OuterRef('pk'), status='completed', completed_at__lte=cutoff).order_by('-value', '-id').values('interval')[:1]), 'interval', output_field=IntegerField()),
         report_value=Coalesce(Subquery(Reading.objects.filter(equipment=OuterRef('pk'), recorded_at__lte=cutoff).order_by('-recorded_at', '-id').values('value')[:1]), 'initial_value', output_field=DecimalField()),
         report_baseline=Coalesce(Subquery(Maintenance.objects.filter(equipment=OuterRef('pk'), status='completed', completed_at__lte=cutoff).order_by('-value', '-id').values('value')[:1]), 'initial_service_value', output_field=DecimalField()))
     for eq in equipment:
         value = eq.report_value
         baseline = eq.report_baseline
-        next_value = baseline + eq.interval
+        next_value = baseline + eq.report_interval
         remaining = next_value - value
-        state = 'overdue' if remaining < 0 else 'required' if remaining == 0 else 'upcoming' if remaining <= Decimal(eq.interval)*Decimal('0.15') else 'operational'
+        state = 'overdue' if remaining < 0 else 'required' if remaining == 0 else 'upcoming' if remaining <= Decimal(eq.report_interval)*Decimal('0.15') else 'operational'
+        if not eq.meter_initialized:
+            state = 'pending'
         rows.append({'id': eq.id, 'code': eq.code, 'name': eq.name, 'current_value': str(value), 'next_service': str(next_value),
                      'remaining': str(remaining), 'unit': eq.unit, 'status': state, 'status_label': LABELS[state]})
     return rows
@@ -330,7 +359,7 @@ class ReportView(APIView):
         # DRF reserves ?format for renderer negotiation: exports use ?export.
         output = request.query_params.get('export', output)
         headers = ['Equipo', 'Nombre', 'Lectura actual', 'Próxima mantención', 'Restante', 'Unidad', 'Estado']
-        values = [[r['code'], r['name'], float(r['current_value']), float(r['next_service']), float(r['remaining']), r['unit'], r['status_label']] for r in rows]
+        values = [[r['code'], r['name'], *(['Pendiente'] * 3 if r['status'] == 'pending' else [float(r['current_value']), float(r['next_service']), float(r['remaining'])]), r['unit'], r['status_label']] for r in rows]
         if output == 'xlsx':
             from openpyxl import Workbook
             from openpyxl.styles import Font, PatternFill

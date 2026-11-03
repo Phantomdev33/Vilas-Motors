@@ -18,15 +18,20 @@ class User(AbstractUser):
     failed_attempts = models.PositiveIntegerField(default=0)
     locked_until = models.DateTimeField(null=True, blank=True)
 
+class CaptchaChallenge(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    answer_hash = models.CharField(max_length=64)
+    expires_at = models.DateTimeField(db_index=True)
+
 class Equipment(models.Model):
     code = models.CharField(max_length=32, unique=True)
     name = models.CharField(max_length=100)
     equipment_type = models.CharField(max_length=80)
-    brand = models.CharField(max_length=80)
-    model = models.CharField(max_length=80)
-    serial_number = models.CharField(max_length=100, unique=True)
-    region = models.CharField(max_length=100)
-    commune = models.CharField(max_length=100)
+    brand = models.CharField(max_length=80, blank=True)
+    model = models.CharField(max_length=80, blank=True)
+    serial_number = models.CharField(max_length=100, unique=True, null=True, blank=True)
+    region = models.CharField(max_length=100, blank=True)
+    commune = models.CharField(max_length=100, blank=True)
     location = models.CharField(max_length=120, blank=True)
     responsible = models.CharField(max_length=120, blank=True)
     unit = models.CharField(max_length=4, choices=[('hrs', 'Horas'), ('km', 'Kilómetros')], default='hrs')
@@ -34,6 +39,8 @@ class Equipment(models.Model):
     initial_value = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     initial_service_value = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     active = models.BooleanField(default=True)
+    meter_initialized = models.BooleanField(default=True)
+    import_notes = models.TextField(blank=True)
     photo = models.ImageField(upload_to='equipment/', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     class Meta:
@@ -41,6 +48,8 @@ class Equipment(models.Model):
         constraints = [models.CheckConstraint(condition=Q(interval__gt=0), name='positive_interval'),
             models.CheckConstraint(condition=Q(initial_value__gte=0), name='positive_initial_value'),
             models.CheckConstraint(condition=Q(initial_service_value__gte=0), name='positive_service_value')]
+    updated_by = models.ForeignKey(User, on_delete=models.PROTECT, null=True, blank=True, related_name='updated_equipment')
+    updated_at = models.DateTimeField(auto_now=True)
     @cached_property
     def current_value(self):
         if hasattr(self, '_current_value'): return self._current_value
@@ -52,19 +61,25 @@ class Equipment(models.Model):
         latest = self.maintenances.filter(status='completed').order_by('-value', '-id').first()
         return latest.value if latest else self.initial_service_value
     @cached_property
+    def service_interval(self):
+        if hasattr(self, '_service_interval'): return self._service_interval
+        latest = self.maintenances.filter(status='completed').order_by('-value', '-id').first()
+        return latest.interval if latest else self.interval
+    @cached_property
     def next_service(self):
-        return self.last_service_value + self.interval
+        return self.last_service_value + self.service_interval
     @cached_property
     def remaining(self):
         return self.next_service - self.current_value
     @cached_property
     def progress(self):
-        return max(0, round(float((self.current_value-self.last_service_value) / self.interval * 100)))
+        return max(0, round(float((self.current_value-self.last_service_value) / self.service_interval * 100)))
     @cached_property
     def status(self):
+        if not self.meter_initialized: return 'pending'
         if self.remaining < 0: return 'overdue'
         if self.remaining == 0: return 'required'
-        if self.remaining <= Decimal(self.interval) * Decimal('0.15'): return 'upcoming'
+        if self.remaining <= Decimal(self.service_interval) * Decimal('0.15'): return 'upcoming'
         return 'operational'
 
 class Gateway(models.Model):
@@ -105,7 +120,7 @@ class Maintenance(models.Model):
     value = models.DecimalField(max_digits=12, decimal_places=2)
     scheduled_at = models.DateTimeField()
     completed_at = models.DateTimeField(null=True, blank=True)
-    status = models.CharField(max_length=16, choices=[('draft', 'Borrador'), ('scheduled', 'Programada'), ('completed', 'Completada'), ('cancelled', 'Cancelada')], default='scheduled')
+    status = models.CharField(max_length=16, choices=[('draft', 'Borrador'), ('scheduled', 'Programada'), ('in_progress', 'En mantención'), ('completed', 'Completada'), ('cancelled', 'Cancelada')], default='scheduled')
     workshop = models.CharField(max_length=120)
     work_order = models.CharField(max_length=64, blank=True)
     description = models.TextField(blank=True)

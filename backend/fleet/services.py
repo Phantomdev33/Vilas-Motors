@@ -1,14 +1,14 @@
 from django.utils import timezone
 from .models import Alert, AuditLog
 
-LABELS = {'operational': 'Operativo', 'upcoming': 'Próximo a mantención', 'required': 'Mantención requerida', 'overdue': 'Mantención vencida'}
+LABELS = {'pending': 'Ficha pendiente de completar', 'operational': 'Operativo', 'upcoming': 'Próximo a mantención', 'required': 'Mantención requerida', 'overdue': 'Mantención vencida'}
 
 def audit(user, action, instance, description=''):
     AuditLog.objects.create(user=user, action=action, entity=instance.__class__.__name__, entity_id=str(instance.pk), description=description)
 
 def reconcile_alert(equipment, user=None, maintenance=None):
     current = Alert.objects.filter(equipment=equipment, active=True).first()
-    if equipment.status == 'operational' or not equipment.active:
+    if equipment.status in ('operational', 'pending') or not equipment.active:
         if current:
             current.active = False
             current.attended_at = timezone.now()

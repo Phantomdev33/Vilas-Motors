@@ -7,6 +7,7 @@ for prefix, view in [('equipment', views.EquipmentViewSet), ('readings', views.R
     ('alerts', views.AlertViewSet), ('audit', views.AuditViewSet)]:
     router.register(prefix, view)
 urlpatterns = [path('', include(router.urls)), path('auth/csrf/', views.CSRFView.as_view()),
+    path('auth/captcha/', views.CaptchaView.as_view()),
     path('auth/login/', views.LoginView.as_view()), path('auth/logout/', views.LogoutView.as_view()),
     path('auth/me/', views.MeView.as_view()), path('auth/reset/', views.PasswordResetView.as_view()),
     path('auth/reset/confirm/', views.PasswordResetConfirmView.as_view()), path('telemetry/', views.TelemetryView.as_view()),

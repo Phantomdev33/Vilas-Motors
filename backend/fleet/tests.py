@@ -128,7 +128,9 @@ class AuthenticationTests(TestCase):
         self.client=APIClient(enforce_csrf_checks=True)
         response=self.client.get('/api/auth/csrf/');self.csrf=response.data['csrfToken']
     def login(self,password):
-        return self.client.post('/api/auth/login/',{'email':self.user.email,'password':password},format='json',HTTP_X_CSRFTOKEN=self.csrf)
+        from .models import CaptchaChallenge
+        captcha = CaptchaChallenge.objects.create(answer_hash=hashlib.sha256(b'ABC234').hexdigest(), expires_at=timezone.now()+timedelta(minutes=5))
+        return self.client.post('/api/auth/login/',{'email':self.user.email,'password':password,'captcha_id':str(captcha.pk),'captcha_answer':'ABC234'},format='json',HTTP_X_CSRFTOKEN=self.csrf)
     def test_login_requires_csrf_and_sets_http_only_cookie(self):
         self.assertEqual(self.client.post('/api/auth/login/',{},format='json').status_code,403)
         response=self.login('SecureDemo2026!');self.assertEqual(response.status_code,200)
