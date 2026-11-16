@@ -109,3 +109,15 @@ Para probar Supabase en tu equipo, agrega `DATABASE_URL` en `backend/.env` y eje
 Las fotos adjuntas continúan en `backend/media/`; esta integración conecta la base de datos, no Supabase Storage. En Render Free esos archivos no son persistentes. El almacenamiento de adjuntos requiere una integración adicional antes de usarlos en el hosting.
 
 Documentación oficial: [conexiones PostgreSQL](https://supabase.com/docs/guides/database/connecting-to-postgres) y [seguridad de Data API](https://supabase.com/docs/guides/api/securing-your-api).
+
+## Diseño visual y pruebas de interfaz
+
+La interfaz usa el tema oscuro de `frontend/src/design.css`, sobre los estilos estructurales existentes. El resumen de flota, los filtros, los contadores y la búsqueda utilizan los registros de la API. Arriendo de maquinaria es una vista informativa con acceso a las fichas; la gestión comercial de contratos aún no está implementada.
+
+Con el frontend local iniciado, ejecuta desde `frontend/`:
+
+```powershell
+npm run test:e2e -- tests/changes.spec.js tests/design.spec.js
+```
+
+Estas pruebas usan una API simulada y no modifican la base de datos. Cubren escritorio y móvil, formularios, filtros, navegación y desbordes de pantalla. Las capturas de diseño se guardan en `.runtime/design-review/` respecto de la carpeta desde la que ejecutas las pruebas y quedan excluidas de Git.
