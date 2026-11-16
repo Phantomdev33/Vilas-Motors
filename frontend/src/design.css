@@ -356,6 +356,16 @@ input:disabled,select:disabled { background: #ffffff03!important; color: #8891a0
 
 .fleet-heading-actions { display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
 .view-equipment { min-height:38px; white-space:nowrap; }
+.service-form .supplies-panel { margin:18px 0; padding:16px; background:#11171f; border:1px solid #ffffff15; border-radius:10px; }
+.supplies-panel .panel-title { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px; }
+.supplies-panel .panel-title p { margin:5px 0 0; color:var(--muted); font-size:11px; }
+.supplies-panel .panel-title .text-button { display:inline-flex; align-items:center; gap:6px; padding:9px 12px; border:1px solid #ff174444; border-radius:7px; background:#ff17440c; white-space:nowrap; }
+.service-form .supplies-panel .supply-row { display:grid; grid-template-columns:minmax(0,1fr) 95px 36px; gap:10px; align-items:center; padding:12px; margin-bottom:8px; background:#1a212c; border:1px solid #ffffff12; border-radius:8px; }
+.service-form .supplies-panel .supply-row select,.service-form .supplies-panel .supply-row input { width:100%; min-width:0; color:#e3e8f0; background:#131a23; border:1px solid #ffffff20; border-radius:6px; min-height:38px; padding:8px; }
+.supplies-panel .supply-row .icon-button { color:#ff5274; }
+.service-form .supplies-panel .supply-list { background:transparent; padding:0; border:0; }
+@media(max-width:700px) { .service-form .supplies-panel .supply-row { grid-template-columns:minmax(0,1fr) 36px; } .service-form .supplies-panel .supply-row select { grid-column:1/-1; } }
+@media(max-width:700px) { .supplies-panel .panel-title { align-items:flex-start; flex-wrap:wrap; } .service-form .supplies-panel { padding:12px; } .service-form .supplies-panel .supply-row { grid-template-columns:minmax(0,1fr) 36px; gap:6px; padding:8px; } }
 .fleet-pagination { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; padding:18px; color:var(--muted); }
 .fleet-pagination>div { display:flex; align-items:center; gap:12px; }
 .vm-modal:has(.quick-maintenance) { width:min(1100px,96vw); max-width:1100px; max-height:90dvh; overflow-y:auto; }

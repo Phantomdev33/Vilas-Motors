@@ -19,6 +19,8 @@ export async function mock(page,loggedIn=true){
     else if(path==='equipment/')body=equipment;
     else if(path==='users/')body=[{id:1,first_name:'Ana',last_name:'Prueba',email:'ana@example.com',role:'admin',is_active:true,last_login:'2026-11-03T12:00:00Z'}];
     else if(path==='alerts/')body=[{id:1,equipment:3,equipment_code:'EX-03',equipment_name:'Excavadora',equipment_type:'Excavadora',severity:'upcoming',active:true,unit:'hrs',current_value:240,remaining:10,progress:96}];
+    else if(path==='maintenances/service-types/')body={options:[{value:'Preventiva',label:'Preventiva'},{value:'Preventiva · Servicio de motor',label:'Preventiva · Servicio de motor'}],aliases:{'Preventiva simulada':'Preventiva'}};
+    else if(path==='supplies/')body=[{id:1,active:true,description:'Aceite de motor',unit:'litros'}];
     else if(path==='maintenances/')body=maintenances;
     else if(path==='readings/')body=[{id:1,equipment:2,equipment_code:'TR-02',equipment_name:'Camión',recorded_at:'2025-08-01T12:00:00Z',source:'manual',evidence:'/assets/excavator.jpg',value:1000,registered_by:'Ana'},{id:2,equipment:3,equipment_code:'EX-03',recorded_at:'2026-01-01T12:00:00Z',source:'manual',evidence:null,value:240,registered_by:'Ana'}];
     else if(path==='report/')body={equipment,date:'2026-11-03'};

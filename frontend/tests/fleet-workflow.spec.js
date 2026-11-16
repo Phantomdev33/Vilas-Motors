@@ -24,6 +24,15 @@ test('maintenance is tied to the detail equipment; errors stay in modal and succ
   await page.goto('/#detail');
   await page.getByRole('button',{name:'Registrar mantenci\u00f3n',exact:true}).click();
   const dialog=page.getByRole('dialog');
+  const serviceType=dialog.getByLabel('Tipo de mantenci\u00f3n *',{exact:true});
+  await expect(serviceType).toHaveJSProperty('tagName','SELECT');
+  await serviceType.selectOption('Preventiva');
+  const supplies=dialog.getByRole('region',{name:'Insumos y repuestos'});
+  await supplies.getByRole('button',{name:'Agregar insumo'}).click();
+  await supplies.getByLabel('Insumo 1',{exact:true}).selectOption('1');
+  await supplies.getByLabel('Cantidad 1').fill('2');
+  await expect(supplies.locator('.supply-row')).toHaveCSS('background-color','rgb(26, 33, 44)');
+  await expect(supplies.locator('.supply-list')).toHaveCSS('background-color','rgba(0, 0, 0, 0)');
   await expect(dialog.getByLabel('Equipo *',{exact:true})).toBeDisabled();
   await expect(dialog.getByLabel('Equipo *',{exact:true})).toHaveValue('1');
   await dialog.getByLabel('Responsable *',{exact:true}).fill('Taller de prueba');
@@ -36,6 +45,9 @@ test('maintenance is tied to the detail equipment; errors stay in modal and succ
   await dialog.getByRole('button',{name:'Programar',exact:true}).click();
   await expect(dialog.getByRole('alert')).toContainText('Error de prueba');
   expect(body.equipment).toBe(1);
+  expect(body.service_type).toBe('Preventiva');
+  expect(body.supplies).toEqual([{supply:1,quantity:'2'}]);
+  await page.screenshot({path:`test-results/maintenance-supplies-${test.info().project.name}.png`,fullPage:true});
   await page.route('**/api/maintenances/',route=>route.request().method()==='POST'?route.fulfill({status:201,json:{id:99}}):route.fallback());
   await dialog.getByRole('button',{name:'Programar',exact:true}).click();
   await expect(dialog).toHaveCount(0);

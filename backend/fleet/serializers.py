@@ -145,6 +145,13 @@ class MaintenanceSupplySerializer(serializers.ModelSerializer):
         return value
 
 class MaintenanceSerializer(serializers.ModelSerializer):
+    def validate_service_type(self, value):
+        from .maintenance_types import SERVICE_TYPES, LEGACY_SERVICE_TYPES
+        value = LEGACY_SERVICE_TYPES.get(value, value)
+        if value not in SERVICE_TYPES:
+            raise serializers.ValidationError('Selecciona un tipo de mantención del catálogo.')
+        return value
+
     unit = serializers.CharField(source='equipment.unit', read_only=True)
     registered_by = serializers.SerializerMethodField()
     next_service = serializers.SerializerMethodField()

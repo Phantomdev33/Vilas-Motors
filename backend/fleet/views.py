@@ -238,6 +238,12 @@ class ReadingViewSet(AuditedViewSet):
         reconcile_alert(equipment, self.request.user)
 
 class MaintenanceViewSet(AuditedViewSet):
+    @action(detail=False, methods=['get'], url_path='service-types')
+    def service_types(self, request):
+        from .maintenance_types import SERVICE_TYPES, LEGACY_SERVICE_TYPES
+        return Response({'options': [{'value': value, 'label': value} for value in SERVICE_TYPES],
+                         'aliases': LEGACY_SERVICE_TYPES})
+
     queryset = Maintenance.objects.select_related('equipment', 'created_by').prefetch_related('supplies__supply').all()
     serializer_class = MaintenanceSerializer
     permission_module = 'maintenance'
