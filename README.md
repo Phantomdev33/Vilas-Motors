@@ -121,3 +121,22 @@ npm run test:e2e -- tests/changes.spec.js tests/design.spec.js
 ```
 
 Estas pruebas usan una API simulada y no modifican la base de datos. Cubren escritorio y móvil, formularios, filtros, navegación y desbordes de pantalla. Las capturas de diseño se guardan en `.runtime/design-review/` respecto de la carpeta desde la que ejecutas las pruebas y quedan excluidas de Git.
+# Prototipo académico con datos simulados
+
+Ejecuta `powershell -ExecutionPolicy Bypass -File scripts/start-prototype.ps1`
+desde la raíz y, en otra terminal, inicia el frontend con `npm run dev` desde
+`frontend` (Node debe estar disponible en PATH).
+
+Este modo utiliza exclusivamente `backend/prototype.sqlite3`, con seis equipos,
+lecturas, mantenciones y usuarios ficticios. No conecta la aplicación a Supabase.
+Las regiones de ejemplo son Arica y Parinacota, Tarapacá, Antofagasta, Atacama
+y Coquimbo; no representan ubicaciones verificadas de la empresa.
+
+Acceso de ejemplo: `admin@vilasmotor.cl`, contraseña `VilasDemo2026!`.
+La carga se puede repetir sin duplicar registros. El modo normal de despliegue
+mantiene su configuración existente; este cambio no publica el prototipo.
+
+El filtro «Disponibles» significa operativo y sin mantención en curso.
+Los filtros se combinan y «Limpiar filtros» restablece también la búsqueda.
+La ficha permite volver a la flota mediante una barra fija, conservando filtros.
+

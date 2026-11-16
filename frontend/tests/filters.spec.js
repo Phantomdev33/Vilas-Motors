@@ -1,0 +1,20 @@
+import {test,expect} from '@playwright/test';
+import {mock} from './support/mock.js';
+test('availability combines with type and region; clear resets every filter',async({page})=>{
+  const errors=await mock(page); await page.goto('/');
+  const rows=page.locator('.desktop-table:visible, .mobile-equipment:visible');
+  await page.getByLabel('Filtrar disponibilidad').selectOption('available');
+  await expect(rows.getByText(/TR-02/)).toHaveCount(0);
+  await page.getByRole('button',{name:'Limpiar filtros',exact:true}).click();
+  await page.getByLabel('Filtrar regi?n de flota').selectOption('Arica y Parinacota');
+  await page.getByLabel('Filtrar tipo de equipo').selectOption('Cami?n');
+  await expect(rows.getByText(/TR-02/)).toBeVisible();
+  if(await page.locator('.desktop-table').isVisible()) await rows.getByRole('button',{name:'Ver ficha'}).click();
+  else await rows.locator('.mobile-card').click();
+  await page.getByRole('button',{name:'Volver a la flota'}).click();
+  await expect(page.getByLabel('Filtrar regi?n de flota')).toHaveValue('Arica y Parinacota');
+  await page.getByRole('button',{name:'Limpiar filtros',exact:true}).click();
+  await expect(page.getByLabel('Filtrar tipo de equipo')).toHaveValue('');
+  await expect(rows.getByText(/XLS-0002/)).toBeVisible();
+  expect(errors).toEqual([]);
+});

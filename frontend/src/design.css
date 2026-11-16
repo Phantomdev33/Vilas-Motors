@@ -353,3 +353,13 @@ input:disabled,select:disabled { background: #ffffff03!important; color: #8891a0
   .login-footer { font-size: 9px; }
 }
 @media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior: auto!important; transition: none!important; animation: none!important; } }
+
+.fleet-heading-actions { display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
+.view-equipment { min-height:38px; white-space:nowrap; }
+.detail-navigation { position:sticky; top:76px; z-index:15; background:var(--panel, #171b23); padding:12px; border-radius:8px; }
+@media(max-width:700px) {
+  .fleet-board>.toolbar>.vm-button.clear-filters { display:inline-flex; }
+  .fleet-heading-actions { gap:6px; }
+  .fleet-heading-actions .vm-button { padding:8px; font-size:10px; }
+  .detail-navigation { top:70px; }
+}
