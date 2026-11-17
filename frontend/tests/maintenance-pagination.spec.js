@@ -1,0 +1,42 @@
+import {test,expect} from '@playwright/test';
+import {mock} from './support/mock.js';
+
+test('maintenance log paginates by 15 and its actions edit or cancel the chosen record',async({page})=>{
+  const errors=await mock(page);
+  const records=Array.from({length:32},(_,i)=>({id:i+1,equipment:i===31?2:3,equipment_code:i===31?'TR-02':`EX-${String(i+1).padStart(2,'0')}`,equipment_name:'Equipo',service_type:'Preventiva',scheduled_at:'2026-11-16T12:00:00Z',completed_at:null,status:'scheduled',value:240,interval:250,unit:'hrs',next_service:490,workshop:'Taller',description:'Prueba',work_order:`OT-${i+1}`,supplies:[]}));
+  await page.route('**/api/maintenances/',route=>route.fulfill({json:records}));
+  await page.goto('/#maintenance');
+  await expect(page.getByRole('button',{name:'Registrar mantención',exact:true})).toHaveCount(0);
+  const rows=page.locator('.page-maintenance .vm-table tbody tr'),pagination=page.getByRole('navigation',{name:'Paginación de mantenciones'});
+  await expect(rows).toHaveCount(15);
+  await pagination.getByRole('button',{name:'Página siguiente',exact:true}).click();
+  await expect(rows).toHaveCount(15);
+  await expect(rows.first()).toContainText('EX-16');
+  const edit=rows.first().getByRole('button',{name:'Editar / Completar',exact:true});
+  await expect(edit.locator('svg')).toHaveCount(1);
+  await edit.click();
+  await expect(page.getByLabel('Orden de trabajo',{exact:true})).toHaveValue('OT-16');
+  await expect(page.getByLabel('Equipo *',{exact:true})).toBeDisabled();
+  await page.getByRole('button',{name:'Ver registro de mantenciones',exact:true}).click();
+  await expect(pagination).toContainText('Página 2 de 3');
+  let cancelled;
+  await page.route('**/api/maintenances/16/',route=>{
+    cancelled=route.request().method();records[15].status='cancelled';return route.fulfill({status:204});
+  });
+  page.once('dialog',dialog=>dialog.accept());
+  await rows.first().getByRole('button',{name:'Cancelar',exact:true}).click();
+  await expect(rows.first()).toContainText('Cancelada');
+  expect(cancelled).toBe('DELETE');
+  await expect(rows.first().getByRole('button',{name:'Cancelar',exact:true})).toHaveCount(0);
+  await expect(rows).toHaveCount(15);
+  await pagination.getByRole('button',{name:'Página siguiente',exact:true}).click();
+  await expect(rows).toHaveCount(2);
+  await page.getByLabel('Filtrar tipo de mantenciones').selectOption('Camión');
+  await expect(rows).toHaveCount(1);
+  await expect(rows.first()).toContainText('TR-02');
+  await expect(pagination).toContainText('Página 1 de 1');
+  await page.getByRole('button',{name:'Limpiar filtros',exact:true}).click();
+  await expect(rows).toHaveCount(15);
+  await page.screenshot({path:`test-results/maintenance-log-${test.info().project.name}.png`,fullPage:true});
+  expect(errors).toEqual([]);
+});

@@ -46,10 +46,16 @@ test('service opened from alert resolves the original notice and moves it to the
     return route.fallback();
   });
   await page.goto('/#alerts');
-  await page.locator('.page-alerts tbody tr').first().getByRole('button',{name:'Registrar servicio',exact:true}).click();
+  const action=page.locator('.page-alerts tbody tr').first().getByRole('button',{name:'Registrar servicio',exact:true});
+  await expect(action).toHaveClass(/primary.*alert-service-button/);
+  expect(await action.evaluate(button=>parseFloat(getComputedStyle(button).minHeight))).toBeGreaterThanOrEqual(42);
+  await action.click();
+  await expect(page).toHaveURL(/#alerts$/);
+  await expect(page.getByRole('heading',{name:'ALERTAS DE MANTENCIÓN',exact:true})).toBeVisible();
   const service=page.getByRole('dialog',{name:'Registrar mantención · EX-03'});
   await expect(service.getByLabel('Equipo *',{exact:true})).toHaveValue('3');
   await expect(service.getByLabel('Equipo *',{exact:true})).toBeDisabled();
+  await page.screenshot({path:`test-results/alert-direct-service-${test.info().project.name}.png`,fullPage:true});
   await service.getByLabel('Responsable *',{exact:true}).fill('Taller');
   await service.getByLabel('Descripción del trabajo *',{exact:true}).fill('Servicio completado de prueba');
   await service.getByRole('button',{name:'Guardar registro completado',exact:true}).click();
