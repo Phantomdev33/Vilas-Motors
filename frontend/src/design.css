@@ -356,6 +356,11 @@ input:disabled,select:disabled { background: #ffffff03!important; color: #8891a0
 
 .fleet-heading-actions { display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
 .view-equipment { min-height:38px; white-space:nowrap; }
+.reading-entry-form { padding:16px; margin:0; }
+.reading-entry-form .upload-area { margin:16px 0; }
+.reading-entry-form>.field { margin:12px 0; }
+.reading-entry-form>.form-error { margin-bottom:16px; }
+.vm-modal:has(.reading-entry-form) { width:min(580px,94vw); max-width:580px; max-height:90dvh; overflow:auto; }
 .service-form .supplies-panel { margin:18px 0; padding:16px; background:#11171f; border:1px solid #ffffff15; border-radius:10px; }
 .supplies-panel .panel-title { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px; }
 .supplies-panel .panel-title p { margin:5px 0 0; color:var(--muted); font-size:11px; }

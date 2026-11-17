@@ -27,6 +27,11 @@ class MaintenanceTypesTests(TestCase):
         self.assertEqual(response.status_code, 400)
         self.assertIn('service_type', response.data)
 
+    def test_corrective_maintenance_is_accepted(self):
+        response = self.save_type('Correctiva')
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.data['service_type'], 'Correctiva')
+
     def test_legacy_simulated_type_is_normalized(self):
         response = self.save_type('Preventiva simulada')
         self.assertEqual(response.status_code, 201)
