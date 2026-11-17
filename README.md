@@ -140,3 +140,10 @@ El filtro «Disponibles» significa operativo y sin mantención en curso.
 Los filtros se combinan y «Limpiar filtros» restablece también la búsqueda.
 La ficha permite volver a la flota mediante una barra fija, conservando filtros.
 
+# GPS Teltonika y fotos en MongoDB
+
+El prototipo incorpora eventos de encendido GPS **simulados**, horas estimadas y
+almacenamiento MongoDB exclusivo para evidencias de lecturas manuales. No incorpora
+OCR ni conecta aún una plataforma GPS real. Para configuración, límites del cálculo,
+migraciones y comandos de simulación, consulta [GPS y MongoDB](docs/GPS-Y-MONGODB.md).
+

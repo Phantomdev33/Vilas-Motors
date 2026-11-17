@@ -5,6 +5,7 @@ from django.db import models
 from django.db.models import Q
 from django.utils import timezone
 from django.utils.functional import cached_property
+from .image_storage import ReadingImageStorage
 
 class User(AbstractUser):
     class Role(models.TextChoices):
@@ -92,18 +93,20 @@ class Sensor(models.Model):
     equipment = models.ForeignKey(Equipment, on_delete=models.PROTECT, related_name='sensors')
     gateway = models.ForeignKey(Gateway, on_delete=models.PROTECT, null=True, blank=True)
     identifier = models.CharField(max_length=64, unique=True)
-    sensor_type = models.CharField(max_length=80, default='Cámara OCR')
-    model = models.CharField(max_length=100, default='Raspberry Pi Zero 2 W')
+    sensor_type = models.CharField(max_length=80, default='GPS')
+    model = models.CharField(max_length=100, default='Teltonika FMB120')
     active = models.BooleanField(default=True)
     token_hash = models.CharField(max_length=128)
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['equipment'], condition=Q(active=True, sensor_type='GPS'), name='one_active_gps_per_equipment')]
 
 class Reading(models.Model):
     equipment = models.ForeignKey(Equipment, on_delete=models.PROTECT, related_name='readings')
     sensor = models.ForeignKey(Sensor, on_delete=models.PROTECT, null=True, blank=True)
     value = models.DecimalField(max_digits=12, decimal_places=2)
     recorded_at = models.DateTimeField(default=timezone.now, db_index=True)
-    source = models.CharField(max_length=16, choices=[('manual', 'Manual'), ('ocr', 'OCR por foto'), ('sensor', 'Sensor')], default='manual')
-    evidence = models.ImageField(upload_to='readings/%Y/%m/', blank=True)
+    source = models.CharField(max_length=16, choices=[('manual', 'Manual'), ('sensor', 'GPS estimado'), ('ocr', 'Histórico legado')], default='manual')
+    evidence = models.ImageField(upload_to='readings/%Y/%m/', storage=ReadingImageStorage(), blank=True)
     confidence = models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
     note = models.TextField(blank=True)
     client_id = models.UUIDField(default=uuid.uuid4, unique=True)
@@ -112,6 +115,31 @@ class Reading(models.Model):
     class Meta:
         ordering = ['-recorded_at', '-id']
         constraints = [models.CheckConstraint(condition=Q(value__gte=0), name='positive_reading')]
+
+class IgnitionEvent(models.Model):
+    sensor = models.ForeignKey(Sensor, on_delete=models.PROTECT, related_name='ignition_events')
+    event_id = models.CharField(max_length=128)
+    recorded_at = models.DateTimeField()
+    ignition = models.BooleanField()
+    simulated = models.BooleanField(default=False)
+    outcome = models.CharField(max_length=20, default='anchor')
+    counted_seconds = models.PositiveBigIntegerField(default=0)
+    reading = models.OneToOneField(Reading, on_delete=models.PROTECT, null=True, blank=True)
+    received_at = models.DateTimeField(auto_now_add=True)
+    class Meta:
+        ordering = ['recorded_at', 'id']
+        constraints = [models.UniqueConstraint(fields=['sensor', 'event_id'], name='unique_gps_event'),
+            models.UniqueConstraint(fields=['sensor', 'recorded_at'], name='unique_gps_timestamp')]
+
+
+class GPSMeterState(models.Model):
+    sensor = models.OneToOneField(Sensor, on_delete=models.PROTECT, related_name='meter_state')
+    last_at = models.DateTimeField()
+    ignition = models.BooleanField()
+    baseline_value = models.DecimalField(max_digits=12, decimal_places=2)
+    counted_seconds = models.PositiveBigIntegerField(default=0)
+    skipped_seconds = models.PositiveBigIntegerField(default=0)
+
 
 class Maintenance(models.Model):
     equipment = models.ForeignKey(Equipment, on_delete=models.PROTECT, related_name='maintenances')

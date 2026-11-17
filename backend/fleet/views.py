@@ -14,7 +14,7 @@ from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import transaction
 from django.db.models import OuterRef, Subquery, DecimalField, IntegerField, Q, Exists
 from django.db.models.functions import Coalesce
-from django.http import HttpResponse, FileResponse
+from django.http import HttpResponse, FileResponse, Http404
 from django.middleware.csrf import get_token
 from django.utils import timezone
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
@@ -186,7 +186,10 @@ class EquipmentViewSet(AuditedViewSet):
     @action(detail=True, methods=['get'])
     def history(self, request, pk=None):
         equipment = self.get_object()
-        return Response({'changes': AuditSerializer(AuditLog.objects.filter(entity='Equipment', entity_id=str(equipment.pk)).select_related('user'), many=True).data, 'equipment': self.get_serializer(equipment).data,
+        from .models import GPSMeterState
+        gps_states = GPSMeterState.objects.filter(sensor__equipment=equipment).select_related('sensor')
+        gps = [{'device':g.sensor.identifier, 'model':g.sensor.model, 'last_at':g.last_at, 'ignition':g.ignition, 'counted_seconds':g.counted_seconds, 'skipped_seconds':g.skipped_seconds, 'simulated':g.sensor.ignition_events.filter(simulated=True).exists()} for g in gps_states]
+        return Response({'gps':gps, 'changes': AuditSerializer(AuditLog.objects.filter(entity='Equipment', entity_id=str(equipment.pk)).select_related('user'), many=True).data, 'equipment': self.get_serializer(equipment).data,
             'readings': ReadingSerializer(equipment.readings.all(), many=True, context={'request': request}).data,
             'maintenances': MaintenanceSerializer(equipment.maintenances.all(), many=True).data,
             'alerts': AlertSerializer(equipment.alerts.all(), many=True).data,
@@ -216,7 +219,7 @@ class ReadingViewSet(AuditedViewSet):
                 return Response(self.get_serializer(existing).data, status=200)
         return super().create(request, *args, **kwargs)
     def perform_create(self, serializer):
-        reading = serializer.save(created_by=self.request.user, source='ocr' if serializer.validated_data.get('source') == 'ocr' else 'manual')
+        reading = serializer.save(created_by=self.request.user, source='manual')
         audit(self.request.user, 'created', reading)
         reconcile_alert(reading.equipment, self.request.user)
     @transaction.atomic
@@ -231,6 +234,8 @@ class ReadingViewSet(AuditedViewSet):
     def perform_destroy(self, instance):
         Equipment.objects.select_for_update().get(pk=instance.equipment_id)
         equipment = instance.equipment
+        if instance.source != 'manual':
+            raise ValidationError('Conserva las lecturas GPS e históricas para mantener la trazabilidad.')
         if equipment.maintenances.filter(status='completed', value__gt=equipment.initial_value).exists():
             raise ValidationError('Esta lectura forma parte de un historial con mantenciones. Conserva el registro y corrige su valor.')
         audit(self.request.user, 'deleted', instance)
@@ -313,27 +318,15 @@ class TelemetryView(APIView):
         token_hash = hashlib.sha256(token[7:].encode()).hexdigest()
         sensor = Sensor.objects.select_related('equipment').filter(token_hash=token_hash, active=True).first()
         if not sensor: return Response({'detail': 'Dispositivo no autorizado.'}, status=401)
-        Equipment.objects.select_for_update().get(pk=sensor.equipment_id)
-        data = request.data.copy()
-        data['equipment'] = sensor.equipment_id
-        client_id = data.get('client_id')
-        if client_id:
-            try: uuid.UUID(str(client_id))
-            except ValueError: raise ValidationError({'client_id': 'Identificador inválido.'})
-            existing = Reading.objects.filter(client_id=client_id).first()
-            if existing:
-                if existing.sensor_id != sensor.pk: raise PermissionDenied('Identificador de lectura ya utilizado.')
-                return Response(ReadingSerializer(existing, context={'request': request}).data)
-        data.pop('source', None)
-        serializer = ReadingSerializer(data=data, context={'request': request})
+        from .gps import ingest_ignition
+        from .gps_serializers import IgnitionInputSerializer
+        serializer = IgnitionInputSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        reading = serializer.save(sensor=sensor, created_by=None, source='ocr' if data.get('confidence') is not None else 'sensor')
-        if sensor.gateway:
-            sensor.gateway.last_connection = timezone.now()
-            sensor.gateway.save(update_fields=['last_connection'])
-        audit(None, 'telemetry_received', reading)
-        reconcile_alert(sensor.equipment)
-        return Response(serializer.data, status=201)
+        event, created = ingest_ignition(sensor, **serializer.validated_data)
+        return Response({'id':event.pk, 'event_id':event.event_id, 'outcome':event.outcome,
+            'counted_seconds':event.counted_seconds, 'reading':event.reading_id,
+            'simulated':event.simulated}, status=201 if created else 200)
+
 
 def report_rows(day):
     cutoff = timezone.make_aware(datetime.combine(day, time.max))
@@ -407,4 +400,19 @@ class MigrationTemplateView(APIView):
         return response
 
 class ProtectedMediaView(APIView):
-    def get(self, request, path): return serve(request, path, document_root=settings.MEDIA_ROOT)
+    permission_classes = [RolePermission]
+    permission_module = 'reading'
+    def get(self, request, path):
+        if path.startswith('mongo/'):
+            if not Reading.objects.filter(evidence=path).exists():
+                raise Http404
+            from .image_storage import ReadingImageStorage
+            try:
+                file = ReadingImageStorage().open(path)
+            except FileNotFoundError:
+                raise Http404 from None
+            response = FileResponse(file, content_type=file.content_type)
+            response['Cache-Control'] = 'private, no-store'
+            response['X-Content-Type-Options'] = 'nosniff'
+            return response
+        return serve(request, path, document_root=settings.MEDIA_ROOT)

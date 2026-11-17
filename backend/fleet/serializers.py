@@ -10,6 +10,8 @@ from .services import LABELS
 def validate_image(value):
     if value and value.size > 10 * 1024 * 1024:
         raise serializers.ValidationError('La imagen no puede superar 10 MB.')
+    if value and getattr(value, 'image', None) and value.image.format not in ('JPEG','PNG','WEBP'):
+        raise serializers.ValidationError('Usa una imagen JPG, PNG o WEBP.')
     return value
 
 
@@ -87,6 +89,35 @@ class EquipmentSerializer(serializers.ModelSerializer):
         return attrs
 
 class ReadingSerializer(serializers.ModelSerializer):
+    def _save_with_image(self, instance, previous_name=''):
+        try:
+            instance.save()
+        except Exception:
+            image = instance.evidence
+            if image and image._committed and image.name.startswith('mongo/') and image.name != previous_name:
+                try:
+                    image.storage.delete(image.name)
+                except Exception:
+                    import logging
+                    logging.getLogger(__name__).warning('No se pudo limpiar una imagen de una carga fallida.')
+            raise
+        return instance
+
+    def create(self, validated_data):
+        return self._save_with_image(Reading(**validated_data))
+
+    def update(self, instance, validated_data):
+        previous_name = instance.evidence.name if instance.evidence else ''
+        for key, value in validated_data.items():
+            setattr(instance, key, value)
+        return self._save_with_image(instance, previous_name)
+
+    is_estimated = serializers.SerializerMethodField()
+    is_simulated = serializers.SerializerMethodField()
+    def get_is_estimated(self, obj):
+        return obj.source == 'sensor' and 'Horas estimadas por encendido GPS Teltonika FMB120' in obj.note
+    def get_is_simulated(self, obj):
+        return self.get_is_estimated(obj) and obj.note.startswith('SIMULACIÓN')
     equipment_code = serializers.CharField(source='equipment.code', read_only=True)
     equipment_name = serializers.CharField(source='equipment.name', read_only=True)
     registered_by = serializers.SerializerMethodField()
@@ -96,7 +127,7 @@ class ReadingSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ['created_by', 'created_at', 'sensor']
     def get_registered_by(self, obj):
-        return obj.created_by.get_full_name() if obj.created_by else 'Dispositivo'
+        return obj.created_by.get_full_name() if obj.created_by else ('GPS simulado' if self.get_is_simulated(obj) else 'GPS estimado' if self.get_is_estimated(obj) else 'Dispositivo histórico')
     def validate(self, attrs):
         equipment = attrs.get('equipment', getattr(self.instance, 'equipment', None))
         value = attrs.get('value', getattr(self.instance, 'value', None))
@@ -119,13 +150,12 @@ class ReadingSerializer(serializers.ModelSerializer):
         completed = equipment.maintenances.filter(status='completed', completed_at__lte=moment).order_by('-value').first()
         if completed and value < completed.value:
             raise serializers.ValidationError({'value': 'No puede ser inferior al horómetro de la mantención completada.'})
-        if not self.instance and attrs.get('source') == 'sensor':
-            raise serializers.ValidationError({'source': 'Las lecturas GPS solo se reciben desde un dispositivo autenticado.'})
-        if not self.instance and attrs.get('source') == 'ocr' and not attrs.get('evidence'):
-            raise serializers.ValidationError({'evidence': 'Adjunta la foto para registrar una lectura OCR.'})
-        confidence = attrs.get('confidence')
-        if confidence is not None and not (0 <= confidence <= 100):
-            raise serializers.ValidationError({'confidence': 'Debe estar entre 0 y 100.'})
+        if not self.instance and attrs.get('source', 'manual') != 'manual':
+            raise serializers.ValidationError({'source':'Solo se admiten lecturas manuales desde este formulario. El GPS usa telemetría autenticada.'})
+        if self.initial_data.get('confidence') is not None:
+            raise serializers.ValidationError({'confidence':'El procesamiento OCR fue retirado.'})
+        if self.instance and self.instance.source != 'manual':
+            raise serializers.ValidationError('Las lecturas automáticas o históricas no se editan. Registra una lectura manual de contraste.')
         return attrs
 
 class SupplySerializer(serializers.ModelSerializer):

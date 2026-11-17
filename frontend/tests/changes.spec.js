@@ -16,7 +16,7 @@ test('fleet buttons filter availability and pending equipment',async({page},info
 });
 test('photo filter finds historic manual photos and year filter works',async({page})=>{
   const errors=await mock(page);await page.goto('/#readings');
-  await page.getByLabel('Filtrar fuente',{exact:true}).selectOption('ocr');
+  await page.getByLabel('Filtrar fuente',{exact:true}).selectOption('photo');
   await expect(page.getByAltText('Foto del horómetro')).toBeVisible();
   await expect(page.getByText('Sin foto histórica')).toHaveCount(0);
   await page.getByLabel('Filtrar por año').selectOption('2026');

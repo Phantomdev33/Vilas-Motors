@@ -1,13 +1,11 @@
-import hashlib
 import os
-import secrets
-from datetime import datetime, timedelta
+from datetime import timedelta
 from decimal import Decimal
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 from django.utils import timezone
-from fleet.models import User, Equipment, Reading, Maintenance, Supply, Gateway, Sensor
+from fleet.models import User, Equipment, Reading, Maintenance, Supply
 from fleet.services import reconcile_alert
 
 class Command(BaseCommand):
@@ -29,8 +27,6 @@ class Command(BaseCommand):
                     ('GH-04','Montacargas','Grúa horquilla','CAT','140',3090,2650,500,'hrs'),
                     ('EX-05','Komatsu PC210','Excavadora','Komatsu','PC210',2120,2000,250,'hrs'),
                     ('WL-06','Cargador frontal','Cargador frontal','CAT','950M',3340,3250,250,'hrs')]
-        regions = [('Arica y Parinacota', 'Arica'), ('Tarapac?', 'Alto Hospicio'), ('Antofagasta', 'Calama'), ('Atacama', 'Copiap?'), ('Coquimbo', 'La Serena')]
-        gateway, _ = Gateway.objects.get_or_create(identifier='GW-NORTE-01', defaults={'model':'Gateway piloto', 'last_connection':timezone.now()})
         for index,(code,name,kind,brand,model,current,baseline,interval,unit) in enumerate(fixtures):
             eq, created = Equipment.objects.get_or_create(code=code, defaults={'name':name,'equipment_type':kind,'brand':brand,'model':model,
                 'serial_number':f'DEMO-{code}-2026','region':'Tarapacá','commune':'Alto Hospicio','location':'Faena Norte · Zona A',
@@ -38,13 +34,12 @@ class Command(BaseCommand):
             if created:
                 for offset in range(5, -1, -1):
                     Reading.objects.create(equipment=eq, value=Decimal(current)-Decimal(offset)*10,
-                        recorded_at=timezone.now()-timedelta(days=offset, minutes=10), source='ocr' if offset%2 else 'manual',
-                        confidence=98 if offset%2 else None, note='Dato ficticio de demostración', created_by=planner)
+                        recorded_at=timezone.now()-timedelta(days=offset, minutes=10), source='manual',
+                        confidence=None, note='Dato ficticio de demostración', created_by=planner)
                 Maintenance.objects.create(equipment=eq, service_type='Preventiva · Servicio de motor', interval=interval, value=current,
                     scheduled_at=timezone.now()+timedelta(days=index), workshop='Maestranza Vila · Taller Central',
                     work_order=f'OT-2026-{index+1:03}', status='in_progress' if index == 5 else 'scheduled', created_by=planner, description='Programación de demostración.')
-                token = secrets.token_urlsafe(32)
-                Sensor.objects.create(equipment=eq, gateway=gateway, identifier=f'CAM-{code}', token_hash=hashlib.sha256(token.encode()).hexdigest())
+                # Los eventos GPS simulados se crean con simulate_gps, sin dispositivos físicos.
             reconcile_alert(eq, planner)
         for code, description, unit in [('OIL-15W40','Aceite de motor · SAE 15W-40','litros'),('CAT-1R1808','Filtro de aceite de motor','unidad'),('GREASE-EP2','Grasa multipropósito','kg')]:
             Supply.objects.get_or_create(code=code, defaults={'description':description,'unit':unit})

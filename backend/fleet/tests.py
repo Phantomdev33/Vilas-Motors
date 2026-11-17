@@ -6,6 +6,8 @@ from decimal import Decimal
 from PIL import Image
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
+from unittest.mock import patch
+from .test_support import MemoryImageCollection
 from django.utils import timezone
 from rest_framework.test import APIClient
 from .models import User, Equipment, Reading, Maintenance, Alert, AuditLog, Sensor
@@ -97,16 +99,21 @@ class FleetAPITests(TestCase):
         self.assertEqual(self.client.delete(f'/api/equipment/{self.eq.pk}/').status_code,204)
         self.eq.refresh_from_db();self.assertFalse(self.eq.active);self.assertEqual(self.eq.readings.count(),1)
         self.assertEqual(self.eq.alerts.count(),1)
-    def test_telemetry_requires_device_token_and_validates_values(self):
-        sensor=Sensor.objects.create(equipment=self.eq,identifier='TEST-CAM',token_hash=hashlib.sha256(b'device-secret').hexdigest())
+    def test_telemetry_requires_device_token_and_ignition_events(self):
+        sensor=Sensor.objects.create(equipment=self.eq,identifier='TEST-GPS',token_hash=hashlib.sha256(b'device-secret').hexdigest())
         self.client.force_authenticate(None)
         self.assertEqual(self.reading(4100).status_code,401)
-        self.assertEqual(self.client.post('/api/telemetry/',{'value':4100},format='json').status_code,401)
+        body={'event_id':'on','recorded_at':(timezone.now()-timedelta(hours=3)).isoformat(),'ignition':True}
+        self.assertEqual(self.client.post('/api/telemetry/',body,format='json').status_code,401)
         self.client.credentials(HTTP_AUTHORIZATION='Device device-secret')
-        self.assertEqual(self.client.post('/api/telemetry/',{'value':4100},format='json').status_code,201)
+        self.assertEqual(self.client.post('/api/telemetry/',body,format='json').status_code,201)
+        off={'event_id':'off','recorded_at':(timezone.now()-timedelta(hours=1)).isoformat(),'ignition':False}
+        self.assertEqual(self.client.post('/api/telemetry/',off,format='json').status_code,201)
         self.assertEqual(Reading.objects.get().sensor,sensor)
         self.assertEqual(self.client.post('/api/telemetry/',{'value':4099},format='json').status_code,400)
-    def test_photo_is_saved_and_requires_authentication_to_view(self):
+    @patch('fleet.image_storage.image_collection')
+    def test_photo_is_saved_and_requires_authentication_to_view(self,collection):
+        collection.return_value=MemoryImageCollection()
         buffer=io.BytesIO();Image.new('RGB',(20,20),'white').save(buffer,format='PNG')
         photo=SimpleUploadedFile('meter.png',buffer.getvalue(),content_type='image/png')
         response=self.client.post('/api/readings/',{'equipment':self.eq.pk,'value':4100,'evidence':photo},format='multipart')

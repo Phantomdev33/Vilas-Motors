@@ -81,3 +81,7 @@ DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'soporte@vilasmotor.local')
 PASSWORD_RESET_TIMEOUT = 1800
 FRONTEND_URL = os.getenv('FRONTEND_URL', 'https://vilas-motors-muhdcegrz-phantomdev33s-projects.vercel.app')
 DATA_UPLOAD_MAX_MEMORY_SIZE = 12 * 1024 * 1024
+MONGODB_URI = os.getenv('MONGODB_URI', '').strip()
+MONGODB_IMAGE_DATABASE = os.getenv('MONGODB_IMAGE_DATABASE', 'vilas_images')
+# No se extrapolan horas durante silencios mayores a este umbral.
+GPS_MAX_EVENT_GAP_SECONDS = int(os.getenv('GPS_MAX_EVENT_GAP_SECONDS', '86400'))
