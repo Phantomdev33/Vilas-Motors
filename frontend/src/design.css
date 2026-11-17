@@ -356,6 +356,13 @@ input:disabled,select:disabled { background: #ffffff03!important; color: #8891a0
 
 .fleet-heading-actions { display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
 .view-equipment { min-height:38px; white-space:nowrap; }
+.equipment-row-actions { display:flex; flex-wrap:wrap; align-items:center; gap:8px; min-width:145px; }
+.equipment-row-actions .vm-button { min-height:36px; padding:9px 12px; font-size:11px; font-weight:650; white-space:nowrap; }
+.equipment-row-actions .equipment-consult { color:#58e2d1; background:#17c9b915; border-color:#17c9b94d; }
+.equipment-row-actions .equipment-edit { color:#f0d378; background:#e4bd3812; border-color:#e4bd3845; }
+.equipment-row-actions .equipment-deactivate { color:#ff7293; background:#ff174415; border-color:#ff17444d; }
+.equipment-row-actions .vm-button:hover { filter:brightness(1.2); border-color:currentColor; }
+.equipment-row-actions .vm-button:focus-visible { outline:2px solid currentColor; outline-offset:3px; }
 .reading-entry-form { padding:16px; margin:0; }
 .reading-entry-form .upload-area { margin:16px 0; }
 .reading-entry-form>.field { margin:12px 0; }
