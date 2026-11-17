@@ -1,5 +1,4 @@
 import hashlib
-import hmac
 import io
 import uuid
 from datetime import datetime, timedelta, time
@@ -7,8 +6,6 @@ from decimal import Decimal
 from django.conf import settings
 from django.contrib.auth import authenticate
 from django.contrib.auth.password_validation import validate_password
-from django.contrib.auth.tokens import default_token_generator
-from django.core.mail import send_mail
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import transaction
 from django.db.models import OuterRef, Subquery, DecimalField, IntegerField, Q, Exists, Prefetch
@@ -16,8 +13,6 @@ from django.db.models.functions import Coalesce
 from django.http import HttpResponse, FileResponse, Http404
 from django.middleware.csrf import get_token
 from django.utils import timezone
-from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
-from django.utils.encoding import force_bytes
 from django.views.static import serve
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
@@ -33,6 +28,8 @@ from .serializers import UserSerializer, EquipmentSerializer, ReadingSerializer,
 from .services import audit, reconcile_alert, LABELS
 from .throttles import DeviceTelemetryThrottle
 from .captcha import challenge, verify
+from .sms import SMSUnavailable, check_challenge, start_challenge
+from .service_references import REFERENCES
 
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import never_cache
@@ -68,29 +65,68 @@ class LoginView(CaptchaProtectedView):
     authentication_classes = []
     @transaction.atomic
     def post(self, request):
-        enforce_csrf(request)
         email = str(request.data.get('email', '')).strip().lower()
         password = request.data.get('password', '')
         if not isinstance(password, str) or len(password) > 1024:
             return Response({'detail': 'Credenciales incorrectas.'}, status=401)
         user = User.objects.select_for_update().filter(email__iexact=email).first()
-        if user and user.locked_until and user.locked_until > timezone.now():
+        if user and user.is_active and user.locked_until and user.locked_until > timezone.now():
             return Response({'detail': 'Acceso bloqueado temporalmente. Intenta nuevamente en 15 minutos.'}, status=429)
         if user and user.locked_until:
             user.failed_attempts = 0
             user.locked_until = None
             user.save(update_fields=['failed_attempts', 'locked_until'])
         authenticated = authenticate(request, username=user.username if user else email, password=password)
-        if not authenticated:
-            if user:
+        if not authenticated or not user or not user.is_active:
+            if user and user.is_active:
                 user.failed_attempts += 1
                 if user.failed_attempts >= 5: user.locked_until = timezone.now() + timedelta(minutes=15)
                 user.save(update_fields=['failed_attempts', 'locked_until'])
             return Response({'detail': 'Correo o contraseña incorrectos.'}, status=401)
+        if not user.phone:
+            return Response({'detail': 'Pide a un administrador que registre tu número de celular.'}, status=403)
+        user.password = authenticated.password
+        try:
+            challenge_id = start_challenge(user, 'login')
+        except SMSUnavailable:
+            return Response({'detail': 'El envío de SMS no está disponible. Intenta nuevamente.'}, status=503)
+        if not challenge_id:
+            return Response({'detail': 'Espera un minuto antes de solicitar otro código.'}, status=429)
+        user.failed_attempts, user.locked_until = 0, None
+        user.save(update_fields=['failed_attempts', 'locked_until'])
+        response = Response({'challenge_id': challenge_id}, status=202)
+        response['Cache-Control'] = 'no-store'
+        return response
+
+
+class SMSConfirmView(APIView):
+    permission_classes = [AllowAny]
+    authentication_classes = []
+
+    def verify_code(self, request, purpose):
+        enforce_csrf(request)
+        return check_challenge(request.data.get('challenge_id'), purpose, request.data.get('code'))
+
+    def invalid_code(self):
+        return Response({'detail': 'Código incorrecto, vencido o agotado. Puedes solicitar otro.'}, status=400)
+
+
+class LoginVerifyView(SMSConfirmView):
+    @transaction.atomic
+    def post(self, request):
+        user, sms = self.verify_code(request, 'login')
+        if not user:
+            return self.invalid_code()
+        if user.locked_until and user.locked_until > timezone.now():
+            return self.invalid_code()
+        sms.used = True
+        sms.save(update_fields=['used'])
         user.failed_attempts, user.locked_until, user.last_login = 0, None, timezone.now()
         user.save(update_fields=['failed_attempts', 'locked_until', 'last_login'])
         response = Response(UserSerializer(user).data)
-        response.set_cookie('access_token', str(AccessToken.for_user(user)), httponly=True, secure=not settings.DEBUG, samesite='Lax', max_age=7200)
+        token = AccessToken.for_user(user)
+        token['sms_access'] = str(user.access_version)
+        response.set_cookie('access_token', str(token), httponly=True, secure=not settings.DEBUG, samesite='Lax', max_age=7200)
         audit(user, 'login', user)
         return response
 
@@ -109,37 +145,48 @@ class MeView(APIView):
         data['permissions'] = {module: roles.get(request.user.role, '') for module, roles in MATRIX.items()}
         return Response(data)
 
+
+class ServiceReferencesView(APIView):
+    def get(self, request):
+        return Response(REFERENCES)
+
 class PasswordResetView(CaptchaProtectedView):
     permission_classes = [AllowAny]
     authentication_classes = []
+    @transaction.atomic
     def post(self, request):
-        enforce_csrf(request)
-        user = User.objects.filter(email__iexact=str(request.data.get('email', '')).strip(), is_active=True).first()
-        if user:
-            uid = urlsafe_base64_encode(force_bytes(user.pk))
-            token = default_token_generator.make_token(user)
-            url = f'{settings.FRONTEND_URL}/?reset={uid}&token={token}'
-            send_mail('Recupera tu acceso · Vila’s Motor', f'Restablece tu contraseña en los próximos 30 minutos:\n{url}', settings.DEFAULT_FROM_EMAIL, [user.email])
-        return Response({'detail': 'Si el correo está registrado, recibirás un enlace para recuperar tu acceso.'})
+        email = str(request.data.get('email', '')).strip()
+        user = User.objects.select_for_update().filter(email__iexact=email, is_active=True).first()
+        challenge_id = None
+        if user and user.phone:
+            try:
+                challenge_id = start_challenge(user, 'reset')
+            except SMSUnavailable:
+                pass
+        response = Response({
+            'challenge_id': challenge_id or uuid.uuid4(),
+            'detail': 'Si tu cuenta está activa y tiene un celular registrado, recibirás un código por SMS. Espera un minuto antes de solicitar otro.',
+        }, status=202)
+        response['Cache-Control'] = 'no-store'
+        return response
 
-class PasswordResetConfirmView(CaptchaProtectedView):
-    permission_classes = [AllowAny]
-    authentication_classes = []
+
+class PasswordResetConfirmView(SMSConfirmView):
+    @transaction.atomic
     def post(self, request):
-        enforce_csrf(request)
-        try:
-            user = User.objects.get(pk=urlsafe_base64_decode(request.data.get('uid', '')).decode(), is_active=True)
-        except (User.DoesNotExist, ValueError, UnicodeDecodeError, TypeError, OverflowError):
-            raise ValidationError('Enlace inválido o vencido.')
-        if not default_token_generator.check_token(user, request.data.get('token', '')):
-            raise ValidationError('Enlace inválido o vencido.')
+        user, sms = self.verify_code(request, 'reset')
+        if not user:
+            return self.invalid_code()
         password = request.data.get('password', '')
-        if not isinstance(password, str): raise ValidationError('Contraseña inválida.')
+        if not isinstance(password, str) or len(password) > 1024:
+            raise ValidationError('Contraseña inválida.')
         try: validate_password(password, user)
         except DjangoValidationError as exc: raise ValidationError({'password': list(exc.messages)})
         user.set_password(password)
         user.failed_attempts, user.locked_until = 0, None
-        user.save()
+        user.save(update_fields=['password', 'failed_attempts', 'locked_until'])
+        sms.used = True
+        sms.save(update_fields=['used'])
         audit(user, 'password_reset', user)
         return Response({'detail': 'Contraseña actualizada. Ya puedes ingresar.'})
 
@@ -281,6 +328,11 @@ class UserViewSet(AuditedViewSet):
     queryset = User.objects.all().order_by('first_name')
     serializer_class = UserSerializer
     permission_module = 'user'
+    @transaction.atomic
+    def update(self, request, *args, **kwargs):
+        User.objects.select_for_update().get(pk=self.get_object().pk)
+        return super().update(request, *args, **kwargs)
+
     def perform_destroy(self, instance):
         if instance.pk == self.request.user.pk: raise ValidationError('No puedes desactivar tu propia cuenta.')
         instance.is_active = False

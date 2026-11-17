@@ -5,6 +5,7 @@ from datetime import timedelta
 from decimal import Decimal
 from django.utils import timezone
 from .models import Equipment,Sensor,Reading,Maintenance,Supply,MaintenanceSupply,Alert,AuditLog,Gateway,IgnitionEvent,GPSMeterState
+from .service_references import service_reference
 
 TYPES = [
  ('Grúa horquilla','Komatsu','FG25','hrs'),('Camión tolva','Volvo','FMX','km'),
@@ -43,7 +44,8 @@ def populate(actor):
     for i in range(50):
         kind,brand,model,unit=TYPES[i%len(TYPES)]
         region,commune=REGIONS[i%5]
-        interval=10000 if unit=='km' else 250 if i%2==0 else 500
+        reference = service_reference(kind, brand, model, unit)
+        interval = reference['interval'] if reference else (10000 if unit == 'km' else 250)
         base=Decimal(interval*10)
         pending=i>=48
         equipment.append(Equipment(code=f'SIM-{i+1:03}',name=f'{kind} {brand} {model}',equipment_type=kind,

@@ -1,23 +1,67 @@
 import uuid
 from decimal import Decimal
-from django.contrib.auth.models import AbstractUser
-from django.db import models
+from django.contrib.auth.models import AbstractUser, UserManager
+from django.core.validators import RegexValidator
+from django.db import models, transaction
 from django.db.models import Q
 from django.utils import timezone
 from django.utils.functional import cached_property
 from .image_storage import ReadingImageStorage
 
+class FleetUserManager(UserManager):
+    def create_superuser(self, username, email=None, password=None, **extra_fields):
+        extra_fields.setdefault('role', 'admin')
+        return super().create_superuser(username, email, password, **extra_fields)
+
+
 class User(AbstractUser):
+    objects = FleetUserManager()
+    REQUIRED_FIELDS = ['email', 'phone']
     class Role(models.TextChoices):
         ADMIN = 'admin', 'Administrador'
         PLANNER = 'planner', 'Planificador'
         HELPER = 'helper', 'Ayudante'
         CHIEF = 'chief', 'Jefe de operaciones'
     email = models.EmailField(unique=True)
+    phone = models.CharField(max_length=16, blank=True, validators=[
+        RegexValidator(r'\A\+[1-9][0-9]{7,14}\Z', 'Usa el formato internacional, por ejemplo +56912345678.'),
+    ])
     role = models.CharField(max_length=16, choices=Role.choices, default=Role.HELPER)
     region = models.CharField(max_length=100, default='Norte')
     failed_attempts = models.PositiveIntegerField(default=0)
     locked_until = models.DateTimeField(null=True, blank=True)
+    access_version = models.UUIDField(default=uuid.uuid4, editable=False)
+
+    def save(self, *args, **kwargs):
+        update_fields = kwargs.get('update_fields')
+        watched_fields = {'is_active', 'phone'}
+        if self._state.adding or (update_fields is not None and not watched_fields.intersection(update_fields)):
+            return super().save(*args, **kwargs)
+        with transaction.atomic(using=kwargs.get('using') or self._state.db):
+            previous = type(self).objects.using(kwargs.get('using') or self._state.db).select_for_update().filter(pk=self.pk).values(
+                'is_active', 'phone', 'access_version',
+            ).first()
+            if previous:
+                self.access_version = previous['access_version']
+                changed = watched_fields if update_fields is None else watched_fields.intersection(update_fields)
+                if any(previous[field] != getattr(self, field) for field in changed):
+                    self.access_version = uuid.uuid4()
+                    if update_fields is not None:
+                        kwargs['update_fields'] = set(update_fields) | {'access_version'}
+            return super().save(*args, **kwargs)
+
+class SMSChallenge(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    purpose = models.CharField(max_length=8)
+    digest = models.CharField(max_length=64)
+    sent_at = models.DateTimeField(auto_now_add=True)
+    attempts = models.PositiveSmallIntegerField(default=0)
+    used = models.BooleanField(default=False)
+
+    class Meta:
+        constraints = [models.UniqueConstraint(fields=['user', 'purpose'], name='unique_user_sms_purpose')]
+
 
 class CaptchaChallenge(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

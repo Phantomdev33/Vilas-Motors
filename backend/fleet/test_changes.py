@@ -3,7 +3,7 @@ from datetime import timedelta
 from decimal import Decimal
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
-from django.test import TestCase, override_settings
+from django.test import TestCase
 from django.utils import timezone
 from rest_framework.test import APIClient
 from .models import CaptchaChallenge, Equipment, User
@@ -83,23 +83,39 @@ class ChangesTests(TestCase):
         self.assertEqual(self.eq.next_service,1500)
         self.assertEqual(Decimal(self.client.get('/api/report/').data['equipment'][0]['next_service']),Decimal(1500))
 
-    @override_settings(EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend', FRONTEND_URL='https://fleet.example.cl')
-    def test_password_recovery_validates_length_and_consumes_reset_link(self):
-        from django.core import mail
-        from urllib.parse import urlsplit, parse_qs
+    def test_reference_supplies_a_default_only_for_the_matching_model_and_unit(self):
+        body = {
+            'code': 'CAT-320', 'name': 'CAT 320', 'equipment_type': 'Excavadora',
+            'brand': 'cat', 'model': '320', 'unit': 'km',
+        }
+        self.assertEqual(self.client.post('/api/equipment/', body, format='json').status_code, 400)
+        body['unit'] = 'hrs'
+        result = self.client.post('/api/equipment/', body, format='json')
+        self.assertEqual(result.status_code, 201)
+        self.assertEqual(result.data['interval'], 500)
+        body.update(code='CAT-320-2', interval=250)
+        result = self.client.post('/api/equipment/', body, format='json')
+        self.assertEqual(result.status_code, 201)
+        self.assertEqual(result.data['interval'], 250)
+
+    def test_password_recovery_validates_length_and_consumes_sms_code(self):
+        from unittest.mock import patch
         self.client.force_authenticate(None)
+        self.user.phone = '+56912345678'
+        self.user.save(update_fields=['phone'])
         def captcha():
             item=CaptchaChallenge.objects.create(answer_hash=hashlib.sha256(b'ABC234').hexdigest(),expires_at=timezone.now()+timedelta(minutes=5))
             return {'captcha_id':str(item.pk),'captcha_answer':'ABC234'}
-        response=self.client.post('/api/auth/reset/',{'email':self.user.email,**captcha()},format='json')
-        self.assertEqual(response.status_code,200)
-        self.assertEqual(len(mail.outbox),1)
-        query=parse_qs(urlsplit(mail.outbox[0].body.splitlines()[-1]).query)
-        body={'uid':query['reset'][0],'token':query['token'][0],'password':'ShortPass12!',**captcha()}
+        with patch('fleet.sms.send_code') as send_code:
+            response = self.client.post('/api/auth/reset/', {'email': self.user.email, **captcha()}, format='json')
+        self.assertEqual(response.status_code, 202)
+        self.assertNotIn('access_token', response.cookies)
+        send_code.assert_called_once()
+        body = {'challenge_id': str(response.data['challenge_id']), 'code': send_code.call_args.args[1], 'password': 'ShortPass12!'}
+        self.assertEqual(self.client.post('/api/auth/login/verify/', body, format='json').status_code, 400)
         self.assertEqual(self.client.post('/api/auth/reset/confirm/',body,format='json').status_code,400)
-        body.update(password='AnotherStrong2026!',**captcha())
+        body.update(password='AnotherStrong2026!')
         self.assertEqual(self.client.post('/api/auth/reset/confirm/',body,format='json').status_code,200)
         self.user.refresh_from_db()
         self.assertTrue(self.user.check_password('AnotherStrong2026!'))
-        body.update(captcha())
         self.assertEqual(self.client.post('/api/auth/reset/confirm/',body,format='json').status_code,400)

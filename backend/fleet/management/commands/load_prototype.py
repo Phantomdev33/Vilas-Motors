@@ -7,6 +7,7 @@ from django.utils import timezone
 
 from fleet.models import Equipment, Reading, Maintenance, User
 from fleet.services import audit, reconcile_alert
+from fleet.service_references import service_reference
 
 
 class Command(BaseCommand):
@@ -30,6 +31,9 @@ class Command(BaseCommand):
             if Equipment.objects.filter(code=code).exists():
                 continue
             kind, brand, model, unit, interval = types[index % 5]
+            reference = service_reference(kind, brand, model, unit)
+            if reference:
+                interval = reference['interval']
             region, commune = regions[index % 5]
             fraction = [Decimal('0.4'), Decimal('0.9'), Decimal('1'), Decimal('1.12'), Decimal('0.3')][index % 5]
             baseline = interval * 10

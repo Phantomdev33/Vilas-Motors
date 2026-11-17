@@ -57,7 +57,7 @@ Sube el código, las migraciones, `frontend/package-lock.json` y `backend/.env.e
 
 La aplicación completa requiere un servidor para Django y una base PostgreSQL. GitHub almacena el código; GitHub Pages por sí solo no ejecuta este backend. El frontend usa `/api/`, por lo que el servidor de producción debe dirigir esa ruta a Django y servir la compilación de `frontend/dist/`.
 
-Configura las variables de `backend/.env.example` para el dominio de destino, `DJANGO_DEBUG=false`, una clave secreta propia, HTTPS, correo SMTP y almacenamiento persistente de los adjuntos. Ejecuta las migraciones y `python manage.py collectstatic` durante el despliegue. Usa un servidor WSGI de producción para `config.wsgi:application`; el servidor de desarrollo se utiliza para trabajo local.
+Configura las variables de `backend/.env.production.example` para el dominio de destino, `DJANGO_DEBUG=false`, una clave secreta propia, HTTPS, SMS y almacenamiento persistente de los adjuntos. Ejecuta las migraciones y `python manage.py collectstatic` durante el despliegue. Usa un servidor WSGI de producción para `config.wsgi:application`; el servidor de desarrollo se utiliza para trabajo local.
 
 ## Estructura
 
@@ -84,12 +84,12 @@ En **Render**, usa Root Directory `backend`, Build Command `bash build.sh` y Sta
 | `FRONTEND_URL` | `https://vilas-motors-muhdcegrz-phantomdev33s-projects.vercel.app` |
 
 El host público que proporciona Render se agrega automáticamente a ALLOWED_HOSTS.
-Configura `FRONTEND_URL` para los enlaces de recuperación y `CSRF_TRUSTED_ORIGINS`
+Configura `FRONTEND_URL` para el acceso a la aplicación y `CSRF_TRUSTED_ORIGINS`
 con los orígenes HTTPS de frontend y backend, separados por coma. La lista de
 orígenes CORS usa por defecto esos mismos valores. Para hosts adicionales usa
 `DJANGO_ALLOWED_HOSTS`. No uses comodines ni publiques credenciales en el frontend.
 
-La URL de Vercel anterior identifica el despliegue que compartiste. Si asignas un dominio estable al proyecto, actualiza FRONTEND_URL para que los correos de recuperación y CSRF usen ese dominio. Un enlace al panel `vercel.com/...` no es la URL pública de la página.
+La URL de Vercel anterior identifica el despliegue que compartiste. Si asignas un dominio estable al proyecto, actualiza `FRONTEND_URL` y los orígenes de CSRF.
 
 `backend/.env` y los scripts de PowerShell mantienen el desarrollo local. En producción no se usan localhost por defecto: Django exige FRONTEND_URL y una conexión explícita a la base. El destino de Render se configura en frontend/vercel.json. No subas `.env` a GitHub: configura las variables en cada proveedor. Después de subir el código, vuelve a desplegar ambos servicios.
 
@@ -145,12 +145,48 @@ Las regiones de ejemplo son Arica y Parinacota, Tarapacá, Antofagasta, Atacama
 y Coquimbo; no representan ubicaciones verificadas de la empresa.
 
 Acceso de ejemplo: `admin@vilasmotor.cl`, contraseña `VilasDemo2026!`.
+Tras ingresar la contraseña y el CAPTCHA, copia el código de seis dígitos de la
+línea `[SMS simulado]` en la terminal de Django. La recuperación usa la misma
+terminal. Con `scripts/start.ps1`, la salida de Django queda en `.runtime/backend.log`.
 La carga se puede repetir sin duplicar registros. El modo normal de despliegue
 mantiene su configuración existente; este cambio no publica el prototipo.
 
 El filtro «Disponibles» significa operativo y sin mantención en curso.
 Los filtros se combinan y «Limpiar filtros» restablece también la búsqueda.
 La ficha permite volver a la flota mediante una barra fija, conservando filtros.
+
+## Mantención preventiva por equipo
+
+Al crear o editar un equipo, selecciona su tipo e indica la marca y el modelo.
+La ficha muestra las referencias disponibles con su tarea, unidad y manual.
+Aplica una referencia si corresponde a la variante y las condiciones de faena,
+o registra el intervalo del manual específico. La flota calcula la próxima
+mantención a partir del horómetro o kilometraje. Si hay una mantención cerrada,
+el cálculo usa el intervalo guardado en esa intervención. Los límites por
+calendario que figuran en los manuales se pueden programar por separado.
+
+Las referencias investigadas están en [el catálogo de intervalos](backend/fleet/service_references.py).
+Algunos equipos del inventario solo indican la familia, como Volvo FMX o Liebherr LTM.
+En esos casos, registra el intervalo de la unidad según su serie y uso. Los datos
+de demostración incluyen intervalos ficticios para equipos sin coincidencia exacta.
+
+## Acceso y recuperación por SMS
+
+El administrador puede registrar el celular en **Usuarios y roles** y cambiar
+el estado de acceso. Una cuenta inactiva queda fuera del sistema hasta que se
+reactiva. Las cuentas existentes necesitan un celular con prefijo internacional.
+Para preparar el primer administrador existente, ejecuta desde `backend/`
+`python manage.py set_sms_phone correo@empresa.cl +56912345678` con los datos
+de la cuenta. Las cuentas nuevas creadas con `createsuperuser` pueden indicar
+el celular en el asistente.
+
+Para recibir SMS en un teléfono, configura `SMS_BACKEND=twilio` y
+`TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN` y `TWILIO_FROM` en el servidor Django.
+El modo `config.prototype` siempre simula el envío. Las instalaciones con
+Twilio requieren Internet y un remitente habilitado por el proveedor.
+Ejecuta `python manage.py migrate` en la base del entorno antes de habilitar
+el flujo. El panel técnico de Django usa la sesión de la aplicación y requiere
+que el navegador pueda enviarle la misma cookie.
 
 # GPS Teltonika y fotos en MongoDB
 

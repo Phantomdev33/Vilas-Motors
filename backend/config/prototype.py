@@ -5,5 +5,6 @@ DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3', 'NAME': BASE_DI
 SECURE_SSL_REDIRECT = False
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+SMS_BACKEND = 'console'
+FRONTEND_URL = 'http://localhost:5173'
 MEDIA_ROOT = BASE_DIR / 'prototype-media'

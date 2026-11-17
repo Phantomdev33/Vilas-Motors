@@ -1,6 +1,7 @@
 import logging
 
 from rest_framework.authentication import CSRFCheck
+from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.exceptions import PermissionDenied
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
@@ -27,6 +28,12 @@ def enforce_csrf(request):
         raise PermissionDenied(message)
 
 class CookieJWTAuthentication(JWTAuthentication):
+    def get_user(self, validated_token):
+        user = super().get_user(validated_token)
+        if validated_token.get('sms_access') != str(user.access_version):
+            raise AuthenticationFailed('Vuelve a iniciar sesión con tu código SMS.')
+        return user
+
     def authenticate(self, request):
         token = request.COOKIES.get('access_token')
         if not token: return None

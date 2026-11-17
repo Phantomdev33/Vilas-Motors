@@ -20,7 +20,7 @@ ALLOWED_HOSTS = [
 render_hostname = os.getenv('RENDER_EXTERNAL_HOSTNAME', '').strip()
 if render_hostname and render_hostname not in ALLOWED_HOSTS:
     ALLOWED_HOSTS.append(render_hostname)
-INSTALLED_APPS = ['django.contrib.admin', 'django.contrib.auth', 'django.contrib.contenttypes',
+INSTALLED_APPS = ['fleet.apps.FleetAdminConfig', 'django.contrib.auth', 'django.contrib.contenttypes',
                   'django.contrib.sessions', 'django.contrib.messages', 'django.contrib.staticfiles',
                   'rest_framework', 'corsheaders', 'fleet']
 MIDDLEWARE = ['django.middleware.security.SecurityMiddleware', 'corsheaders.middleware.CorsMiddleware',
@@ -42,7 +42,7 @@ REST_FRAMEWORK = {'DEFAULT_AUTHENTICATION_CLASSES': ['fleet.authentication.Cooki
                   'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.IsAuthenticated'],
                   'DEFAULT_THROTTLE_CLASSES': ['rest_framework.throttling.AnonRateThrottle'],
                   'DEFAULT_THROTTLE_RATES': {'anon': '100/min'}}
-SIMPLE_JWT = {'ACCESS_TOKEN_LIFETIME': timedelta(hours=2)}
+SIMPLE_JWT = {'ACCESS_TOKEN_LIFETIME': timedelta(hours=2), 'CHECK_REVOKE_TOKEN': True}
 LANGUAGE_CODE = 'es-cl'
 TIME_ZONE = 'America/Santiago'
 USE_I18N = True
@@ -71,14 +71,10 @@ SECURE_HSTS_INCLUDE_SUBDOMAINS = not DEBUG
 SECURE_HSTS_PRELOAD = not DEBUG
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 X_FRAME_OPTIONS = 'DENY'
-EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend')
-EMAIL_HOST = os.getenv('EMAIL_HOST', '')
-EMAIL_PORT = int(os.getenv('EMAIL_PORT', '587'))
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
-DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'soporte@vilasmotor.local')
-PASSWORD_RESET_TIMEOUT = 1800
+SMS_BACKEND = os.getenv('SMS_BACKEND', 'console' if DEBUG else 'twilio')
+TWILIO_ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID', '')
+TWILIO_AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN', '')
+TWILIO_FROM = os.getenv('TWILIO_FROM', '')
 FRONTEND_URL = os.getenv('FRONTEND_URL', 'https://vilas-motors-muhdcegrz-phantomdev33s-projects.vercel.app')
 DATA_UPLOAD_MAX_MEMORY_SIZE = 12 * 1024 * 1024
 MONGODB_URI = os.getenv('MONGODB_URI', '').strip()

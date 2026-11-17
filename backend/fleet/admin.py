@@ -3,7 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 from .models import User, Equipment, Reading, Maintenance, Supply, MaintenanceSupply, Alert, Sensor, Gateway, AuditLog
 @admin.register(User)
 class FleetUserAdmin(UserAdmin):
-    fieldsets = UserAdmin.fieldsets + (('Vila’s Motor', {'fields': ('role', 'region', 'failed_attempts', 'locked_until')}),)
+    fieldsets = UserAdmin.fieldsets + (('Vila’s Motor', {'fields': ('role', 'region', 'phone', 'failed_attempts', 'locked_until')}),)
 for model in (Equipment, Reading, Maintenance, Supply, MaintenanceSupply, Alert, Sensor, Gateway): admin.site.register(model)
 @admin.register(AuditLog)
 class AuditAdmin(admin.ModelAdmin):

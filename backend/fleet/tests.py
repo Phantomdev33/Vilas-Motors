@@ -145,7 +145,7 @@ class FleetAPITests(TestCase):
 
 class AuthenticationTests(TestCase):
     def setUp(self):
-        self.user=User.objects.create_user(username='test',email='test@vilas.cl',password='SecureDemo2026!',role='planner')
+        self.user=User.objects.create_user(username='test',email='test@vilas.cl',password='SecureDemo2026!',role='planner',phone='+56912345678')
         self.client=APIClient(enforce_csrf_checks=True)
         response=self.client.get('/api/auth/csrf/');self.csrf=response.data['csrfToken']
     def login(self,password):
@@ -153,11 +153,84 @@ class AuthenticationTests(TestCase):
         captcha = CaptchaChallenge.objects.create(answer_hash=hashlib.sha256(b'ABC234').hexdigest(), expires_at=timezone.now()+timedelta(minutes=5))
         return self.client.post('/api/auth/login/',{'email':self.user.email,'password':password,'captcha_id':str(captcha.pk),'captcha_answer':'ABC234'},format='json',HTTP_X_CSRFTOKEN=self.csrf)
     def test_login_requires_csrf_and_sets_http_only_cookie(self):
+        import re
+        from contextlib import redirect_stdout
+        from io import StringIO
+        from django.test import override_settings
         self.assertEqual(self.client.post('/api/auth/login/',{},format='json').status_code,403)
-        response=self.login('SecureDemo2026!');self.assertEqual(response.status_code,200)
+        console = StringIO()
+        with override_settings(DEBUG=True, SMS_BACKEND='console'), redirect_stdout(console):
+            response = self.login('SecureDemo2026!')
+        self.assertEqual(response.status_code, 202)
+        self.assertNotIn('access_token', response.cookies)
+        self.assertIn(self.client.get('/api/auth/me/').status_code, (401, 403))
+        sent = re.search(r'\[SMS simulado\].*ingresar: (\d{6})\.', console.getvalue())
+        self.assertIsNotNone(sent)
+        body = {'challenge_id': str(response.data['challenge_id']), 'code': sent.group(1)}
+        self.assertEqual(self.client.post('/api/auth/login/verify/', body, format='json').status_code, 403)
+        response = self.client.post('/api/auth/login/verify/', body, format='json', HTTP_X_CSRFTOKEN=self.csrf)
+        self.assertEqual(response.status_code, 200)
         self.assertTrue(response.cookies['access_token']['httponly'])
         self.assertEqual(self.client.get('/api/auth/me/').status_code,200)
         self.assertEqual(self.client.post('/api/readings/',{},format='json').status_code,403)
+        self.assertEqual(self.client.post('/api/auth/login/verify/', body, format='json', HTTP_X_CSRFTOKEN=self.csrf).status_code, 400)
+        self.user.is_active = False
+        self.user.save(update_fields=['is_active'])
+        self.assertIn(self.client.get('/api/auth/me/').status_code, (401, 403))
+        self.user.is_active = True
+        self.user.save(update_fields=['is_active'])
+        self.assertIn(self.client.get('/api/auth/me/').status_code, (401, 403))
+
+    def test_disabled_account_cannot_start_or_complete_login_after_admin_reactivation(self):
+        from unittest.mock import patch
+        with patch('fleet.sms.send_code') as send_code:
+            response = self.login('SecureDemo2026!')
+            self.assertEqual(response.status_code, 202)
+            body = {'challenge_id': str(response.data['challenge_id']), 'code': send_code.call_args.args[1]}
+            admin = User.objects.create_superuser(username='admin', email='admin@vilas.cl', password='SecureDemo2026!')
+            admin_client = APIClient()
+            admin_client.force_authenticate(admin)
+            url = f'/api/users/{self.user.pk}/'
+            self.assertEqual(admin_client.patch(url, {'is_active': False}, format='json').status_code, 200)
+            self.assertEqual(self.login('SecureDemo2026!').status_code, 401)
+            send_code.assert_called_once()
+            self.assertEqual(admin_client.patch(url, {'is_active': True}, format='json').status_code, 200)
+            self.assertEqual(self.client.post('/api/auth/login/verify/', body, format='json', HTTP_X_CSRFTOKEN=self.csrf).status_code, 400)
+
+    def test_sms_code_expires_and_locks_after_five_attempts(self):
+        from unittest.mock import patch
+        from .models import SMSChallenge
+        url = '/api/auth/login/verify/'
+        with patch('fleet.sms.send_code') as send_code:
+            response = self.login('SecureDemo2026!')
+            first_id = response.data['challenge_id']
+            code = send_code.call_args.args[1]
+            wrong_code = '000000' if code != '000000' else '111111'
+            for _ in range(5):
+                result = self.client.post(url, {'challenge_id': str(first_id), 'code': wrong_code}, format='json', HTTP_X_CSRFTOKEN=self.csrf)
+                self.assertEqual(result.status_code, 400)
+            self.assertEqual(self.client.post(url, {'challenge_id': str(first_id), 'code': code}, format='json', HTTP_X_CSRFTOKEN=self.csrf).status_code, 400)
+            self.assertEqual(self.login('SecureDemo2026!').status_code, 429)
+            SMSChallenge.objects.filter(pk=first_id).update(sent_at=timezone.now() - timedelta(minutes=2))
+            response = self.login('SecureDemo2026!')
+            self.assertEqual(response.status_code, 202)
+            second_id = response.data['challenge_id']
+            SMSChallenge.objects.filter(pk=second_id).update(sent_at=timezone.now() - timedelta(minutes=5))
+            self.assertEqual(self.client.post(url, {'challenge_id': str(second_id), 'code': send_code.call_args.args[1]}, format='json', HTTP_X_CSRFTOKEN=self.csrf).status_code, 400)
+
+    def test_django_admin_uses_the_verified_application_session(self):
+        from unittest.mock import patch
+        self.user.role = 'admin'
+        self.user.is_staff = True
+        self.user.save(update_fields=['role', 'is_staff'])
+        self.client.force_login(self.user)
+        self.assertEqual(self.client.get('/admin/').status_code, 302)
+        with patch('fleet.sms.send_code') as send_code:
+            response = self.login('SecureDemo2026!')
+        body = {'challenge_id': str(response.data['challenge_id']), 'code': send_code.call_args.args[1]}
+        response = self.client.post('/api/auth/login/verify/', body, format='json', HTTP_X_CSRFTOKEN=self.csrf)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(self.client.get('/admin/').status_code, 200)
     def test_five_failed_attempts_lock_account(self):
         for _ in range(5):self.assertEqual(self.login('wrong').status_code,401)
         self.assertEqual(self.login('SecureDemo2026!').status_code,429)

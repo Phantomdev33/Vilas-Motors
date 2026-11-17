@@ -7,6 +7,7 @@ from rest_framework import serializers
 from .models import User, Equipment, Reading, Maintenance, Supply, MaintenanceSupply, Alert, Sensor, AuditLog
 from .services import LABELS
 from .date_fields import OperationalDateTimeField
+from .service_references import service_reference
 
 def validate_image(value):
     if value and value.size > 10 * 1024 * 1024:
@@ -27,7 +28,7 @@ class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=False, min_length=13)
     class Meta:
         model = User
-        fields = ['id', 'email', 'first_name', 'last_name', 'role', 'role_label', 'region', 'is_active', 'last_login', 'password']
+        fields = ['id', 'email', 'first_name', 'last_name', 'role', 'role_label', 'region', 'is_active', 'last_login', 'password', 'phone']
         read_only_fields = ['last_login']
     def validate_email(self, value):
         value = value.strip().lower()
@@ -53,7 +54,7 @@ class UserSerializer(serializers.ModelSerializer):
         instance = super().update(instance, validated_data)
         if password:
             instance.set_password(password)
-            instance.save()
+            instance.save(update_fields=['password'])
         return instance
 
 class EquipmentSerializer(serializers.ModelSerializer):
@@ -79,6 +80,14 @@ class EquipmentSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         if self.instance and self.instance.import_notes and attrs.get('code', self.instance.code) != self.instance.code:
             raise serializers.ValidationError({'code': 'El código de importación se conserva para evitar duplicados en futuras cargas.'})
+        if self.instance is None and 'interval' not in attrs and attrs.get('meter_initialized', True):
+            reference = service_reference(
+                attrs.get('equipment_type', ''), attrs.get('brand', ''),
+                attrs.get('model', ''), attrs.get('unit', 'hrs'),
+            )
+            if not reference:
+                raise serializers.ValidationError({'interval': 'Indica el intervalo según el manual del equipo.'})
+            attrs['interval'] = reference['interval']
         initial = attrs.get('initial_value', getattr(self.instance, 'initial_value', 0))
         service = attrs.get('initial_service_value', getattr(self.instance, 'initial_service_value', 0))
         if service > initial:

@@ -7,6 +7,7 @@ from django.db import transaction
 from django.utils import timezone
 from fleet.models import User, Equipment, Reading, Maintenance, Supply
 from fleet.services import reconcile_alert
+from fleet.service_references import service_reference
 
 class Command(BaseCommand):
     help = 'Carga exclusivamente datos ficticios, sin sobrescribir registros existentes.'
@@ -16,10 +17,15 @@ class Command(BaseCommand):
         password = os.getenv('DEMO_PASSWORD', 'VilasDemo2026!')
         people = [('admin@vilasmotor.cl','Alex','Morgan','admin'), ('james@vilasmotor.cl','James','Pérez','planner'),
                   ('ayudante@vilasmotor.cl','Jamie','Cruz','helper'), ('jefe@vilasmotor.cl','Elías','Ríos','chief')]
-        for email, first, last, role in people:
-            if not User.objects.filter(email=email).exists():
+        for index, (email, first, last, role) in enumerate(people, start=1):
+            phone = f'+1202555010{index}' if settings.SMS_BACKEND == 'console' else ''
+            user = User.objects.filter(email=email).first()
+            if not user:
                 User.objects.create_user(username=email, email=email, password=password, first_name=first, last_name=last,
-                    role=role, is_staff=role=='admin', is_superuser=role=='admin')
+                    role=role, phone=phone, is_staff=role=='admin', is_superuser=role=='admin')
+            elif phone and user.username == email and not user.phone and user.check_password(password):
+                user.phone = phone
+                user.save(update_fields=['phone'])
         planner = User.objects.get(email='james@vilasmotor.cl')
         fixtures = [('EX-01','CAT 320','Excavadora','CAT','320',4280,4000,250,'hrs'),
                     ('LD-02','Volvo L120H','Cargador frontal','Volvo','L120H',6100,6100-500,500,'hrs'),
@@ -28,6 +34,9 @@ class Command(BaseCommand):
                     ('EX-05','Komatsu PC210','Excavadora','Komatsu','PC210',2120,2000,250,'hrs'),
                     ('WL-06','Cargador frontal','Cargador frontal','CAT','950M',3340,3250,250,'hrs')]
         for index,(code,name,kind,brand,model,current,baseline,interval,unit) in enumerate(fixtures):
+            reference = service_reference(kind, brand, model, unit)
+            if reference:
+                interval = reference['interval']
             eq, created = Equipment.objects.get_or_create(code=code, defaults={'name':name,'equipment_type':kind,'brand':brand,'model':model,
                 'serial_number':f'DEMO-{code}-2026','region':'Tarapacá','commune':'Alto Hospicio','location':'Faena Norte · Zona A',
                 'responsible':'James Pérez','unit':unit,'interval':interval,'initial_value':current-100,'initial_service_value':baseline})
