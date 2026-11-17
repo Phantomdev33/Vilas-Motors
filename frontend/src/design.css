@@ -356,6 +356,8 @@ input:disabled,select:disabled { background: #ffffff03!important; color: #8891a0
 
 .fleet-heading-actions { display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
 .view-equipment { min-height:38px; white-space:nowrap; }
+.state-badge.resolved { color:#55deb2; background:#00d99510; border-color:#00d99555; }
+.vm-table tr.resolved-alert td { background:#00d99503; }
 .notification-control { position:relative; }
 .vm-modal:has(.notification-detail) { width:min(660px,94vw); max-width:660px; max-height:90dvh; overflow:auto; }
 .notification-detail-heading { display:flex; gap:14px; align-items:flex-start; padding:14px 0; }

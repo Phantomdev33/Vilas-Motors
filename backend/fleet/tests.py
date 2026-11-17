@@ -53,10 +53,24 @@ class FleetAPITests(TestCase):
         self.assertEqual(Alert.objects.get(active=True).severity,'overdue')
     def test_completed_maintenance_resets_interval_and_closes_alert(self):
         self.reading(4250)
-        self.assertEqual(self.maintenance().status_code,201)
+        original=Alert.objects.get(active=True)
+        original_message=original.message
+        result=self.maintenance()
+        self.assertEqual(result.status_code,201)
         self.eq.refresh_from_db();self.assertEqual(self.eq.next_service,Decimal(4500));self.assertEqual(self.eq.status,'operational')
         self.assertEqual(Alert.objects.filter(active=True).count(),0)
         self.assertIsNotNone(Alert.objects.get().attended_at)
+        original.refresh_from_db()
+        self.assertFalse(original.active)
+        self.assertEqual(original.message,original_message)
+        self.assertEqual(original.maintenance_id,result.data['id'])
+        self.assertTrue(AuditLog.objects.filter(entity='Alert',entity_id=str(original.pk),action='alert_attended',user=self.planner).exists())
+        self.assertEqual(self.reading(4490).status_code,201)
+        self.assertEqual(Alert.objects.filter(active=True).count(),1)
+        self.assertEqual(Alert.objects.count(),2)
+        original.refresh_from_db()
+        self.assertFalse(original.active)
+        self.assertEqual(original.maintenance_id,result.data['id'])
     def test_draft_and_schedule_do_not_reset_interval(self):
         self.reading(4250)
         for state in ['draft','scheduled']:
