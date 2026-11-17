@@ -356,6 +356,22 @@ input:disabled,select:disabled { background: #ffffff03!important; color: #8891a0
 
 .fleet-heading-actions { display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
 .view-equipment { min-height:38px; white-space:nowrap; }
+.compact-calendar-panel { width:100%; max-width:680px; margin-bottom:20px; align-self:flex-start; }
+.compact-calendar-panel .toolbar>.field { flex:1 1 180px; min-width:0; }
+.calendar-grid.compact-calendar { grid-template-columns:repeat(7,minmax(0,1fr)); width:100%; max-width:372px; gap:6px; margin:16px auto; background:transparent; border:0; }
+.compact-calendar .weekday { min-width:0; padding:5px 0; text-align:center; font-size:10px; }
+.compact-calendar .calendar-day { aspect-ratio:1; min-height:0!important; height:auto; min-width:0; margin:0; padding:0; display:flex; flex-direction:column; justify-content:center; align-items:center; gap:3px; border:1px solid #ffffff10; border-radius:8px; font-size:13px; }
+.compact-calendar .calendar-day:disabled { opacity:.45; cursor:default; }
+.compact-calendar .calendar-day.has-events { border-color:#23cfbd66; color:#d8fff6; background:#12302e!important; }
+.compact-calendar .calendar-count { font-size:9px; min-width:16px; padding:1px 4px; border-radius:5px; background:#18c5b325; color:#57e7cf; }
+.vm-modal:has(.calendar-day-detail) { width:min(700px,94vw); max-width:700px; max-height:90dvh; overflow:auto; }
+.calendar-day-record { background:#111923; border:1px solid #ffffff16; border-radius:9px; padding:14px; margin:12px 0; }
+.calendar-day-record>div { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; }
+.calendar-day-record p,.calendar-day-record small { color:#b5c2d4; display:block; line-height:1.6; }
+.calendar-day-record .vm-button { margin-top:12px; }
+.calendar-service-state { padding:4px 8px; border:1px solid #ffffff28; border-radius:6px; color:#c7d5e6; font-size:11px; }
+.calendar-service-state.completed { color:#57e7b9; border-color:#00d99555; }
+.calendar-service-state.in_progress { color:#3edbeb; border-color:#3edbeb55; }
 .vm-table .reading-edit-button { display:inline-flex; align-items:center; gap:8px; min-height:40px; min-width:95px; padding:10px 15px; font-size:12px; font-weight:700; color:#f0d378; background:#e4bd381c; border:1px solid #e4bd3866; border-radius:8px; }
 .reading-edit-button:hover { background:#e4bd3830; border-color:#f0d378; }
 .reading-edit-button:focus-visible { outline:2px solid #5aebdc; outline-offset:3px; }
