@@ -356,6 +356,15 @@ input:disabled,select:disabled { background: #ffffff03!important; color: #8891a0
 
 .fleet-heading-actions { display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
 .view-equipment { min-height:38px; white-space:nowrap; }
+.vm-table .reading-edit-button { display:inline-flex; align-items:center; gap:8px; min-height:40px; min-width:95px; padding:10px 15px; font-size:12px; font-weight:700; color:#f0d378; background:#e4bd381c; border:1px solid #e4bd3866; border-radius:8px; }
+.reading-edit-button:hover { background:#e4bd3830; border-color:#f0d378; }
+.reading-edit-button:focus-visible { outline:2px solid #5aebdc; outline-offset:3px; }
+.vm-modal:has(.download-progress) { width:min(420px,92vw); max-width:420px; }
+.download-progress { display:flex; flex-direction:column; align-items:center; gap:15px; padding:20px 10px 12px; text-align:center; }
+.download-progress strong { color:#e7edf7; font-size:16px; }
+.download-progress p { color:#afbbce; font-size:12px; margin:0; line-height:1.7; }
+.download-spinner { width:44px; height:44px; border:3px solid #ffffff18; border-top-color:#ff174c; border-right-color:#25d9ca; border-radius:50%; animation:download-spin .85s linear infinite; }
+@keyframes download-spin { to { transform:rotate(360deg); } }
 .maintenance-row-actions { min-width:190px; }
 .maintenance-row-actions .vm-button { min-height:40px; padding:10px 14px; }
 .maintenance-row-actions .equipment-edit { border-color:#e4bd3866; background:#e4bd381c; }
