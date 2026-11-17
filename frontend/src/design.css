@@ -357,6 +357,19 @@ input:disabled,select:disabled { background: #ffffff03!important; color: #8891a0
 .fleet-heading-actions { display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
 .view-equipment { min-height:38px; white-space:nowrap; }
 .notification-control { position:relative; }
+.vm-modal:has(.notification-detail) { width:min(660px,94vw); max-width:660px; max-height:90dvh; overflow:auto; }
+.notification-detail-heading { display:flex; gap:14px; align-items:flex-start; padding:14px 0; }
+.notification-detail-heading>svg { color:#ff5279; flex-shrink:0; margin-top:4px; }
+.notification-detail-heading h2 { font-size:20px; margin:12px 0 5px; }
+.notification-detail-heading p { color:var(--muted); margin:0; }
+.notification-message { padding:16px; background:#ffffff04; border:1px solid #ffffff16; border-radius:9px; line-height:1.7; }
+.notification-metrics { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin:18px 0; }
+.notification-metrics>div { background:#111923; border:1px solid #ffffff12; border-radius:8px; padding:12px; }
+.notification-metrics dt { color:var(--muted); font-size:11px; font-weight:500; }
+.notification-metrics dd { font-size:18px; font-weight:700; margin:7px 0 0; }
+.notification-context { color:#bdc8d7; font-size:12px; }
+.notification-detail .form-actions { flex-wrap:wrap; gap:8px; margin-top:20px; }
+@media(max-width:650px) { .notification-metrics { grid-template-columns:1fr; } .notification-detail .form-actions>.vm-button { flex:1 1 45%; white-space:normal; } }
 .notification-trigger { position:relative; width:36px; height:36px; border:1px solid var(--line); border-radius:9px; color:#b7c1d0; }
 .notification-count { position:absolute; top:-7px; right:-7px; min-width:18px; height:18px; padding:0 4px; display:flex; align-items:center; justify-content:center; border-radius:10px; background:#ff174c; color:white; font-size:10px; font-weight:750; border:2px solid #10151d; }
 .notifications-panel { position:absolute; top:48px; right:0; width:340px; padding:16px; background:#171e29; border:1px solid #ffffff24; border-radius:12px; box-shadow:0 16px 45px #0009; z-index:80; }
