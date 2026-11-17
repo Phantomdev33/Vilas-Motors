@@ -356,6 +356,12 @@ input:disabled,select:disabled { background: #ffffff03!important; color: #8891a0
 
 .fleet-heading-actions { display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
 .view-equipment { min-height:38px; white-space:nowrap; }
+.vm-modal:has(.equipment-window) { width:min(1240px,96vw); max-width:1240px; max-height:90dvh; overflow-y:auto; }
+.equipment-window>.page-heading { flex-wrap:wrap; }
+.equipment-window .detail-navigation { position:sticky; top:0; z-index:15; }
+.equipment-window .equipment-summary { flex-wrap:wrap; }
+.equipment-window>.side-form { width:100%; }
+.desktop-table td:last-child>.vm-button { margin:4px; }
 .equipment-row-actions { display:flex; flex-wrap:wrap; align-items:center; gap:8px; min-width:145px; }
 .equipment-row-actions .vm-button { min-height:36px; padding:9px 12px; font-size:11px; font-weight:650; white-space:nowrap; }
 .equipment-row-actions .equipment-consult { color:#58e2d1; background:#17c9b915; border-color:#17c9b94d; }

@@ -34,8 +34,9 @@ test('older backend missing catalog still offers Correctiva',async({page})=>{
   await mock(page);
   await page.route('**/api/maintenances/service-types/',route=>route.fulfill({status:404,json:{detail:'No encontrado.'}}));
   await page.goto('/#detail');
+  await page.getByRole('button',{name:'Ver ficha e historial',exact:true}).first().click();
   await page.getByRole('button',{name:'Registrar mantención',exact:true}).click();
-  const dialog=page.getByRole('dialog');
+  const dialog=page.getByRole('dialog',{name:/Registrar mantenci/});
   await dialog.getByLabel('Tipo de mantención *',{exact:true}).selectOption('Correctiva');
   await expect(dialog.getByRole('alert')).toHaveCount(0);
   await dialog.getByLabel('Responsable *',{exact:true}).fill('Taller');

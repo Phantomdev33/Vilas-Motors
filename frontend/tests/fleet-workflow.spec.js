@@ -22,8 +22,9 @@ test('fleet paginates by 15 and resets after filtering',async({page})=>{
 test('maintenance is tied to the detail equipment; errors stay in modal and success stays on detail',async({page})=>{
   const errors=await mock(page);
   await page.goto('/#detail');
+  await page.getByRole('button',{name:'Ver ficha e historial',exact:true}).first().click();
   await page.getByRole('button',{name:'Registrar mantenci\u00f3n',exact:true}).click();
-  const dialog=page.getByRole('dialog');
+  const dialog=page.getByRole('dialog',{name:/Registrar mantenci/});
   const serviceType=dialog.getByLabel('Tipo de mantenci\u00f3n *',{exact:true});
   await expect(serviceType).toHaveJSProperty('tagName','SELECT');
   await serviceType.selectOption('Preventiva');

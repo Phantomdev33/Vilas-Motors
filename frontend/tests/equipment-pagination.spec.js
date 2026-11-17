@@ -44,3 +44,29 @@ test('read only equipment access retains consult without mutation actions',async
   await expect(page.getByRole('button',{name:'Editar',exact:true})).toHaveCount(0);
   await expect(page.getByRole('button',{name:'Desactivar',exact:true})).toHaveCount(0);
 });
+
+test('equipment type availability and status combine and clear restores all filters',async({page})=>{
+  const errors=await mock(page);
+  await page.goto('/#equipment');
+  const rows=page.locator('.page-equipment .vm-table tbody tr');
+  await page.getByLabel('Filtrar tipo de vehículo',{exact:true}).selectOption('Camión');
+  await page.getByLabel('Filtrar región',{exact:true}).selectOption('Arica y Parinacota');
+  await page.getByLabel('Filtrar disponibilidad de equipos').selectOption('unavailable');
+  await page.getByLabel('Filtrar estado de equipos').selectOption('in_progress');
+  await expect(rows).toHaveCount(1);
+  await expect(rows.first()).toContainText('TR-02');
+  await page.getByLabel('Filtrar disponibilidad de equipos').selectOption('available');
+  await expect(rows).toHaveCount(0);
+  await page.getByLabel('Mostrar equipos anteriores / inactivos').check();
+  await page.getByRole('button',{name:'Limpiar filtros',exact:true}).click();
+  await expect(rows).toHaveCount(3);
+  await expect(page.getByLabel('Filtrar tipo de vehículo',{exact:true})).toHaveValue('');
+  await expect(page.getByLabel('Filtrar región',{exact:true})).toHaveValue('');
+  await expect(page.getByLabel('Filtrar disponibilidad de equipos')).toHaveValue('');
+  await expect(page.getByLabel('Filtrar estado de equipos')).toHaveValue('');
+  await expect(page.getByLabel('Mostrar equipos anteriores / inactivos')).not.toBeChecked();
+  await page.getByLabel('Filtrar estado de equipos').selectOption('upcoming');
+  await expect(rows).toHaveCount(1);
+  await expect(rows.first()).toContainText('EX-03');
+  expect(errors).toEqual([]);
+});

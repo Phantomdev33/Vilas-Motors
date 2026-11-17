@@ -24,7 +24,7 @@ export async function mock(page,loggedIn=true){
     else if(path==='maintenances/')body=maintenances;
     else if(path==='readings/')body=[{id:1,equipment:2,equipment_code:'TR-02',equipment_name:'Camión',recorded_at:'2025-08-01T12:00:00Z',source:'manual',evidence:'/assets/excavator.jpg',value:1000,registered_by:'Ana'},{id:2,equipment:3,equipment_code:'EX-03',recorded_at:'2026-01-01T12:00:00Z',source:'manual',evidence:null,value:240,registered_by:'Ana'}];
     else if(path==='report/')body={equipment,date:'2026-11-03'};
-    else if(path.endsWith('/history/'))body={equipment:equipment[0],readings:[],maintenances:[],alerts:[],sensors:[],changes:[{id:1,action:'imported',user_name:'Sistema',created_at:'2026-11-03T12:00:00Z'}]};
+    else if(path.endsWith('/history/'))body={equipment:equipment.find(e=>e.id===Number(path.split('/')[1]))||equipment[0],readings:[],maintenances:[],alerts:[],sensors:[],changes:[{id:1,action:'imported',user_name:'Sistema',created_at:'2026-11-03T12:00:00Z'}]};
     return route.fulfill({json:body});
   });
   return errors;
