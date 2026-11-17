@@ -356,7 +356,7 @@ input:disabled,select:disabled { background: #ffffff03!important; color: #8891a0
 
 .fleet-heading-actions { display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
 .view-equipment { min-height:38px; white-space:nowrap; }
-.compact-calendar-panel { width:100%; max-width:680px; margin-bottom:20px; align-self:flex-start; }
+.compact-calendar-panel { width:100%; max-width:680px; margin:0 auto 20px; align-self:center; }
 .compact-calendar-panel .toolbar>.field { flex:1 1 180px; min-width:0; }
 .calendar-grid.compact-calendar { grid-template-columns:repeat(7,minmax(0,1fr)); width:100%; max-width:372px; gap:6px; margin:16px auto; background:transparent; border:0; }
 .compact-calendar .weekday { min-width:0; padding:5px 0; text-align:center; font-size:10px; }

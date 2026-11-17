@@ -36,12 +36,20 @@ Para cargar datos ficticios de forma explícita, ejecuta `python manage.py seed_
 
 ## Verificación
 
+Desde la raíz del proyecto:
+
 ```powershell
-.runtime/python/python.exe backend/manage.py check
-.runtime/python/python.exe backend/manage.py test fleet --noinput
+powershell -ExecutionPolicy Bypass -File scripts/check.ps1
 ```
 
-Desde `frontend/`, `npm run build` compila la página. Con ambos servidores iniciados, `scripts/check.ps1` ejecuta además las pruebas de navegador. Estas usan Edge y las cuentas demo, y crean registros de prueba; ejecútalas en un entorno de desarrollo.
+El verificador ejecuta Django con `config.prototype` y SQLite aislado, compila el
+frontend y corre las pruebas actuales de escritorio/móvil con API simulada. No
+modifica Supabase. Playwright inicia o reutiliza Vite automáticamente; no requiere
+un backend real para estas pruebas. Edge debe estar instalado.
+
+La revisión contra la pauta, sus medidas y limitaciones están documentadas en
+[Revisión de entrega](docs/REVISION-ENTREGA.md). Los pasos de presentación están
+en [Demostración de entrega](docs/DEMOSTRACION-ENTREGA.md).
 
 ## Repositorio y despliegue
 
@@ -75,7 +83,11 @@ En **Render**, usa Root Directory `backend`, Build Command `bash build.sh` y Sta
 | `DATABASE_URL` | La URI privada de Supabase con SSL |
 | `FRONTEND_URL` | `https://vilas-motors-muhdcegrz-phantomdev33s-projects.vercel.app` |
 
-El host público que proporciona Render se agrega automáticamente a ALLOWED_HOSTS. FRONTEND_URL se agrega automáticamente a los orígenes CSRF. Para dominios adicionales, usa `DJANGO_ALLOWED_HOSTS` (hosts separados por coma) y `CSRF_TRUSTED_ORIGINS` (orígenes completos HTTPS separados por coma). No uses comodines de Vercel ni agregues todos los previews: cada origen autorizado puede enviar peticiones autenticadas.
+El host público que proporciona Render se agrega automáticamente a ALLOWED_HOSTS.
+Configura `FRONTEND_URL` para los enlaces de recuperación y `CSRF_TRUSTED_ORIGINS`
+con los orígenes HTTPS de frontend y backend, separados por coma. La lista de
+orígenes CORS usa por defecto esos mismos valores. Para hosts adicionales usa
+`DJANGO_ALLOWED_HOSTS`. No uses comodines ni publiques credenciales en el frontend.
 
 La URL de Vercel anterior identifica el despliegue que compartiste. Si asignas un dominio estable al proyecto, actualiza FRONTEND_URL para que los correos de recuperación y CSRF usen ese dominio. Un enlace al panel `vercel.com/...` no es la URL pública de la página.
 

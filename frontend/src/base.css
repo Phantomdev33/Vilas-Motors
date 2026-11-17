@@ -1,0 +1,11 @@
+/* Base mínima: la interfaz utiliza componentes y estilos propios. */
+*,*::before,*::after { box-sizing:border-box; }
+html { -webkit-text-size-adjust:100%; }
+[hidden] { display:none!important; }
+button,input,optgroup,select,textarea { margin:0; font:inherit; }
+button,select { text-transform:none; }
+button,[type=button],[type=submit] { -webkit-appearance:button; }
+img,svg { vertical-align:middle; }
+table { border-collapse:collapse; }
+th { text-align:inherit; }
+.table-responsive { overflow-x:auto; -webkit-overflow-scrolling:touch; }

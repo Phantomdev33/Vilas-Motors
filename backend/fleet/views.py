@@ -1,4 +1,3 @@
-import csv
 import hashlib
 import hmac
 import io
@@ -12,7 +11,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
 from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import transaction
-from django.db.models import OuterRef, Subquery, DecimalField, IntegerField, Q, Exists
+from django.db.models import OuterRef, Subquery, DecimalField, IntegerField, Q, Exists, Prefetch
 from django.db.models.functions import Coalesce
 from django.http import HttpResponse, FileResponse, Http404
 from django.middleware.csrf import get_token
@@ -187,11 +186,13 @@ class EquipmentViewSet(AuditedViewSet):
     def history(self, request, pk=None):
         equipment = self.get_object()
         from .models import GPSMeterState
-        gps_states = GPSMeterState.objects.filter(sensor__equipment=equipment).select_related('sensor')
-        gps = [{'device':g.sensor.identifier, 'model':g.sensor.model, 'last_at':g.last_at, 'ignition':g.ignition, 'counted_seconds':g.counted_seconds, 'skipped_seconds':g.skipped_seconds, 'simulated':g.sensor.ignition_events.filter(simulated=True).exists()} for g in gps_states]
+        from .models import IgnitionEvent
+        gps_states = GPSMeterState.objects.filter(sensor__equipment=equipment).select_related('sensor').annotate(
+            simulated_events=Exists(IgnitionEvent.objects.filter(sensor_id=OuterRef('sensor_id'),simulated=True)))
+        gps = [{'device':g.sensor.identifier, 'model':g.sensor.model, 'last_at':g.last_at, 'ignition':g.ignition, 'counted_seconds':g.counted_seconds, 'skipped_seconds':g.skipped_seconds, 'simulated':g.simulated_events} for g in gps_states]
         return Response({'gps':gps, 'changes': AuditSerializer(AuditLog.objects.filter(entity='Equipment', entity_id=str(equipment.pk)).select_related('user'), many=True).data, 'equipment': self.get_serializer(equipment).data,
-            'readings': ReadingSerializer(equipment.readings.all(), many=True, context={'request': request}).data,
-            'maintenances': MaintenanceSerializer(equipment.maintenances.all(), many=True).data,
+            'readings': ReadingSerializer(equipment.readings.select_related('created_by'), many=True, context={'request': request}).data,
+            'maintenances': MaintenanceSerializer(equipment.maintenances.select_related('created_by').prefetch_related('supplies__supply'), many=True).data,
             'alerts': AlertSerializer(equipment.alerts.all(), many=True).data,
             'sensors': SensorSerializer(equipment.sensors.all(), many=True).data})
 
@@ -296,7 +297,7 @@ class SupplyViewSet(AuditedViewSet):
         audit(self.request.user, 'deactivated', instance)
 
 class AlertViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Alert.objects.select_related('equipment').all()
+    queryset = Alert.objects.prefetch_related(Prefetch('equipment',queryset=EquipmentViewSet.queryset.all()))
     serializer_class = AlertSerializer
     permission_classes = [RolePermission]
     permission_module = 'alert'
@@ -390,14 +391,6 @@ class ReportView(APIView):
             buffer.seek(0)
             return FileResponse(buffer, as_attachment=True, filename=f'flota-{day}.pdf')
         return Response({'date': day.isoformat(), 'equipment': rows})
-
-class MigrationTemplateView(APIView):
-    def get(self, request):
-        buffer = io.StringIO()
-        csv.writer(buffer).writerow(['code', 'name', 'equipment_type', 'brand', 'model', 'serial_number', 'region', 'commune', 'location', 'responsible', 'unit', 'interval', 'initial_value', 'initial_service_value'])
-        response = HttpResponse('\ufeff'+buffer.getvalue(), content_type='text/csv; charset=utf-8')
-        response['Content-Disposition'] = 'attachment; filename="plantilla-equipos.csv"'
-        return response
 
 class ProtectedMediaView(APIView):
     permission_classes = [RolePermission]

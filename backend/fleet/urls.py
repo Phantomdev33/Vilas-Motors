@@ -11,5 +11,5 @@ urlpatterns = [path('', include(router.urls)), path('auth/csrf/', views.CSRFView
     path('auth/login/', views.LoginView.as_view()), path('auth/logout/', views.LogoutView.as_view()),
     path('auth/me/', views.MeView.as_view()), path('auth/reset/', views.PasswordResetView.as_view()),
     path('auth/reset/confirm/', views.PasswordResetConfirmView.as_view()), path('telemetry/', views.TelemetryView.as_view()),
-    path('report/', views.ReportView.as_view()), path('migration-template/', views.MigrationTemplateView.as_view()),
+    path('report/', views.ReportView.as_view()),
     path('media/<path:path>', views.ProtectedMediaView.as_view())]
