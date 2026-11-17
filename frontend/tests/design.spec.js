@@ -27,17 +27,16 @@ for (const screen of ['fleet','equipment','readings','detail','maintenance','cal
   });
 }
 
-test('equipment form retains its unit and the header search filters the fleet',async({page},info)=>{
+test('equipment form retains its unit and local fleet search replaces header search',async({page},info)=>{
   const errors=await mock(page);
   await page.goto('/#equipment');
   await page.getByRole('button',{name:'Crear equipo',exact:true}).click();
   await expect(page.getByLabel('Intervalo de servicio (hrs) *',{exact:true})).toBeVisible();
   await page.screenshot({path:`.runtime/design-review/editor-${info.project.name}.png`,fullPage:true});
-  if(info.project.name==='desktop'){
-    await page.getByLabel('Buscar equipo en la flota',{exact:true}).fill('EX-03');
-    await page.getByRole('button',{name:'Buscar en la flota',exact:true}).click();
-    await expect(page.locator('.desktop-table').getByText('EX-03 · Excavadora')).toBeVisible();
-    await expect(page.locator('.desktop-table tbody tr')).toHaveCount(1);
-  }
+  await page.goto('/#fleet');
+  await expect(page.locator('.topbar .global-search')).toHaveCount(0);
+  await expect(page.getByLabel('Buscar equipo en la flota',{exact:true})).toHaveCount(0);
+  await page.getByLabel('Buscar código o modelo',{exact:true}).fill('EX-03');
+  await expect(page.locator('.desktop-table:visible, .mobile-equipment:visible').getByText('EX-03 · Excavadora')).toBeVisible();
   expect(errors).toEqual([]);
 });

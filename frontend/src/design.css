@@ -58,10 +58,10 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
 .topbar-heading { display: flex; flex-direction: column; gap: 5px; min-width: 180px; }
 .topbar-heading>.eyebrow { color: #f45b80; font-size: 8px; }
 .topbar-heading>strong { color: #f0f2f7; font-size: 18px; font-weight: 700; letter-spacing: -.4px; }
-.global-search { display: flex; align-items: center; margin-left: auto; position: relative; width: min(245px,25%); }
-.global-search .search-control { width: 100%; min-width: 0; }
-.global-search .search-control input { padding-right: 28px; font-size: 10px; }
-.global-search>button { position: absolute; right: 4px; }
+
+
+
+
 .topbar-right { gap: 13px; }
 .topbar-right>time { display: none; }
 .topbar-right>.icon-button { border: 1px solid var(--line); border-radius: 9px; width: 35px; height: 35px; color: #abb4c1; }
@@ -245,7 +245,7 @@ input:disabled,select:disabled { background: #ffffff03!important; color: #8891a0
   .sidebar nav button { font-size: 10px; gap: 9px; padding-left: 10px; }
   .main-content { padding: 23px 22px 0; }
   .topbar { padding: 0 22px; gap: 15px; }
-  .global-search { width: 200px; }
+
   .topbar-heading>strong { font-size: 16px; }
   .user-meta { display: none; }
   .fleet-overview { grid-template-columns: 1fr 120px; gap: 20px; padding: 25px; }
@@ -261,7 +261,7 @@ input:disabled,select:disabled { background: #ffffff03!important; color: #8891a0
   .fleet-board>.toolbar>.search-control { flex: 2; min-width: 200px; }
 }
 @media(max-width:800px) {
-  .global-search { display: none; }
+
   .topbar-right { margin-left: auto; }
   .fleet-filters { gap: 7px; }
   .stat-icon { display: none; }
@@ -277,7 +277,7 @@ input:disabled,select:disabled { background: #ffffff03!important; color: #8891a0
   .sidebar-overlay { background: #000a; backdrop-filter: blur(3px); }
   .workspace { padding-bottom: 78px; }
   .topbar { margin: 0; padding: 0 18px; height: 72px; background: #0d121bec; border-left: 0; border-right: 0; }
-  .topbar-heading,.global-search,.topbar-right { display: none; }
+.topbar-heading,.topbar-right { display: none; }
   .mobile-topbrand .brand-wordmark { font-size: 19px; gap: 4px; }
   .mobile-topbrand .brand-mark { width: 29px; height: 36px; font-size: 24px; }
   .mobile-topbrand .brand-wordmark small { font-size: 6px; letter-spacing: 4px; }
