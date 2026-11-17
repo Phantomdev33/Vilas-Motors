@@ -6,6 +6,7 @@ from django.utils import timezone
 from rest_framework import serializers
 from .models import User, Equipment, Reading, Maintenance, Supply, MaintenanceSupply, Alert, Sensor, AuditLog
 from .services import LABELS
+from .date_fields import OperationalDateTimeField
 
 def validate_image(value):
     if value and value.size > 10 * 1024 * 1024:
@@ -89,6 +90,7 @@ class EquipmentSerializer(serializers.ModelSerializer):
         return attrs
 
 class ReadingSerializer(serializers.ModelSerializer):
+    recorded_at = OperationalDateTimeField(required=False)
     def _save_with_image(self, instance, previous_name=''):
         try:
             instance.save()
@@ -175,6 +177,8 @@ class MaintenanceSupplySerializer(serializers.ModelSerializer):
         return value
 
 class MaintenanceSerializer(serializers.ModelSerializer):
+    scheduled_at = OperationalDateTimeField(day_start=True)
+    completed_at = OperationalDateTimeField(required=False, allow_null=True)
     def validate_service_type(self, value):
         from .maintenance_types import SERVICE_TYPES, LEGACY_SERVICE_TYPES
         value = LEGACY_SERVICE_TYPES.get(value, value)
