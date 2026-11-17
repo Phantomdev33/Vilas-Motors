@@ -1,6 +1,32 @@
 import {test,expect} from '@playwright/test';
 import {mock} from './support/mock.js';
 
+test('vehicle selector cascades from region type and search and clears invalid selections',async({page})=>{
+  const errors=await mock(page);await page.goto('/#detail');
+  const vehicle=page.getByLabel('Filtrar vehículo de fichas',{exact:true});
+  await expect(vehicle.locator('option')).toHaveCount(4);
+  await page.getByLabel('Filtrar región de fichas').selectOption('Tarapacá');
+  await expect(vehicle.locator('option')).toHaveCount(3);
+  await page.getByLabel('Filtrar tipo de ficha').selectOption('Excavadora');
+  await expect(vehicle.locator('option')).toHaveCount(2);
+  await vehicle.selectOption('3');
+  await expect(page.locator('main tbody tr')).toHaveCount(1);
+  await expect(page.locator('main tbody tr')).toContainText('EX-03');
+  await page.getByLabel('Filtrar tipo de ficha').selectOption('Grúa horquilla');
+  await expect(vehicle).toHaveValue('');
+  await expect(vehicle.locator('option')).toHaveCount(2);
+  await vehicle.selectOption('1');
+  await page.getByLabel('Buscar ficha por código, nombre o serie').fill('inexistente');
+  await expect(vehicle).toBeDisabled();
+  await expect(page.locator('main tbody tr')).toHaveCount(0);
+  await page.getByRole('button',{name:'Limpiar filtros',exact:true}).click();
+  await expect(vehicle).toBeEnabled();
+  await expect(vehicle).toHaveValue('');
+  await expect(vehicle.locator('option')).toHaveCount(4);
+  await expect(page.locator('main tbody tr')).toHaveCount(3);
+  expect(errors).toEqual([]);
+});
+
 test('general registry lists equipment and edits the chosen record',async({page})=>{
   const errors=await mock(page);await page.goto('/#detail');
   await expect(page.getByRole('heading',{name:'FICHAS TÉCNICAS E HISTORIALES'})).toBeVisible();
