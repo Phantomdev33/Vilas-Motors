@@ -94,3 +94,42 @@ test('login opens the fleet only after verifying the SMS code',async({page})=>{
   await page.getByRole('button',{name:'Verificar código'}).click();
   await expect(page.getByRole('heading',{name:'ESTADO DE LA FLOTA'})).toBeVisible();
 });
+
+test('a regular user can edit their profile and confirm a new mobile number',async({page})=>{
+  await mock(page);
+  const user={id:9,first_name:'Ana',last_name:'Pérez',email:'ana@example.cl',phone:'+56912345678',role:'helper',permissions:{equipment:'R'}};
+  await page.route('**/api/auth/me/',route=>{
+    if(route.request().method()==='PATCH'){
+      const body=route.request().postDataJSON();
+      expect(body).toMatchObject({email:'ana.nueva@example.cl',current_password:'SecureDemo2026!'});
+      user.email=body.email;
+    }
+    return route.fulfill({json:user});
+  });
+  await page.route('**/api/auth/me/phone/',route=>{
+    if(route.request().method()==='POST'){
+      expect(route.request().postDataJSON()).toEqual({phone:'+56987654321',current_password:'SecureDemo2026!'});
+      return route.fulfill({status:202,json:{challenge_id:'new-phone'}});
+    }
+    expect(route.request().postDataJSON()).toEqual({phone:'+56987654321',challenge_id:'new-phone',code:'012345'});
+    return route.fulfill({json:{detail:'Celular actualizado. Inicia sesión con tu nuevo número registrado.'}});
+  });
+  await page.goto('/');
+  await expect(page.getByRole('heading',{name:'ESTADO DE LA FLOTA'})).toBeVisible();
+  const profile=page.getByRole('button',{name:'Mi perfil',exact:true});
+  const menu = page.getByRole('button',{name:'Abrir menú'});
+  if(await menu.isVisible()) await menu.click();
+  await profile.click();
+  await expect(page.getByRole('heading',{name:'Mi perfil'})).toBeVisible();
+  await page.getByLabel('Correo electrónico').fill('ana.nueva@example.cl');
+  await page.getByLabel('Contraseña actual para cambiar el correo').fill('SecureDemo2026!');
+  await page.getByRole('button',{name:'Guardar datos'}).click();
+  await expect(page.getByText('Datos guardados.')).toBeVisible();
+  await page.getByLabel('Nuevo celular').fill('+56987654321');
+  await page.getByLabel('Contraseña actual para cambiar el celular').fill('SecureDemo2026!');
+  await page.getByRole('button',{name:'Enviar código SMS'}).click();
+  await page.getByLabel('Código SMS').fill('012345');
+  await page.getByRole('button',{name:'Confirmar celular'}).click();
+  await expect(page.getByText(/Celular actualizado/)).toBeVisible();
+  await expect(page.getByRole('button',{name:'Ingresar'})).toBeVisible();
+});

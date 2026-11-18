@@ -50,6 +50,12 @@ class User(AbstractUser):
                         kwargs['update_fields'] = set(update_fields) | {'access_version'}
             return super().save(*args, **kwargs)
 
+class ProfilePhoto(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    image = models.BinaryField()
+    revision = models.UUIDField(default=uuid.uuid4, editable=False)
+
+
 class SMSChallenge(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE)

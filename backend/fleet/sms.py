@@ -14,6 +14,7 @@ from django.utils.crypto import constant_time_compare, salted_hmac
 from .models import SMSChallenge, User
 
 logger = logging.getLogger(__name__)
+DEMO_SMS_PHONES = tuple(f'+1202555010{index}' for index in range(1, 5))
 
 
 class SMSUnavailable(Exception):
@@ -21,14 +22,14 @@ class SMSUnavailable(Exception):
 
 
 def send_code(phone, code, purpose):
-    action = 'ingresar' if purpose == 'login' else 'recuperar tu contraseña'
+    action = {'login': 'ingresar', 'reset': 'recuperar tu contraseña', 'profile': 'confirmar tu nuevo celular'}[purpose]
     message = f"Vila's Motor: código para {action}: {code}. Vence en 5 minutos."
     if settings.SMS_BACKEND == 'console' and settings.DEBUG:
         print(f'[SMS simulado] {phone}: {message}', flush=True)
         return
 
     sid, token, sender = settings.TWILIO_ACCOUNT_SID, settings.TWILIO_AUTH_TOKEN, settings.TWILIO_FROM
-    if settings.SMS_BACKEND != 'twilio' or not all((sid, token, sender)):
+    if settings.SMS_BACKEND != 'twilio' or not all((sid, token, sender)) or phone in DEMO_SMS_PHONES:
         raise SMSUnavailable
     authorization = base64.b64encode(f'{sid}:{token}'.encode()).decode()
     request = Request(
@@ -44,14 +45,17 @@ def send_code(phone, code, purpose):
         raise SMSUnavailable from None
 
 
-def digest(challenge_id, purpose, user, code):
+def digest(challenge_id, purpose, user, code, destination=''):
+    payload = f'{challenge_id}:{purpose}:{user.pk}:{user.access_version}:{user.password}:{code}'
+    if destination:
+        payload = f'{payload}:{destination}'
     return salted_hmac(
-        'fleet.sms', f'{challenge_id}:{purpose}:{user.pk}:{user.access_version}:{user.password}:{code}',
+        'fleet.sms', payload,
         algorithm='sha256',
     ).hexdigest()
 
 
-def start_challenge(user, purpose):
+def start_challenge(user, purpose, *, destination=''):
     """Caller holds the user row lock until the challenge is stored."""
     previous = SMSChallenge.objects.filter(user=user, purpose=purpose).first()
     if previous and previous.sent_at > timezone.now() - timedelta(minutes=1):
@@ -62,10 +66,10 @@ def start_challenge(user, purpose):
         previous.delete()
     challenge = SMSChallenge.objects.create(
         id=challenge_id, user=user, purpose=purpose,
-        digest=digest(challenge_id, purpose, user, code),
+        digest=digest(challenge_id, purpose, user, code, destination),
     )
     try:
-        send_code(user.phone, code, purpose)
+        send_code(destination or user.phone, code, purpose)
     except SMSUnavailable:
         challenge.used = True
         challenge.save(update_fields=['used'])
@@ -73,22 +77,25 @@ def start_challenge(user, purpose):
     return challenge_id
 
 
-def check_challenge(challenge_id, purpose, code):
+def check_challenge(challenge_id, purpose, code, *, user=None, destination=''):
     """Verify under the user row lock, held until the caller consumes the code."""
     try:
         challenge_id = uuid.UUID(str(challenge_id))
     except (ValueError, TypeError):
         return None, None
     query = SMSChallenge.objects.filter(pk=challenge_id, purpose=purpose)
-    user_id = query.values_list('user_id', flat=True).first()
-    user = User.objects.select_for_update().filter(pk=user_id, is_active=True).first()
+    if user is None:
+        user_id = query.values_list('user_id', flat=True).first()
+        user = User.objects.select_for_update().filter(pk=user_id, is_active=True).first()
+    else:
+        query = query.filter(user=user)
     challenge = query.first() if user else None
     if not challenge or challenge.used or challenge.attempts >= 5:
         return None, None
     if challenge.sent_at <= timezone.now() - timedelta(minutes=5):
         return None, None
     if not isinstance(code, str) or not constant_time_compare(
-        challenge.digest, digest(challenge.id, purpose, user, code[:7]),
+        challenge.digest, digest(challenge.id, purpose, user, code[:7], destination),
     ):
         challenge.attempts += 1
         challenge.save(update_fields=['attempts'])

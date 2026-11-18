@@ -8,6 +8,7 @@ from django.utils import timezone
 from fleet.models import User, Equipment, Reading, Maintenance, Supply
 from fleet.services import reconcile_alert
 from fleet.service_references import service_reference
+from fleet.sms import DEMO_SMS_PHONES
 
 class Command(BaseCommand):
     help = 'Carga exclusivamente datos ficticios, sin sobrescribir registros existentes.'
@@ -17,8 +18,8 @@ class Command(BaseCommand):
         password = os.getenv('DEMO_PASSWORD', 'VilasDemo2026!')
         people = [('admin@vilasmotor.cl','Alex','Morgan','admin'), ('james@vilasmotor.cl','James','Pérez','planner'),
                   ('ayudante@vilasmotor.cl','Jamie','Cruz','helper'), ('jefe@vilasmotor.cl','Elías','Ríos','chief')]
-        for index, (email, first, last, role) in enumerate(people, start=1):
-            phone = f'+1202555010{index}' if settings.SMS_BACKEND == 'console' else ''
+        for (email, first, last, role), demo_phone in zip(people, DEMO_SMS_PHONES, strict=True):
+            phone = demo_phone if settings.SMS_BACKEND == 'console' else ''
             user = User.objects.filter(email=email).first()
             if not user:
                 User.objects.create_user(username=email, email=email, password=password, first_name=first, last_name=last,

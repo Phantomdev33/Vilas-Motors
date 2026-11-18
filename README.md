@@ -172,6 +172,12 @@ de demostración incluyen intervalos ficticios para equipos sin coincidencia exa
 
 ## Acceso y recuperación por SMS
 
+En **Mi perfil**, cada usuario puede editar su nombre, apellido y correo,
+además de subir o quitar su foto. Para cambiar el correo necesita su
+contraseña actual. Para cambiar el celular necesita su contraseña actual y
+el código que llega al nuevo número. Después vuelve a iniciar sesión.
+Las fotos se guardan en la base de datos y se muestran dentro de la sesión.
+
 El administrador puede registrar el celular en **Usuarios y roles** y cambiar
 el estado de acceso. Una cuenta inactiva queda fuera del sistema hasta que se
 reactiva. Las cuentas existentes necesitan un celular con prefijo internacional.
@@ -180,10 +186,28 @@ Para preparar el primer administrador existente, ejecuta desde `backend/`
 de la cuenta. Las cuentas nuevas creadas con `createsuperuser` pueden indicar
 el celular en el asistente.
 
-Para recibir SMS en un teléfono, configura `SMS_BACKEND=twilio` y
-`TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN` y `TWILIO_FROM` en el servidor Django.
-El modo `config.prototype` siempre simula el envío. Las instalaciones con
-Twilio requieren Internet y un remitente habilitado por el proveedor.
+Para recibir SMS reales en el prototipo local, configura `TWILIO_ACCOUNT_SID`,
+`TWILIO_AUTH_TOKEN` y `TWILIO_FROM` en `backend/.env`. Usa como remitente un
+número de Twilio habilitado para SMS y comprueba que Chile figure habilitado
+en los permisos geográficos de la cuenta. Desde la raíz registra un celular
+real en la base del prototipo e inicia el backend con el envío habilitado:
+
+```powershell
+$env:DJANGO_SETTINGS_MODULE = 'config.prototype'
+./.runtime/python/python.exe backend/manage.py migrate
+./.runtime/python/python.exe backend/manage.py seed_demo
+./.runtime/python/python.exe backend/manage.py set_sms_phone admin@vilasmotor.cl +56912345678
+powershell -ExecutionPolicy Bypass -File scripts/start-prototype.ps1 -RealSms
+```
+
+Sustituye el celular de ejemplo por el número que recibirá los códigos.
+El script conserva SQLite y los números ficticios quedan excluidos del envío
+real. Para un despliegue Django fuera de ese script, configura además
+`SMS_BACKEND=twilio`. Twilio requiere Internet y un remitente habilitado
+por el proveedor. Una cuenta de prueba puede limitar el contenido a plantillas
+predefinidas, mientras que Vila’s Motor genera sus propios mensajes.
+[Guía de Twilio para Chile](https://www.twilio.com/en-us/guidelines/cl/sms) ·
+[Limitaciones de la prueba](https://www.twilio.com/docs/usage/tutorials/how-to-use-your-free-trial-account).
 Ejecuta `python manage.py migrate` en la base del entorno antes de habilitar
 el flujo. El panel técnico de Django usa la sesión de la aplicación y requiere
 que el navegador pueda enviarle la misma cookie.

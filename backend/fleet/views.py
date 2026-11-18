@@ -23,7 +23,7 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import AccessToken
 from .authentication import enforce_csrf
 from .models import User, Equipment, Reading, Maintenance, Supply, Alert, AuditLog, Sensor
-from .permissions import RolePermission, MATRIX
+from .permissions import RolePermission
 from .serializers import UserSerializer, EquipmentSerializer, ReadingSerializer, MaintenanceSerializer, SupplySerializer, AlertSerializer, AuditSerializer, SensorSerializer
 from .services import audit, reconcile_alert, LABELS
 from .throttles import DeviceTelemetryThrottle
@@ -138,13 +138,6 @@ class LogoutView(APIView):
         response = Response({'detail': 'Sesión cerrada.'})
         response.delete_cookie('access_token', samesite='Lax')
         return response
-
-class MeView(APIView):
-    def get(self, request):
-        data = UserSerializer(request.user).data
-        data['permissions'] = {module: roles.get(request.user.role, '') for module, roles in MATRIX.items()}
-        return Response(data)
-
 
 class ServiceReferencesView(APIView):
     def get(self, request):

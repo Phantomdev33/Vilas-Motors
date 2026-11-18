@@ -23,6 +23,13 @@ class ImageURLField(serializers.ImageField):
     def to_representation(self, value):
         return value.url if value else None
 
+def unique_user_email(value, instance):
+    value = value.strip().lower()
+    if User.objects.filter(email__iexact=value).exclude(pk=getattr(instance, 'pk', None)).exists():
+        raise serializers.ValidationError('Ya existe una cuenta con este correo.')
+    return value
+
+
 class UserSerializer(serializers.ModelSerializer):
     role_label = serializers.CharField(source='get_role_display', read_only=True)
     password = serializers.CharField(write_only=True, required=False, min_length=13)
@@ -31,10 +38,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'email', 'first_name', 'last_name', 'role', 'role_label', 'region', 'is_active', 'last_login', 'password', 'phone']
         read_only_fields = ['last_login']
     def validate_email(self, value):
-        value = value.strip().lower()
-        if User.objects.filter(email__iexact=value).exclude(pk=getattr(self.instance, 'pk', None)).exists():
-            raise serializers.ValidationError('Ya existe una cuenta con este correo.')
-        return value
+        return unique_user_email(value, self.instance)
     def validate(self, attrs):
         password = attrs.get('password')
         if not self.instance and not password:
